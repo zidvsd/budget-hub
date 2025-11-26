@@ -40,10 +40,16 @@ const items = [
     icon: Settings,
   },
 ];
-
-export function AppSidebar() {
+interface AppSidebarProps {
+  hide?: boolean;
+}
+export function AppSidebar({ hide }: AppSidebarProps) {
   return (
-    <Sidebar className="lg:hidden flex flex-col justify-between h-full">
+    <Sidebar
+      className={`${
+        hide ? "lg:hidden" : null
+      } flex flex-col justify-between h-full`}
+    >
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>

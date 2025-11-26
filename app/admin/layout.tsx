@@ -1,4 +1,6 @@
 import "../globals.css";
+import { AppSidebar } from "@/components/AppSidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function AdminLayout({
   children,
@@ -6,9 +8,15 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="">
-      <header className="p-4">Admin Panel</header>
-      <main className="p-6">{children}</main>
-    </div>
+    <SidebarProvider>
+      <AppSidebar />
+      <main className="p-6">
+        <header>
+          <h1 className="text-2xl font-bold mb-4">Admin Panel</h1>
+        </header>
+        <SidebarTrigger />
+        {children}
+      </main>
+    </SidebarProvider>
   );
 }

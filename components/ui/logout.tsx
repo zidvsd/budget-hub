@@ -17,9 +17,10 @@ export default function LogoutButton() {
       const { error } = await supabase.auth.signOut();
 
       if (error) {
-        throw error;
+        toast.error("Failed to logout");
+        return;
       }
-
+      document.cookie = "role=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
       toast.success("Logged out successfully!");
       router.push("/login"); // redirect after logout
     } catch (err: any) {

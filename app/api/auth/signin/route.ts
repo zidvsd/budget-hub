@@ -23,13 +23,26 @@ export async function POST(req: NextRequest) {
         { status: 200 }
       );
     }
-
-    const { error: insertError } = await supabaseAdmin.from("users").upsert({
-      id: userId,
-      email,
-      role: "user",
-      full_name: "",
-    });
+    const { data: existingUser } = await supabaseAdmin
+      .from("users")
+      .select("id")
+      .eq("email", email)
+      .maybeSingle();
+    if (existingUser) {
+      return NextResponse.json(
+        { message: "User already exits" },
+        { status: 400 }
+      );
+    }
+    const { error: insertError } = await supabaseAdmin.from("users").upsert(
+      {
+        id: userId,
+        email,
+        role: "user",
+        full_name: "",
+      },
+      { onConflict: "email" }
+    );
 
     if (insertError) throw insertError;
 

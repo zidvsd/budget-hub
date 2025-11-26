@@ -43,7 +43,11 @@ export default function LoginCard() {
       await supabase.auth.setSession(data.session);
 
       toast.success("Logged in successfully!");
-      router.push("/");
+      if (data.role === "admin") {
+        router.push("/admin/dashboard");
+      } else {
+        router.push("/");
+      }
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong. Please try again.");

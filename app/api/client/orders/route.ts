@@ -19,7 +19,22 @@ export async function GET(req: NextRequest) {
 
   const { data, error } = await supabase
     .from("orders")
-    .select("*")
+    .select(
+      `
+      id,
+      user_id,
+      total_price,
+      status,
+      created_at,
+      updated_at,
+      order_items(
+        quantity,
+        price,
+        product_id,
+        product:products(name)
+      )
+    `
+    )
     .eq("user_id", userId)
     .order("created_at", { ascending: false });
 

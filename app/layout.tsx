@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Roboto, Montserrat, Lora } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+
 const roboto = Roboto({
   subsets: ["latin"],
   variable: "--font-roboto",
@@ -31,19 +32,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className="" lang="en">
+    <html className="dark" lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body className={` ${roboto.variable} antialiased `}>
-        {/* <SidebarProvider className="lg:hidden ">
-          <AppSidebar /> */}
-        <main>
-          {/* <SidebarTrigger /> */}
-          {children}
-        </main>
+        <main>{children}</main>
         <Toaster position="top-right" />
-        {/* </SidebarProvider> */}
       </body>
     </html>
   );

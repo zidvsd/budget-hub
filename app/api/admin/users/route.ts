@@ -13,17 +13,15 @@ export async function GET() {
         { status: 403 }
       );
     }
-    const { data, error } = await supabaseAdmin
-      .from("orders")
-      .select(`*, order_items(*, product:products(name)) `);
+    const { data, error } = await supabaseAdmin.from("users").select("*");
 
     if (error) throw error;
 
     return NextResponse.json(data);
   } catch (error: any) {
-    console.error("Error fetching admin orders:", error);
+    console.error("Error fetching users", error);
     return NextResponse.json(
-      { error: error.message || "Failed to fetch orders" },
+      { error: error.message || "Failed to fetch users" },
       { status: 500 }
     );
   }

@@ -1,3 +1,4 @@
+"use client";
 import "../globals.css";
 import { AppSidebar } from "@/components/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -12,7 +13,6 @@ export default function AdminLayout({
     <SidebarProvider>
       <AppSidebar items={adminMenu} />
       <main className="w-full p-6">
-        <header></header>
         <SidebarTrigger />
         {children}
       </main>

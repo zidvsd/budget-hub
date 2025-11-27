@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Roboto, Montserrat } from "next/font/google";
+import { Roboto, Montserrat, Lora } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 const roboto = Roboto({
@@ -7,9 +7,16 @@ const roboto = Roboto({
   variable: "--font-roboto",
   display: "swap",
 });
+
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
+  display: "swap",
+});
+
+const lora = Lora({
+  subsets: ["latin"],
+  variable: "--font-Lora",
   display: "swap",
 });
 
@@ -24,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html className="" lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>

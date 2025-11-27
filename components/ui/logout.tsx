@@ -1,12 +1,15 @@
 "use client";
 
+interface LogoutButtonProps {
+  showText?: boolean;
+}
 import { useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-
-export default function LogoutButton() {
+import { LogOut } from "lucide-react";
+export default function LogoutButton({ showText = true }: LogoutButtonProps) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const router = useRouter();
 
@@ -33,11 +36,13 @@ export default function LogoutButton() {
 
   return (
     <Button
+      variant={"ghost"}
       onClick={handleLogout}
       disabled={isLoggingOut}
-      className="cursor-pointer"
+      className="flex items-center gap-2 hover-utility cursor-pointer"
     >
-      {isLoggingOut ? "Logging Out..." : "Log Out"}
+      <LogOut className="h-4 w-4" />
+      {showText && (isLoggingOut ? "Logging Out..." : "Log Out")}
     </Button>
   );
 }

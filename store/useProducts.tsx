@@ -11,15 +11,16 @@ interface ProductsState {
 
 export const useProducts = create<ProductsState>((set) => ({
   products: [],
-  loading: false,
+  loading: true,
   error: null,
 
   fetchProducts: async () => {
     set({ loading: true, error: null });
     try {
-      const { data, error } = await supabase.from("products").select("*");
-      if (error) throw error;
-      set({ products: data ?? [], loading: false });
+      const res = await fetch("/api/products");
+      if (!res.ok) throw new Error("Unable to fetch products");
+      const data: Product[] = await res.json();
+      set({ products: data, loading: false });
     } catch (err: any) {
       set({ error: err.message, loading: false });
     }

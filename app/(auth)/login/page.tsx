@@ -17,10 +17,11 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-
+import { EyeOff, Eye } from "lucide-react";
 export default function LoginCard() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const handleSubmit = async (e: React.FormEvent) => {
@@ -92,15 +93,25 @@ export default function LoginCard() {
                 Forgot your password?
               </Link>
             </div>
-            <Input
-              autoComplete="off"
-              id="password"
-              type="password"
-              value={password}
-              placeholder="********"
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className="relative">
+              <Input
+                autoComplete="off"
+                id="password"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                placeholder="********"
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute hover-utility cursor-pointer right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
           </div>
 
           <Button type="submit" className="cursor-pointer w-full mt-2">

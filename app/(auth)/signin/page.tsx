@@ -16,10 +16,13 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { EyeOff, Eye } from "lucide-react";
+
 export default function page() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,6 +39,7 @@ export default function page() {
         console.error("Signup error", data.error);
         toast.error("Failed to sign in", data.error);
       }
+
       toast.success("Account created successfully!");
       setEmail("");
       setPassword("");
@@ -82,15 +86,25 @@ export default function page() {
                 Forgot password?
               </Link>
             </div>
-            <Input
-              autoComplete="off"
-              id="password"
-              type="password"
-              placeholder="********"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className="relative">
+              <Input
+                autoComplete="off"
+                id="password"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                placeholder="********"
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute hover-utility cursor-pointer right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
           </div>
 
           <Button type="submit" className="w-full mt-2 cursor-pointer">

@@ -1,6 +1,7 @@
 import "../globals.css";
 import { AppSidebar } from "@/components/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { adminMenu } from "@/lib/layoutMenus";
 
 export default function AdminLayout({
   children,
@@ -9,11 +10,9 @@ export default function AdminLayout({
 }) {
   return (
     <SidebarProvider>
-      <AppSidebar />
-      <main className="p-6">
-        <header>
-          <h1 className="text-2xl font-bold mb-4">Admin Panel</h1>
-        </header>
+      <AppSidebar items={adminMenu} />
+      <main className="w-full p-6">
+        <header></header>
         <SidebarTrigger />
         {children}
       </main>

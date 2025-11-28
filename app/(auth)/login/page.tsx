@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/lib/supabase/client";
 import {
   Card,
   CardAction,
@@ -27,38 +26,33 @@ export default function LoginCard() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await res.json();
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error || "Login failed");
 
-      if (!res.ok) {
-        toast.error(data.error || "Something went wrong");
-        return;
-      }
-
-      await supabase.auth.setSession(data.session);
-
-      toast.success("Logged in successfully!");
-      if (data.role === "admin") {
+      // Redirect based on role
+      if (json.data.role === "admin") {
         router.push("/admin/dashboard");
       } else {
         router.push("/");
       }
-    } catch (error) {
-      console.error(error);
-      toast.error("Something went wrong. Please try again.");
+
+      toast.success("Logged in successfully!");
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err.message || "Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
     }
-    // TODO: Add login logic here
-    console.log({ email, password });
   };
-
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>

@@ -11,43 +11,16 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let mounted = true;
+    const role = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("role="))
+      ?.split("=")[1];
 
-    // 1️⃣ Check initial session
-    const checkSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      if (!mounted) return;
-
-      if (!session) {
-        router.push("/login"); // redirect if not logged in
-      } else {
-        setSession(session);
-      }
-      setLoading(false);
-    };
-
-    checkSession();
-
-    // 2️⃣ Listen for login/logout events
-    const listener = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) {
-        router.push("/login");
-        setSession(null);
-      } else {
-        setSession(session);
-      }
-    });
-
-    // unsubscribe properly
-    return () => {
-      mounted = false;
-      listener.data.subscription.unsubscribe();
-    };
+    if (!role) {
+      router.push("/login");
+    }
+    setLoading(false);
   }, [router]);
-
   if (loading) return <p>Checking session...</p>;
   if (!session) return null; // while redirecting
 

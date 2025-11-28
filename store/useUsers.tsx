@@ -34,7 +34,6 @@ export const useUsers = create<UsersState>((set) => ({
       if (!res.ok) throw new Error("Unable to fetch users");
 
       const json = await res.json();
-      const data = await res.json();
 
       if ("success" in json && json.success === false) {
         set({ error: json.error, loading: false, users: [] });
@@ -46,6 +45,5 @@ export const useUsers = create<UsersState>((set) => ({
       set({ error: err.message, loading: false });
     }
   },
-
   clearUsers: () => set({ users: [], error: null }),
 }));

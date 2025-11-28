@@ -1,11 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase/client";
 
 export async function GET(
-  req: Request,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const { id } = await params;
+  const { id } = params;
 
   if (!id) {
     return NextResponse.json(
@@ -26,8 +26,5 @@ export async function GET(
     );
   }
 
-  return NextResponse.json(
-    { success: true, message: "Product fetched successfully", data },
-    { status: 200 }
-  );
+  return NextResponse.json(data);
 }

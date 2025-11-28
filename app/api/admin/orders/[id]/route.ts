@@ -131,7 +131,7 @@ export async function PATCH(
       );
     }
 
-    return NextResponse.json({ success: true, data }, { status: 200 });
+    return NextResponse.json(data);
   } catch (error: any) {
     return NextResponse.json(
       { success: false, error: error.message },

@@ -1,6 +1,4 @@
 import { create } from "zustand";
-import { supabase } from "@/lib/supabase/client";
-import { OrderItem } from "@/lib/types/orders";
 import { getRoleFromCookie } from "@/lib/utils";
 import { Order } from "@/lib/types/orders";
 
@@ -33,12 +31,20 @@ export const useOrders = create<OrdersState>((set) => ({
         credentials: "include",
       });
 
-      if (!res.ok) throw new Error(`Failed to fetch orders ${res.statusText}`);
-      const data = await res.json();
-      set({ orders: data ?? [], loading: false });
+      const json = await res.json();
+      if ("success" in json && json.success === false) {
+        set({ error: json.error, loading: false, orders: [] });
+        return;
+      }
+
+      set({ orders: json.data ?? json, loading: false });
     } catch (error: any) {
       console.error("Failed to fetch orders:", error);
-      set({ error: error, loading: false, orders: [] });
+      set({
+        error: error.message ?? "Unknown error",
+        loading: false,
+        orders: [],
+      });
     }
   },
 

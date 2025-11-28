@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/utils/admin/utils";
 import { supabaseAdmin } from "@/lib/supabase/server-client";
+import { json } from "stream/consumers";
 
 // update product
 export async function PATCH(req: NextRequest) {
@@ -34,10 +35,7 @@ export async function PATCH(req: NextRequest) {
         { status: 400 }
       );
     }
-    return NextResponse.json(
-      { success: true, message: "Product updated successfully", data },
-      { status: 200 }
-    );
+    return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json(
       { success: false, error: "Server Error" },
@@ -70,10 +68,7 @@ export async function DELETE(req: NextRequest) {
         { status: 400 }
       );
     }
-    return NextResponse.json(
-      { success: true, message: "Product deleted successfully", data },
-      { status: 200 }
-    );
+    return NextResponse.json(json);
   } catch (error) {
     return NextResponse.json(
       { success: false, error: "Internal server error" },

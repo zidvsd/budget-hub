@@ -31,13 +31,17 @@ export const useUsers = create<UsersState>((set) => ({
         },
         credentials: "include",
       });
-
       if (!res.ok) throw new Error("Unable to fetch users");
 
+      const json = await res.json();
       const data = await res.json();
 
-      console.log("⚠️ Users API returned:", data);
-      set({ users: data, loading: false });
+      if ("success" in json && json.success === false) {
+        set({ error: json.error, loading: false, users: [] });
+        return;
+      }
+
+      set({ users: json.data ?? json, loading: false });
     } catch (err: any) {
       set({ error: err.message, loading: false });
     }

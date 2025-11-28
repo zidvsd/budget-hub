@@ -24,6 +24,11 @@ export const adminMenu: {
   },
   { title: "Users", url: "/admin/dashboard/users", icon: "Users" },
   {
+    title: "Analytics",
+    url: "/admin/dashboard/analytics",
+    icon: "ChartColumnIncreasing",
+  },
+  {
     title: "Notifications",
     url: "/admin/dashboard/notifications",
     icon: "Bell",

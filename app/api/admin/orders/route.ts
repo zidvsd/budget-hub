@@ -1,21 +1,39 @@
 import { supabaseAdmin } from "@/lib/supabase/server-client";
 import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
-export async function GET() {
+import { NextResponse, NextRequest } from "next/server";
+import { requireAdmin } from "@/lib/utils/admin/utils";
+// get all orders
+export async function GET(req: NextRequest) {
   try {
-    const cookieStore = await cookies();
-    const role = cookieStore.get("role")?.value;
+    const adminCheck = await requireAdmin(req);
+    if (adminCheck) return adminCheck;
 
-    // Check if user is admin
-    if (role !== "admin") {
-      return NextResponse.json(
-        { error: "Unauthorized: Admin access required" },
-        { status: 403 }
-      );
-    }
     const { data, error } = await supabaseAdmin
       .from("orders")
       .select(`*, order_items(*, product:products(name)) `);
+
+    if (error) throw error;
+
+    return NextResponse.json(data);
+  } catch (error: any) {
+    console.error("Error fetching admin orders:", error);
+    return NextResponse.json(
+      { error: error.message || "Failed to fetch orders" },
+      { status: 500 }
+    );
+  }
+}
+
+// create an order
+export async function POST(req: NextRequest) {
+  try {
+    const adminCheck = await requireAdmin(req);
+    if (adminCheck) return adminCheck;
+
+    const { data, error } = await supabaseAdmin
+      .from("orders")
+      .insert("")
+      .select();
 
     if (error) throw error;
 

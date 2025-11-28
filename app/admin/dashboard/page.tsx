@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { useProducts } from "@/store/useProducts";
 export default function page() {
   const { fetchOrders, orders, loading, error } = useOrders();
-  const { products, fetchProducts } = useProducts();
+
   return (
     <div>
       <h1 className="page-heading">Dashboard</h1>

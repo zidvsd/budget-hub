@@ -1,8 +1,14 @@
 import { NextResponse, NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+interface OrderItemPayload {
+  product_id: string;
+  quantity: number;
+  price: number;
+}
 // get all orders of user
 export async function GET(req: NextRequest) {
   const supabase = await createClient();
+
   const {
     data: { user },
     error: userError,
@@ -10,12 +16,12 @@ export async function GET(req: NextRequest) {
 
   if (userError || !user) {
     return NextResponse.json(
-      { error: "User not authenticated" },
+      { success: false, error: "User not authenticated" },
       { status: 401 }
     );
   }
 
-  const userId = user?.id;
+  const userId = user.id;
 
   const { data, error } = await supabase
     .from("orders")
@@ -38,17 +44,37 @@ export async function GET(req: NextRequest) {
     .eq("user_id", userId)
     .order("created_at", { ascending: false });
 
-  if (error)
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
+  if (error) {
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 400 }
+    );
+  }
+
+  return NextResponse.json({ success: true, data }, { status: 200 });
 }
 
 export async function POST(req: NextRequest) {
   try {
     const supabase = await createClient();
 
+    // Get authenticated user
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      return NextResponse.json(
+        { success: false, error: "User not authenticated" },
+        { status: 401 }
+      );
+    }
+
+    const userId = user.id;
+
     const body = await req.json();
-    const { user_id, total_price, order_items } = body;
+    const { total_price, order_items } = body;
 
     if (
       !total_price ||
@@ -61,8 +87,6 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-
-    const userId = "e06b6d1e-d4c9-4ece-b72a-92e7c3320246";
 
     // insert order
     const { data: orderData, error: orderError } = await supabase
@@ -87,14 +111,16 @@ export async function POST(req: NextRequest) {
     const orderId = orderData.id;
 
     // insert order items
-    const orderItemsPayload = order_items.map((item: any) => ({
-      order_id: orderId,
-      product_id: item.product_id,
-      quantity: item.quantity,
-      price: item.price,
-    }));
+    const orderItemsPayload: OrderItemPayload[] = order_items.map(
+      (item: OrderItemPayload) => ({
+        order_id: orderId,
+        product_id: item.product_id,
+        quantity: item.quantity,
+        price: item.price,
+      })
+    );
 
-    const { data: itemsData, error: itemsError } = await supabase
+    const { error: itemsError } = await supabase
       .from("order_items")
       .insert(orderItemsPayload);
 

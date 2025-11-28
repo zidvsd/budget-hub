@@ -15,7 +15,7 @@ export async function GET(
 
     if (!orderId)
       return NextResponse.json(
-        { error: "Order ID not found" },
+        { success: false, error: "Order ID not found" },
         { status: 400 }
       );
 
@@ -71,7 +71,7 @@ export async function PATCH(
 
     if (!orderId) {
       return NextResponse.json(
-        { error: "Order ID not provided" },
+        { success: false, error: "Order ID not provided" },
         { status: 400 }
       );
     }
@@ -131,7 +131,7 @@ export async function PATCH(
       );
     }
 
-    return NextResponse.json(data);
+    return NextResponse.json({ success: true, data });
   } catch (error: any) {
     return NextResponse.json(
       { success: false, error: error.message },

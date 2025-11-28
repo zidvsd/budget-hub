@@ -35,7 +35,8 @@ export async function PATCH(req: NextRequest) {
         { status: 400 }
       );
     }
-    return NextResponse.json(data);
+
+    return NextResponse.json({ success: true, data });
   } catch (error) {
     return NextResponse.json(
       { success: false, error: "Server Error" },
@@ -68,7 +69,8 @@ export async function DELETE(req: NextRequest) {
         { status: 400 }
       );
     }
-    return NextResponse.json(json);
+
+    return NextResponse.json({ success: true, data });
   } catch (error) {
     return NextResponse.json(
       { success: false, error: "Internal server error" },

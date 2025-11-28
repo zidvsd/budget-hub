@@ -14,11 +14,11 @@ export async function GET(req: NextRequest) {
 
     if (error) throw error;
 
-    return NextResponse.json(data);
+    return NextResponse.json({ success: true, data });
   } catch (error: any) {
     console.error("Error fetching admin orders:", error);
     return NextResponse.json(
-      { error: error.message || "Failed to fetch orders" },
+      { success: false, error: error.message || "Failed to fetch orders" },
       { status: 500 }
     );
   }
@@ -37,11 +37,11 @@ export async function POST(req: NextRequest) {
 
     if (error) throw error;
 
-    return NextResponse.json(data);
+    return NextResponse.json({ success: true, data });
   } catch (error: any) {
     console.error("Error fetching admin orders:", error);
     return NextResponse.json(
-      { error: error.message || "Failed to fetch orders" },
+      { success: false, error: error.message || "Failed to fetch orders" },
       { status: 500 }
     );
   }

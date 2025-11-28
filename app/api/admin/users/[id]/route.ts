@@ -29,16 +29,16 @@ export async function GET(
     if (error) {
       console.error("Supabase Error:", error);
       return NextResponse.json(
-        { error: error.message || "Failed to fetch user" },
+        { success: false, error: error.message || "Failed to fetch user" },
         { status: 400 }
       );
     }
 
-    return NextResponse.json(data);
+    return NextResponse.json({ success: true, data });
   } catch (error: any) {
     console.error("Error fetching users", error);
     return NextResponse.json(
-      { error: error.message || "Failed to fetch user" },
+      { success: false, error: error.message || "Failed to fetch user" },
       { status: 500 }
     );
   }

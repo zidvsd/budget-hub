@@ -5,26 +5,33 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const { id } = params;
+  try {
+    const { id } = await params;
 
-  if (!id) {
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: "Id not found" },
+        { status: 400 }
+      );
+    }
+
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .eq("id", id);
+
+    if (error) {
+      return NextResponse.json(
+        { success: false, error: error.message },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ success: true, data }, { status: 200 });
+  } catch (err: any) {
     return NextResponse.json(
-      { success: false, error: "Id not found" },
-      { status: 400 }
-    );
-  }
-
-  const { data, error } = await supabase
-    .from("products")
-    .select("*")
-    .eq("id", id);
-
-  if (error) {
-    return NextResponse.json(
-      { success: false, error: error.message },
+      { success: false, error: err.message || "Server Error" },
       { status: 500 }
     );
   }
-
-  return NextResponse.json(data);
 }

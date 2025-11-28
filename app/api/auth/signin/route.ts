@@ -2,35 +2,51 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase/server-client";
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const { email, password } = body;
-
   try {
+    const { email, password } = await req.json();
+
+    if (!email || !password) {
+      return NextResponse.json(
+        { success: false, error: "Email and password are required" },
+        { status: 400 }
+      );
+    }
+
     const { data: signUpData, error: signUpError } =
       await supabaseAdmin.auth.signUp({
         email,
         password,
       });
 
-    if (signUpError) throw signUpError;
-    const userId = signUpData.user?.id;
-    if (!userId) {
+    if (signUpError) {
       return NextResponse.json(
-        { message: "Signup successful! Please check your email to confirm." },
-        { status: 200 }
+        { success: false, error: signUpError.message },
+        { status: 400 }
       );
     }
+
+    const userId = signUpData.user?.id;
+
+    if (!userId) {
+      return NextResponse.json(
+        { success: false, error: "Signup failed, user ID not returned" },
+        { status: 500 }
+      );
+    }
+
     const { data: existingUser } = await supabaseAdmin
       .from("users")
       .select("id")
       .eq("email", email)
       .maybeSingle();
+
     if (existingUser) {
       return NextResponse.json(
-        { message: "User already exits" },
+        { success: false, message: "User already exits" },
         { status: 400 }
       );
     }
+
     const { error: insertError } = await supabaseAdmin.from("users").upsert(
       {
         id: userId,
@@ -41,10 +57,20 @@ export async function POST(req: NextRequest) {
       { onConflict: "email" }
     );
 
-    if (insertError) throw insertError;
+    if (insertError)
+      return NextResponse.json(
+        { success: false, message: "Failed to add user" },
+        { status: 400 }
+      );
 
-    return NextResponse.json({ message: "User signed up successfully!" });
+    return NextResponse.json({
+      success: true,
+      data: { message: "User signed up successfully!" },
+    });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 400 });
+    return NextResponse.json(
+      { success: false, error: err.message || "Signup failed" },
+      { status: 500 }
+    );
   }
 }

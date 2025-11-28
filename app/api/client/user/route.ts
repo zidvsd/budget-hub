@@ -9,9 +9,10 @@ export async function GET(req: NextRequest) {
       data: { user },
       error: userError,
     } = await supabase.auth.getUser();
+
     if (userError || !user) {
       return NextResponse.json(
-        { error: "User not authenticated" },
+        { success: false, error: "User not authenticated" },
         { status: 401 }
       );
     }
@@ -20,14 +21,18 @@ export async function GET(req: NextRequest) {
       .from("users")
       .select("*")
       .eq("id", user.id);
+
     if (profileError || !profile) {
       return NextResponse.json(
-        { error: profileError?.message || "Profile not found" },
+        { success: false, error: profileError?.message || "Profile not found" },
         { status: 404 }
       );
     }
-    return NextResponse.json(profile);
+    return NextResponse.json({ success: true, data: profile }, { status: 200 });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: error.message || "Server Error" },
+      { status: 500 }
+    );
   }
 }

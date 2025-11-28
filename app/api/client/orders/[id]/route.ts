@@ -13,7 +13,7 @@ export async function GET(
 
     if (!orderId)
       return NextResponse.json(
-        { error: "Order ID not found" },
+        { success: false, error: "Order ID not found" },
         { status: 400 }
       );
 
@@ -25,7 +25,7 @@ export async function GET(
 
     if (userError || !user) {
       return NextResponse.json(
-        { error: "User not authenticated" },
+        { success: false, error: "User not authenticated" },
         { status: 401 }
       );
     }
@@ -55,10 +55,16 @@ export async function GET(
       .single();
 
     if (error)
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      return NextResponse.json(
+        { success: false, error: error.message },
+        { status: 400 }
+      );
 
-    return NextResponse.json(data);
+    return NextResponse.json({ success: true, data }, { status: 200 });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: error.message || "Server Error" },
+      { status: 500 }
+    );
   }
 }

@@ -12,16 +12,16 @@ export async function GET(req: NextRequest) {
     if (error) {
       console.error("Supabase Error:", error);
       return NextResponse.json(
-        { error: error.message || "Failed to fetch users" },
+        { success: false, error: error.message || "Failed to fetch users" },
         { status: 400 }
       );
     }
 
-    return NextResponse.json(data);
+    return NextResponse.json({ success: true, data });
   } catch (error: any) {
     console.error("Error fetching users", error);
     return NextResponse.json(
-      { error: error.message || "Failed to fetch users" },
+      { success: false, error: error.message || "Failed to fetch users" },
       { status: 500 }
     );
   }

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Roboto, Montserrat, Lora } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
-
+import { ThemeProvider } from "@/components/theme-providers";
 const roboto = Roboto({
   subsets: ["latin"],
   variable: "--font-roboto",
@@ -32,13 +32,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className="dark" lang="en">
+    <html suppressHydrationWarning lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body className={` ${roboto.variable} antialiased `}>
-        <main>{children}</main>
-        <Toaster position="top-right" />
+        <ThemeProvider attribute="class" enableSystem>
+          <main>{children}</main>
+          <Toaster position="top-right" />
+        </ThemeProvider>
       </body>
     </html>
   );

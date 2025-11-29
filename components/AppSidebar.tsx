@@ -17,6 +17,8 @@ import * as LucideIcons from "lucide-react";
 import Link from "next/link";
 import { LucideIcon } from "lucide-react";
 import { useSidebar } from "@/components/ui/sidebar";
+import { ModeToggle } from "./ModeToggle";
+import { getRoleFromCookie } from "@/lib/utils";
 // Menu items.
 
 interface AppSidebarProps {
@@ -29,6 +31,7 @@ interface AppSidebarProps {
 }
 export function AppSidebar({ hide, items = clientMenu }: AppSidebarProps) {
   const { toggleSidebar, state } = useSidebar();
+  const role = getRoleFromCookie();
   const isCollapsed = state === "collapsed";
   return (
     <Sidebar
@@ -39,7 +42,9 @@ export function AppSidebar({ hide, items = clientMenu }: AppSidebarProps) {
     >
       <SidebarContent>
         <SidebarGroup className="group-data-[collapsible=icon]">
-          <SidebarGroupLabel>Admin Panel</SidebarGroupLabel>
+          <SidebarGroupLabel>
+            {role === "admin" ? "Admin Panel" : "Sidebar"}
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {
@@ -67,8 +72,15 @@ export function AppSidebar({ hide, items = clientMenu }: AppSidebarProps) {
         </SidebarGroup>
       </SidebarContent>
 
+      {/* mode toggle */}
+      <div>
+        <SidebarMenuButton asChild>
+          <ModeToggle showText={!isCollapsed} />
+        </SidebarMenuButton>
+      </div>
+
       {/* Logout button at the bottom */}
-      <div className={`${isCollapsed ? "p-0" : "p-2"}`}>
+      <div>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>

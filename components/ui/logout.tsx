@@ -39,7 +39,7 @@ export default function LogoutButton({ showText = true }: LogoutButtonProps) {
       variant={"ghost"}
       onClick={handleLogout}
       disabled={isLoggingOut}
-      className="flex items-center gap-2 hover-utility cursor-pointer"
+      className="flex w-full items-start justify-start gap-2 hover-utility cursor-pointer"
     >
       <LogOut className="h-4 w-4" />
       {showText && (isLoggingOut ? "Logging Out..." : "Log Out")}

@@ -31,7 +31,6 @@ interface AppSidebarProps {
 }
 export function AppSidebar({ hide, items = clientMenu }: AppSidebarProps) {
   const { toggleSidebar, state } = useSidebar();
-  const role = getRoleFromCookie();
   const isCollapsed = state === "collapsed";
   return (
     <Sidebar
@@ -42,9 +41,7 @@ export function AppSidebar({ hide, items = clientMenu }: AppSidebarProps) {
     >
       <SidebarContent>
         <SidebarGroup className="group-data-[collapsible=icon]">
-          <SidebarGroupLabel>
-            {role === "admin" ? "Admin Panel" : "Sidebar"}
-          </SidebarGroupLabel>
+          <SidebarGroupLabel>Sidebar</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {

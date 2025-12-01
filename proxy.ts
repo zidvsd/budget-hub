@@ -3,13 +3,18 @@ import { NextResponse, NextRequest } from "next/server";
 
 export function proxy(req: NextRequest) {
   const role = req.cookies.get("role")?.value; // assume you set a cookie with role after login
-  if (role === "admin" && req.nextUrl.pathname.startsWith("/")) {
-    if (!req.nextUrl.pathname.startsWith("/admin")) {
-      return NextResponse.redirect(new URL("/admin/dashboard", req.url));
+  const token = req.cookies.get("access-token")?.value;
+  const url = req.nextUrl.pathname;
+
+  // Protect admin routes
+  if (url.startsWith("/admin")) {
+    if (!token || role !== "admin") {
+      return NextResponse.redirect(new URL("/login", req.url));
     }
   }
-  if (role === "user" && req.nextUrl.pathname.startsWith("/admin")) {
-    return NextResponse.redirect(new URL("/", req.url));
+
+  if (role === "admin" && url === "/") {
+    return NextResponse.redirect(new URL("/admin/dashboard", req.url));
   }
   return NextResponse.next();
 }

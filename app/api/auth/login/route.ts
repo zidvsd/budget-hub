@@ -42,7 +42,12 @@ export async function POST(req: NextRequest) {
     };
 
     const response = NextResponse.json({ success: true, data: payload });
-    response.cookies.set("role", userData.role, { path: "/" });
+    response.cookies.set("role", userData.role, {
+      path: "/",
+      httpOnly: false,
+      sameSite: "lax",
+    });
+    console.log("setting role cookie", userData.role);
     return response;
   } catch (error: any) {
     return NextResponse.json(

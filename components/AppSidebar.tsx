@@ -18,7 +18,7 @@ import Link from "next/link";
 import { LucideIcon } from "lucide-react";
 import { useSidebar } from "@/components/ui/sidebar";
 import { ModeToggle } from "./ModeToggle";
-import { getRoleFromCookie } from "@/lib/utils";
+import { useAuthFromCookies } from "@/hooks/useAuth";
 // Menu items.
 
 interface AppSidebarProps {
@@ -32,6 +32,7 @@ interface AppSidebarProps {
 export function AppSidebar({ hide, items = clientMenu }: AppSidebarProps) {
   const { toggleSidebar, state } = useSidebar();
   const isCollapsed = state === "collapsed";
+  const { role, loading } = useAuthFromCookies();
   return (
     <Sidebar
       collapsible="icon"
@@ -81,7 +82,17 @@ export function AppSidebar({ hide, items = clientMenu }: AppSidebarProps) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <LogoutButton showText={!isCollapsed} />
+              {role ? (
+                <LogoutButton showText={!isCollapsed} />
+              ) : (
+                <Link
+                  href="/login"
+                  className="flex items-center gap-2 px-2 py-2 rounded hover:bg-gray-100"
+                >
+                  <LucideIcons.LogIn className="size-4" />
+                  {!isCollapsed && <span className="p-1">Sign In</span>}
+                </Link>
+              )}
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

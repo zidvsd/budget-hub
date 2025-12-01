@@ -1,28 +1,21 @@
 "use client";
 
-import { supabase } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
-import { Session } from "@supabase/supabase-js";
 
-export function useAuth() {
-  const [session, setSession] = useState<Session | null>(null);
+export function useAuthFromCookies() {
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function getSession() {
-      const { data } = await supabase.auth.getSession();
-      setSession(data.session);
-    }
+    const cookiesList = document.cookie.split("; ").reduce((acc, c) => {
+      const [key, value] = c.split("=");
+      acc[key] = value;
+      return acc;
+    }, {} as Record<string, string>);
 
-    getSession();
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
+    setUserRole(cookiesList["role"] ?? null);
+    setLoading(false);
   }, []);
 
-  return session;
+  return { role: userRole, loading };
 }

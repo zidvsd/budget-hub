@@ -37,7 +37,7 @@ export function ModeToggle({ showText = false }: ModeToggleProps) {
       </span>
 
       {/* TEXT */}
-      {showText && <span>{label}</span>}
+      {showText && <span className="font-normal">{label}</span>}
     </Button>
   );
 }

@@ -34,21 +34,15 @@ export function AppSidebar({ hide, items = clientMenu }: AppSidebarProps) {
   const isCollapsed = state === "collapsed";
   const { role, loading } = useAuthFromCookies();
   return (
-    <Sidebar
-      collapsible="icon"
-      className={`${
-        hide ? "lg:hidden" : null
-      } flex flex-col justify-between h-full`}
-    >
-      <SidebarContent>
-        <SidebarGroup className="group-data-[collapsible=icon]">
+    <Sidebar collapsible="icon" className="flex flex-col h-full">
+      <SidebarContent className="flex flex-col h-full">
+        {/* TOP MENU ITEMS */}
+        <SidebarGroup>
           <SidebarGroupLabel>Sidebar</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {
-                const IconComponent = LucideIcons[
-                  item.icon as keyof typeof LucideIcons
-                ] as LucideIcon;
+                const IconComponent = LucideIcons[item.icon] as LucideIcon;
 
                 return (
                   <SidebarMenuItem key={item.title}>
@@ -68,35 +62,33 @@ export function AppSidebar({ hide, items = clientMenu }: AppSidebarProps) {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {/* BOTTOM SECTION */}
+        <div className="mt-auto flex flex-col items-center justify-center ">
+          <SidebarGroup>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {/* MODE TOGGLE */}
+                <SidebarMenuButton asChild>
+                  <ModeToggle showText={!isCollapsed} />
+                </SidebarMenuButton>
+
+                {/* LOGOUT / LOGIN */}
+                <SidebarMenuButton asChild>
+                  {role ? (
+                    <LogoutButton showText={!isCollapsed} />
+                  ) : (
+                    <Link href="/login" className="flex items-center gap-2">
+                      <LucideIcons.LogIn className="size-4" />
+                      {!isCollapsed && <span>Sign In</span>}
+                    </Link>
+                  )}
+                </SidebarMenuButton>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </div>
       </SidebarContent>
-
-      {/* mode toggle */}
-      <div>
-        <SidebarMenuButton asChild>
-          <ModeToggle showText={!isCollapsed} />
-        </SidebarMenuButton>
-      </div>
-
-      {/* Logout button at the bottom */}
-      <div>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              {role ? (
-                <LogoutButton showText={!isCollapsed} />
-              ) : (
-                <Link
-                  href="/login"
-                  className="flex items-center gap-2 px-2 py-2 rounded hover:bg-gray-100"
-                >
-                  <LucideIcons.LogIn className="size-4" />
-                  {!isCollapsed && <span className="p-1">Sign In</span>}
-                </Link>
-              )}
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </div>
     </Sidebar>
   );
 }

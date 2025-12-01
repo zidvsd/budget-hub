@@ -53,7 +53,7 @@ export default function page() {
   };
 
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full max-w-sm bg-muted">
       <CardHeader>
         <CardTitle>Create an account</CardTitle>
         <CardDescription>
@@ -107,7 +107,11 @@ export default function page() {
             </div>
           </div>
 
-          <Button type="submit" className="w-full mt-2 cursor-pointer">
+          <Button
+            type="submit"
+            variant={"accent"}
+            className="w-full mt-2 cursor-pointer"
+          >
             {isLoading ? "Signing Up..." : "Sign Up"}
           </Button>
         </form>

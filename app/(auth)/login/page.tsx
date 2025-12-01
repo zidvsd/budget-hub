@@ -54,7 +54,7 @@ export default function LoginCard() {
     }
   };
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full max-w-sm bg-muted">
       <CardHeader>
         <CardTitle>Login to your account</CardTitle>
         <CardDescription>
@@ -108,7 +108,11 @@ export default function LoginCard() {
             </div>
           </div>
 
-          <Button type="submit" className="cursor-pointer w-full mt-2">
+          <Button
+            variant={"accent"}
+            type="submit"
+            className="cursor-pointer w-full mt-2"
+          >
             {isLoading ? "Logging..." : "Log in"}
           </Button>
         </form>

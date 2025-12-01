@@ -10,11 +10,11 @@ export default function Navbar() {
   const { role, loading } = useAuthFromCookies();
   if (loading) return null;
   return (
-    <nav className="sticky top-0  border-b border-neutral-200 z-50">
+    <nav className="sticky top-0 bg-transparent border-b border-neutral-300 shadow dark:border-neutral-700 z-50">
       <div className="custom-container flex items-center justify-between py-3">
         {/* Logo */}
         <Link href={"/"} className="text-xl font-bold">
-          MyLogo
+          GadyetHub
         </Link>
 
         {/* Search */}

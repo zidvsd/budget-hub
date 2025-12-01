@@ -39,10 +39,14 @@ export default function LogoutButton({ showText = true }: LogoutButtonProps) {
       variant={"ghost"}
       onClick={handleLogout}
       disabled={isLoggingOut}
-      className="flex font-normal  w-full items-start justify-start gap-2 hover-utility cursor-pointer"
+      className=" flex justify-start gap-2 w-full rounded-md px-2 py-1.5 text-sm font-medium  hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
     >
-      <LogOut className="size-4" />
-      {showText && (isLoggingOut ? "Logging Out..." : "Log Out")}
+      <LogOut className="h-4 w-4 shrink-0" />
+      {showText && (
+        <span className="font-normal">
+          {isLoggingOut ? "Logging Out..." : "Log Out"}
+        </span>
+      )}
     </Button>
   );
 }

@@ -4,13 +4,13 @@ import { Facebook, Instagram, Mail, Github } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-neutral-900 text-neutral-100 mt-12">
+    <footer className="bg-muted w-full mt-12">
       <div className="custom-container py-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {/* About */}
           <div>
             <h3 className="text-lg font-semibold mb-3">About Us</h3>
-            <p className="text-sm text-neutral-300">
+            <p className="text-sm text-neutral-600 dark:text-neutral-300">
               GadyetHub is a lightweight marketplace focused on curated
               electronics and accessories. We make shopping simple and secure.
             </p>
@@ -19,7 +19,7 @@ export default function Footer() {
           {/* Quick Links */}
           <div>
             <h3 className="text-lg font-semibold mb-3">Quick Links</h3>
-            <ul className="space-y-2 text-sm text-neutral-300">
+            <ul className="space-y-2 text-sm text-neutral-600 dark:text-neutral-300">
               <li>
                 <Link href="/" className="hover:text-white">
                   Home
@@ -46,7 +46,7 @@ export default function Footer() {
           {/* Customer Service */}
           <div>
             <h3 className="text-lg font-semibold mb-3">Customer Service</h3>
-            <ul className="space-y-2 text-sm text-neutral-300">
+            <ul className="space-y-2 text-sm text-neutral-600 dark:text-neutral-300">
               <li>
                 <Link href="/account" className="hover:text-white">
                   My Account
@@ -77,28 +77,28 @@ export default function Footer() {
               <a
                 aria-label="Facebook"
                 href="#"
-                className="text-neutral-300 hover:text-white"
+                className="text-neutral-600 dark:text-neutral-300 hover:text-white"
               >
                 <Facebook className="w-5 h-5" />
               </a>
               <a
                 aria-label="Instagram"
                 href="#"
-                className="text-neutral-300 hover:text-white"
+                className="text-neutral-600 dark:text-neutral-300 hover:text-white"
               >
                 <Instagram className="w-5 h-5" />
               </a>
               <a
                 aria-label="Email"
                 href="mailto:hello@gadyethub.com"
-                className="text-neutral-300 hover:text-white"
+                className="text-neutral-600 dark:text-neutral-300 hover:text-white"
               >
                 <Mail className="w-5 h-5" />
               </a>
               <a
                 aria-label="GitHub"
                 href="https://github.com"
-                className="text-neutral-300 hover:text-white"
+                className="text-neutral-600 dark:text-neutral-300 hover:text-white"
               >
                 <Github className="w-5 h-5" />
               </a>

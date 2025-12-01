@@ -11,7 +11,7 @@ export default function ClientLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const publicPages = ["/", "/category", "/products/category"];
+  const publicPages = ["/", "/category", "/products"];
   return (
     <>
       <ProtectedRoute role="user" publicPages={publicPages}>

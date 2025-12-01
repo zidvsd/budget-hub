@@ -13,7 +13,9 @@ export default function AdminLayout({
     <SidebarProvider>
       <AppSidebar items={adminMenu} />
       <main className="w-full p-6">
-        <SidebarTrigger />
+        <div className="flex justify-between">
+          <SidebarTrigger />
+        </div>
         {children}
       </main>
     </SidebarProvider>

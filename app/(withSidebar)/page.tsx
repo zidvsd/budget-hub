@@ -6,5 +6,9 @@ import { Session } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 
 export default function page() {
-  return <p>Welcome to our products page!</p>;
+  return (
+    <div className="mt-8">
+      <p>Welcome to our products page!</p>
+    </div>
+  );
 }

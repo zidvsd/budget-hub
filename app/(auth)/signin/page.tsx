@@ -53,7 +53,7 @@ export default function page() {
   };
 
   return (
-    <Card className="w-full max-w-sm bg-muted">
+    <Card className="w-full max-w-sm dark:bg-muted">
       <CardHeader>
         <CardTitle>Create an account</CardTitle>
         <CardDescription>

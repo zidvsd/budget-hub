@@ -24,8 +24,14 @@ export default function ClientLayout({
         {/* Mobile/Tablet: Sidebar + Content */}
         <SidebarProvider className="md:hidden">
           <AppSidebar items={clientMenu} />
-          <SidebarTrigger />
-          <main className="w-full  min-h-screen">{children}</main>
+          <div className="flex flex-col w-full custom-container">
+            <div className="flex justify-between items-center">
+              <SidebarTrigger />
+              <h1>Logo</h1>
+            </div>
+
+            <main className="w-full  min-h-screen">{children}</main>
+          </div>
         </SidebarProvider>
         <Footer />
       </ProtectedRoute>

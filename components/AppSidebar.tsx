@@ -64,13 +64,13 @@ export function AppSidebar({ hide, items = clientMenu }: AppSidebarProps) {
         </SidebarGroup>
 
         {/* BOTTOM SECTION */}
-        <div className="mt-auto flex flex-col items-center justify-center ">
+        <div className="mt-auto flex flex-col items-center  ">
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu>
                 {/* MODE TOGGLE */}
                 <SidebarMenuButton asChild>
-                  <ModeToggle showText={!isCollapsed} />
+                  <ModeToggle variant="ghost" showText={!isCollapsed} />
                 </SidebarMenuButton>
 
                 {/* LOGOUT / LOGIN */}
@@ -78,7 +78,7 @@ export function AppSidebar({ hide, items = clientMenu }: AppSidebarProps) {
                   {role ? (
                     <LogoutButton showText={!isCollapsed} />
                   ) : (
-                    <Link href="/login" className="flex items-center gap-2">
+                    <Link href="/login" className="flex items-center gap-3 ">
                       <LucideIcons.LogIn className="size-4" />
                       {!isCollapsed && <span>Sign In</span>}
                     </Link>

@@ -54,7 +54,7 @@ export default function LoginCard() {
     }
   };
   return (
-    <Card className="w-full max-w-sm bg-muted">
+    <Card className="w-full max-w-sm dark:bg-muted">
       <CardHeader>
         <CardTitle>Login to your account</CardTitle>
         <CardDescription>

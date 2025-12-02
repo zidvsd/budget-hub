@@ -7,7 +7,7 @@ import { useOrders } from "@/store/useOrders";
 import { useUsers } from "@/store/useUsers";
 import { useEffect } from "react";
 
-export default function Page() {
+export default function page() {
   const { fetchOrders, orders, loading: ordersLoading } = useOrders();
   const { fetchUsers, users, loading: usersLoading } = useUsers();
 

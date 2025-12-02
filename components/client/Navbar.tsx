@@ -22,27 +22,37 @@ export default function Navbar() {
           <div className=" mx-4 md:w-1/2 lg:w-1/2">
             <Input placeholder="Search..." className="w-full " />
           </div>
-          <div className="">
-            <ModeToggle />
+          <div className="w-fit">
+            <ModeToggle variant="nav" />
           </div>
         </div>
 
         {/* Icons */}
         <div className="flex items-center space-x-8">
-          <Link href={"/notifications"}>
-            <Bell className="w-6 h-6 cursor-pointer" />
+          <Link
+            href="/notifications"
+            className="group hover:bg-muted rounded-lg p-2 transition"
+          >
+            <Bell className="size-4 cursor-pointer transition group-hover:text-accent" />
           </Link>
-          <Link href={"/cart"}>
-            <ShoppingCart className="w-6 h-6 cursor-pointer" />
+
+          <Link
+            href="/cart"
+            className="group hover:bg-muted rounded-lg p-2 transition"
+          >
+            <ShoppingCart className="size-4 cursor-pointer transition   group-hover:text-accent" />
           </Link>
           <div className="flex items-center space-x-8">
             {role ? (
-              <Link href={"/account"}>
-                <User className="w-6 h-6 cursor-pointer" />
+              <Link
+                href="/account"
+                className="group hover:bg-muted rounded-lg p-2 transition"
+              >
+                <User className="size-4 cursor-pointer transition group-hover:text-accent" />
               </Link>
             ) : (
               <Link href={"/login"}>
-                <Button variant="secondary">Login</Button>
+                <Button variant="accent">Login</Button>
               </Link>
             )}
           </div>

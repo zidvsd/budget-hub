@@ -12,7 +12,7 @@ export default function AdminLayout({
   return (
     <SidebarProvider>
       <AppSidebar items={adminMenu} />
-      <main className="w-full p-6">
+      <main className="w-full p-4 lg:p-6 max-w-[1440px]">
         <div className="flex justify-between">
           <SidebarTrigger />
         </div>

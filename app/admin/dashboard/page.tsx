@@ -1,34 +1,77 @@
 "use client";
-import { Users, ShoppingCart, DollarSign, Package } from "lucide-react";
+
+import { TriangleAlert, ShoppingCart, DollarSign, Package } from "lucide-react";
 import { StatCard } from "@/components/ui/stat-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useOrders } from "@/store/useOrders";
-import { useEffect } from "react";
 import { useProducts } from "@/store/useProducts";
-export default function page() {
-  const { fetchOrders, orders, loading, error } = useOrders();
+import { useEffect } from "react";
+
+export default function DashboardPage() {
+  const { fetchOrders, orders, loading: ordersLoading } = useOrders();
+  const { fetchProducts, products, loading: productsLoading } = useProducts();
+
+  const loading = ordersLoading || productsLoading;
+
+  useEffect(() => {
+    fetchOrders();
+    fetchProducts();
+  }, [fetchOrders, fetchProducts]);
+
+  const totalProducts = products.length;
+  const totalOrders = orders.length;
+  const totalPendingOrders = orders.filter(
+    (order) => order.status === "pending"
+  ).length;
+  const totalLowStocks = products.filter(
+    (product) => product.stock <= 5
+  ).length;
 
   return (
     <div>
-      <h1 className="page-heading">Dashboard</h1>
-      <p className="page-subheading">Welcome to your admin dashboard</p>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
-        <StatCard
-          title="Total Products"
-          icon={<Package className="w-6 h-6" />}
-          stat={1280}
-        />
-        <StatCard
-          title="Total Orders"
-          icon={<ShoppingCart className="w-6 h-6" />}
-          stat={1280}
-        />
-        <StatCard
-          title="Pending Orders"
-          icon={<DollarSign className="w-6 h-6" />}
-          stat={245}
-        />
-      </div>
+      {loading ? (
+        <>
+          <Skeleton className="h-8 w-1/3 mb-2" />
+          <Skeleton className="h-5 w-2/3 mb-6" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+          </div>
+        </>
+      ) : (
+        <>
+          <h1 className="page-heading">Dashboard</h1>
+          <p className="page-subheading">Welcome to your admin dashboard</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-5">
+            <StatCard
+              title="Total Products"
+              icon={<Package className="w-6 h-6" />}
+              stat={totalProducts}
+              description="All products currently available in the store"
+            />
+            <StatCard
+              title="Total Orders"
+              icon={<ShoppingCart className="w-6 h-6" />}
+              stat={totalOrders}
+              description="All orders placed by customers so far."
+            />
+            <StatCard
+              title="Pending Orders"
+              icon={<DollarSign className="w-6 h-6" />}
+              stat={totalPendingOrders}
+              description="Orders that are awaiting processing or fulfillment."
+            />
+            <StatCard
+              title="Low Stocks"
+              icon={<TriangleAlert className="w-6 h-6" />}
+              stat={totalLowStocks}
+              description="Products with 5 or fewer items remaining in stock."
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 }

@@ -39,7 +39,7 @@ export default function RootLayout({
       <body className={` ${roboto.variable} antialiased `}>
         <ThemeProvider attribute="class" enableSystem>
           <main>{children}</main>
-          <Toaster position="top-right" />
+          <Toaster richColors expand={true} position="top-right" />
         </ThemeProvider>
       </body>
     </html>

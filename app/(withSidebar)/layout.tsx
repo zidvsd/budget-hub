@@ -6,11 +6,18 @@ import { clientMenu } from "@/lib/layoutMenus";
 import Navbar from "@/components/client/Navbar";
 import Footer from "@/components/client/Footer";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import { useUsers } from "@/store/useUsers";
+import { useEffect } from "react";
 export default function ClientLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { fetchUsers } = useUsers();
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
   const publicPages = ["/", "/category", "/products"];
   return (
     <>

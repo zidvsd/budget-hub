@@ -14,3 +14,7 @@ export const getRoleFromCookie = (): string | null => {
   const roleCookie = cookies.find((cookie) => cookie.startsWith("role="));
   return roleCookie ? roleCookie.split("=")[1] : null;
 };
+
+export function getFirstName(name: string) {
+  return name.split(" ")[0];
+}

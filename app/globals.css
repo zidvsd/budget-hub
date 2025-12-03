@@ -158,3 +158,11 @@ h1 {
 .page-subheading {
   @apply text-neutral-500;
 }
+
+footer ul li {
+  @apply hover:text-accent transition duration-300 ease-in-out;
+}
+
+footer a {
+  @apply hover:text-accent transition duration-300 ease-in-out;
+}

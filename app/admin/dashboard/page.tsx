@@ -47,25 +47,25 @@ export default function DashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-5">
             <StatCard
               title="Total Products"
-              icon={<Package className="w-6 h-6" />}
+              icon={<Package className="size-6" />}
               stat={totalProducts}
               description="All products currently available in the store"
             />
             <StatCard
               title="Total Orders"
-              icon={<ShoppingCart className="w-6 h-6" />}
+              icon={<ShoppingCart className="size-6" />}
               stat={totalOrders}
               description="All orders placed by customers so far."
             />
             <StatCard
               title="Pending Orders"
-              icon={<DollarSign className="w-6 h-6" />}
+              icon={<DollarSign className="size-6 " />}
               stat={totalPendingOrders}
               description="Orders that are awaiting processing or fulfillment."
             />
             <StatCard
               title="Low Stocks"
-              icon={<TriangleAlert className="w-6 h-6" />}
+              icon={<TriangleAlert className="size-6 " />}
               stat={totalLowStocks}
               description="Products with 5 or fewer items remaining in stock."
             />

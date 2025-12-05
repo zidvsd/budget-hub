@@ -16,7 +16,7 @@ export default function AdminLayout({
         <div className="flex justify-between">
           <SidebarTrigger />
         </div>
-        {children}
+        <div className="mt-4">{children}</div>
       </main>
     </SidebarProvider>
   );

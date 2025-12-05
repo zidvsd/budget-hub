@@ -42,12 +42,12 @@ export default function LogoutButton({ showText = true }: LogoutButtonProps) {
       variant="ghost"
       onClick={handleLogout}
       disabled={isLoggingOut}
-      className={`flex items-center gap-2 rounded-md transition
-        ${showText ? "px-3 py-2 justify-start" : "p-0 w-8 h-8 justify-center"}
-        dark:hover:bg-accent/60 hover:bg-accent/10 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed
-      `}
+      className={`group flex items-center gap-2 rounded-md transition
+    ${showText ? "px-3 py-2 justify-start" : "p-0 w-8 h-8 justify-center"}
+    dark:hover:bg-accent/60 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed
+  `}
     >
-      <LogOut className="h-4 w-4 shrink-0" />
+      <LogOut className="h-4 w-4 shrink-0 text-black dark:text-white group-hover:text-white transition" />
       {showText && (
         <span className="font-normal">
           {isLoggingOut ? "Logging Out..." : "Log Out"}

@@ -46,33 +46,33 @@ export default function Navbar() {
         <div className="flex items-center space-x-4 md:space-x-8">
           <Link
             href="/notifications"
-            className="group hover:bg-muted rounded-lg p-2 transition"
+            className="group hover:bg-muted rounded-lg p-2 hover-utility"
           >
             <Bell className="size-4 cursor-pointer transition group-hover:text-accent" />
           </Link>
 
           <Link
             href="/cart"
-            className="group hover:bg-muted rounded-lg p-2 transition"
+            className="group hover:bg-muted rounded-lg p-2 hover-utility"
           >
-            <ShoppingCart className="size-4 cursor-pointer transition group-hover:text-accent" />
+            <ShoppingCart className="size-4 cursor-pointer hover-utility group-hover:text-accent" />
           </Link>
 
           <div className="flex items-center">
             {role ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="group hover:bg-muted rounded-lg p-2 transition">
-                    <User className="size-4 cursor-pointer transition group-hover:text-accent" />
+                  <button className="group hover:bg-muted  cursor-pointer rounded-lg p-2 hover-utility">
+                    <User className="size-4 cursor-pointer hover-utility group-hover:text-accent" />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem>
                     <Link
                       href="/account"
-                      className="flex items-center gap-2 w-full  justify-center text-center "
+                      className="group flex items-center py-1.5 gap-2 w-full justify-center text-center hover:text-white transition"
                     >
-                      <UserIcon className="w-4 h-4 shrink-0" />
+                      <UserIcon className="w-4 h-4 shrink-0 text-black dark:text-white group-hover:text-white transition" />
                       {loading
                         ? "Loading..."
                         : getFirstName(users[0]?.full_name) || "Account"}

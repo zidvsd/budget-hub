@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Roboto, Montserrat, Lora } from "next/font/google";
+import { Roboto, Montserrat, Lora, Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/theme-providers";
@@ -12,6 +12,11 @@ const roboto = Roboto({
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
+  display: "swap",
+});
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -36,10 +41,10 @@ export default function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
-      <body className={` ${roboto.variable} antialiased `}>
+      <body className={` ${inter.variable} antialiased `}>
         <ThemeProvider attribute="class" enableSystem>
           <main>{children}</main>
-          <Toaster richColors expand={true} position="top-right" />
+          <Toaster expand={true} position="top-right" />
         </ThemeProvider>
       </body>
     </html>

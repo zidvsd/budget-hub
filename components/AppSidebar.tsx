@@ -47,11 +47,7 @@ export function AppSidebar({ hide, items = clientMenu }: AppSidebarProps) {
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <Link
-                        onClick={toggleSidebar}
-                        href={item.url}
-                        className="flex items-center gap-2"
-                      >
+                      <Link href={item.url} className="flex items-center gap-2">
                         <IconComponent className="h-4 w-4" />
                         <span>{item.title}</span>
                       </Link>

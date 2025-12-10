@@ -4,8 +4,10 @@ import { useEffect } from "react";
 import { StatCard } from "@/components/ui/stat-card";
 import { ShieldUser, UserRound, UserSquare2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { DataTable } from "@/components/ui/data-table";
+import { columns } from "./columns";
 export default function page() {
-  const { fetchUsers, users, loading: usersLoading } = useUsers();
+  const { fetchUsers, users, loading: userLoading } = useUsers();
 
   useEffect(() => {
     fetchUsers();
@@ -14,10 +16,10 @@ export default function page() {
   const totalUsers = users.length;
   const totalAdmins = users.filter((user) => user.role === "admin").length;
   const totalCustomers = users.filter((user) => user.role === "user").length;
-
+  const loading = userLoading;
   return (
     <div>
-      {usersLoading ? (
+      {loading ? (
         <>
           <Skeleton className="h-8 w-1/3 mb-2" />
           <Skeleton className="h-5 w-2/3 mb-6" />
@@ -53,6 +55,15 @@ export default function page() {
           </div>
         </>
       )}
+
+      {/* Users List */}
+      <div className="mt-8">
+        {loading ? (
+          <Skeleton className=" w-full h-42 rounded-md animate-pulse" />
+        ) : (
+          <DataTable data={users} columns={columns} />
+        )}
+      </div>
     </div>
   );
 }

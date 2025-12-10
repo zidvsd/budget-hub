@@ -31,7 +31,7 @@ export default function page() {
       <h1 className="page-heading">Orders Management</h1>
       <p className="page-subheading">Manage and track all customer orders</p>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+      <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-5">
         <StatCard
           title="Users"
           icon={<Users className="w-6 h-6" />}
@@ -48,37 +48,6 @@ export default function page() {
           stat={orders.length}
           description="This month"
         />
-      </div>
-
-      {/* Users List */}
-      <div className="mt-10">
-        <h2 className="text-xl font-semibold mb-3">Users List</h2>
-        {users.length === 0 ? (
-          <p>No users found.</p>
-        ) : (
-          <div className="space-y-3">
-            {users.map((user) => (
-              <div key={user.id} className="border rounded-md p-4">
-                <p>
-                  <strong>Name:</strong> {user.full_name}
-                </p>
-                <p>
-                  <strong>Email:</strong> {user.email}
-                </p>
-                <p>
-                  <strong>Role:</strong> {user.role}
-                </p>
-                <p>
-                  <strong>Address:</strong> {user.address ?? "N/A"}
-                </p>
-                <p>
-                  <strong>Joined:</strong>{" "}
-                  {new Date(user.created_at).toLocaleDateString()}
-                </p>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
 
       {/* Orders List */}

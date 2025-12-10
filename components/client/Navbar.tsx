@@ -44,19 +44,22 @@ export default function Navbar() {
 
         {/* Icons */}
         <div className="flex items-center space-x-4 md:space-x-8">
-          <Link
-            href="/notifications"
-            className="group hover:bg-muted rounded-lg p-2 hover-utility"
-          >
-            <Bell className="size-4 cursor-pointer transition group-hover:text-accent" />
-          </Link>
-
-          <Link
-            href="/cart"
-            className="group hover:bg-muted rounded-lg p-2 hover-utility"
-          >
-            <ShoppingCart className="size-4 cursor-pointer hover-utility group-hover:text-accent" />
-          </Link>
+          {role && (
+            <>
+              <Link
+                href="/notifications"
+                className="group hover:bg-muted rounded-lg p-2 hover-utility"
+              >
+                <Bell className="size-4 cursor-pointer transition group-hover:text-accent" />
+              </Link>
+              <Link
+                href="/cart"
+                className="group hover:bg-muted rounded-lg p-2 hover-utility"
+              >
+                <ShoppingCart className="size-4 cursor-pointer hover-utility group-hover:text-accent" />
+              </Link>{" "}
+            </>
+          )}
 
           <div className="flex items-center">
             {role ? (

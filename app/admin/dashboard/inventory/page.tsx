@@ -2,10 +2,9 @@
 
 import { useEffect } from "react";
 import { useProducts } from "@/store/useProducts";
-import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import { Skeleton } from "@/components/ui/skeleton";
-
+import { DataTable } from "@/components/ui/data-table";
 export default function page() {
   const { fetchProducts, products, loading } = useProducts();
 

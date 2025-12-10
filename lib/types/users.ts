@@ -4,5 +4,6 @@ export interface User {
   email: string;
   role: "admin" | "user";
   address: string | null;
+  phone: string;
   created_at: string;
 }

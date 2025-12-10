@@ -25,3 +25,10 @@ export function formatDate(date: string) {
     year: "numeric",
   });
 }
+
+export function formatPrice(price: number) {
+  return `₱${price.toFixed(2)}`;
+}
+export function truncateId(text: string) {
+  return text.slice(0, 8) + "...";
+}

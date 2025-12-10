@@ -14,6 +14,16 @@ export const columns: ColumnDef<User>[] = [
     accessorKey: "email",
     header: "Email",
   },
+  {
+    accessorKey: "phone",
+    header: "Phone",
+    cell: ({ row }) => {
+      {
+        const phone = row.original.phone;
+        return phone ? phone : "N/A";
+      }
+    },
+  },
 
   {
     accessorKey: "role",
@@ -23,7 +33,7 @@ export const columns: ColumnDef<User>[] = [
         <span
           className={`${
             row.original.role === "admin"
-              ? "text-white bg-accent rounded-full p-1"
+              ? "text-white bg-accent rounded-full px-2"
               : ""
           }`}
         >

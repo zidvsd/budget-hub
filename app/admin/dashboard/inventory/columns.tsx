@@ -16,7 +16,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
+type TableMeta = {
+  onDelete: (id: string) => void;
+};
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
@@ -57,7 +59,7 @@ export const columns: ColumnDef<Product>[] = [
     header: "Actions",
     cell: ({ row, table }) => {
       const id = row.original.id;
-
+      const meta = table.options.meta as TableMeta | undefined;
       return (
         <div className="flex items-center gap-2">
           <Button variant={"nav"} className="border">
@@ -83,9 +85,9 @@ export const columns: ColumnDef<Product>[] = [
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction
-                  onClick={() =>
-                    table.options.meta?.onDelete?.(row.original.id)
-                  }
+                  onClick={() => {
+                    meta?.onDelete(id);
+                  }}
                 >
                   Delete
                 </AlertDialogAction>

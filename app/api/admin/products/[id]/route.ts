@@ -46,11 +46,15 @@ export async function PATCH(req: NextRequest) {
 }
 
 // delete single product
-export async function DELETE(req: NextRequest) {
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
     const adminCheck = await requireAdmin(req);
     if (adminCheck) return adminCheck;
-    const { id } = await req.json();
+
+    const id = params.id;
 
     if (!id)
       return NextResponse.json(
@@ -64,6 +68,7 @@ export async function DELETE(req: NextRequest) {
       .eq("id", id);
 
     if (error) {
+      console.error("Supabase Deletion Error:", error);
       return NextResponse.json(
         { success: false, error: "Failed to delete product" },
         { status: 400 }

@@ -18,7 +18,8 @@ export async function GET(
     const { data, error } = await supabase
       .from("products")
       .select("*")
-      .eq("id", id);
+      .eq("id", id)
+      .single();
 
     if (error) {
       return NextResponse.json(

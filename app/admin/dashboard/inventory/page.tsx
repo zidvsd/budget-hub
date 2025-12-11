@@ -16,10 +16,13 @@ export default function page() {
       });
       if (!res.ok) {
         throw new Error("failed to delete");
-        toast.error("Failed to delete item");
       }
       toast.success("Item deleted successfully");
+
+      await fetchProducts();
     } catch (error) {
+      toast.error("Failed to delete item");
+
       console.log(error);
     }
   }
@@ -31,8 +34,9 @@ export default function page() {
     <div className="w-full ">
       {loading ? (
         <div className="flex flex-col gap-2 items-start">
-          <Skeleton className=" w-62 h-18 rounded-md animate-pulse" />
-          <Skeleton className=" w-38 h-24 rounded-md animate-pulse" />
+          <Skeleton className=" w-92 h-18 rounded-md animate-pulse" />
+          <Skeleton className=" w-48 h-16 rounded-md animate-pulse" />
+          <Skeleton className=" w-92 h-14 rounded-md animate-pulse" />
         </div>
       ) : (
         <>

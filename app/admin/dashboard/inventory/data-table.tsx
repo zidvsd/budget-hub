@@ -16,7 +16,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
+import { Empty } from "@/components/ui/empty";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -34,10 +34,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
+import { EmptyDemo } from "@/components/Empty";
 type TableMeta = {
   onDelete?: (id: string) => void;
 };
+import { ShoppingCart } from "lucide-react";
 
 export function DataTable<TData, TValue>({
   columns,
@@ -68,7 +69,7 @@ export function DataTable<TData, TValue>({
     },
     meta: {
       onDelete,
-    } as TableMeta,
+    },
   });
 
   return (
@@ -145,7 +146,7 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center">
-                  No results.
+                  <EmptyDemo icon={ShoppingCart} />
                 </TableCell>
               </TableRow>
             )}

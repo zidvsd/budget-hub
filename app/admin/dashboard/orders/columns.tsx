@@ -49,7 +49,7 @@ export const columns = (users: User[]): ColumnDef<Order>[] => [
   },
   {
     accessorKey: "created_at",
-    header: "Date",
+    header: "Date Placed",
     cell: ({ row }) => formatDate(row.original.created_at),
   },
 ];

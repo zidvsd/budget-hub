@@ -164,3 +164,11 @@ footer ul li {
 footer a {
   @apply hover:text-accent transition duration-300 ease-in-out;
 }
+
+.toast-success {
+  @apply bg-black;
+}
+
+.toast-error {
+  @apply bg-black;
+}

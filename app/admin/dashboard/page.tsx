@@ -1,25 +1,34 @@
 "use client";
 
-import { TriangleAlert, ShoppingCart, DollarSign, Package } from "lucide-react";
+import {
+  TriangleAlert,
+  ShoppingCart,
+  DollarSign,
+  Package,
+  Users,
+} from "lucide-react";
 import { StatCard } from "@/components/ui/stat-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useOrders } from "@/store/useOrders";
 import { useProducts } from "@/store/useProducts";
 import { useEffect } from "react";
+import { useUsers } from "@/store/useUsers";
 
 export default function DashboardPage() {
   const { fetchOrders, orders, loading: ordersLoading } = useOrders();
   const { fetchProducts, products, loading: productsLoading } = useProducts();
-
-  const loading = ordersLoading || productsLoading;
+  const { fetchUsers, users, loading: usersLoading } = useUsers();
+  const loading = ordersLoading || productsLoading || usersLoading;
 
   useEffect(() => {
     fetchOrders();
     fetchProducts();
-  }, [fetchOrders, fetchProducts]);
+    fetchUsers();
+  }, [fetchOrders, fetchProducts, fetchUsers]);
 
   const totalProducts = products.length;
   const totalOrders = orders.length;
+  const totalUsers = users.length;
   const totalPendingOrders = orders.filter(
     (order) => order.status === "pending"
   ).length;
@@ -34,6 +43,7 @@ export default function DashboardPage() {
           <Skeleton className="h-8 w-1/3 mb-2" />
           <Skeleton className="h-5 w-2/3 mb-6" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+            <Skeleton className="h-24 w-full" />
             <Skeleton className="h-24 w-full" />
             <Skeleton className="h-24 w-full" />
             <Skeleton className="h-24 w-full" />
@@ -55,19 +65,25 @@ export default function DashboardPage() {
               title="Total Orders"
               icon={<ShoppingCart className="size-6" />}
               stat={totalOrders}
-              description="All orders placed by customers so far."
+              description="All orders placed by customers so far"
             />
             <StatCard
               title="Pending Orders"
               icon={<DollarSign className="size-6 " />}
               stat={totalPendingOrders}
-              description="Orders that are awaiting processing or fulfillment."
+              description="Orders that are awaiting processing or fulfillment"
             />
             <StatCard
               title="Low Stocks"
               icon={<TriangleAlert className="size-6 " />}
               stat={totalLowStocks}
-              description="Products with 5 or fewer items remaining in stock."
+              description="Products with 5 or fewer items remaining in stock"
+            />
+            <StatCard
+              title="Low Stocks"
+              icon={<Users className="size-6 " />}
+              stat={totalUsers}
+              description="All users registered"
             />
           </div>
         </>

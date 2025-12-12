@@ -44,7 +44,7 @@ export default function RootLayout({
       <body className={` ${inter.variable} antialiased `}>
         <ThemeProvider attribute="class" enableSystem>
           <main>{children}</main>
-          <Toaster expand={true} position="top-right" />
+          <Toaster richColors={true} expand={true} position="top-right" />
         </ThemeProvider>
       </body>
     </html>

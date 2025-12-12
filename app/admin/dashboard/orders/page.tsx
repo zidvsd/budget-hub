@@ -66,21 +66,28 @@ export default function OrdersPage() {
               title="Total Orders"
               icon={<ShoppingCart className="w-6 h-6" />}
               stat={totalOrders}
+              description="Total number of orders placed overall."
             />
+
             <StatCard
               title="Pending Orders"
               icon={<Clock className="w-6 h-6" />}
               stat={pendingOrders}
+              description="Orders that have been created but not yet processed."
             />
+
             <StatCard
               title="Cancelled Orders"
               icon={<XCircle className="w-6 h-6" />}
               stat={cancelledOrders}
+              description="Orders that were cancelled by users or admins."
             />
+
             <StatCard
               title="Completed Orders"
               icon={<CheckCircle className="w-6 h-6" />}
               stat={completedOrders}
+              description="Orders that have been successfully fulfilled."
             />
           </div>
 

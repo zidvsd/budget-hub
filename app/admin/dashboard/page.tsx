@@ -47,7 +47,6 @@ export default function DashboardPage() {
             <Skeleton className="h-24 w-full" />
             <Skeleton className="h-24 w-full" />
             <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-24 w-full" />
           </div>
         </>
       ) : (
@@ -73,14 +72,9 @@ export default function DashboardPage() {
               stat={totalPendingOrders}
               description="Orders that are awaiting processing or fulfillment"
             />
+
             <StatCard
-              title="Low Stocks"
-              icon={<TriangleAlert className="size-6 " />}
-              stat={totalLowStocks}
-              description="Products with 5 or fewer items remaining in stock"
-            />
-            <StatCard
-              title="Low Stocks"
+              title="Total Users"
               icon={<Users className="size-6 " />}
               stat={totalUsers}
               description="All users registered"

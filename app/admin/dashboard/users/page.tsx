@@ -41,16 +41,19 @@ export default function page() {
               title="Total Users"
               icon={<UserSquare2 className="size-6" />}
               stat={totalUsers}
+              description="Total number of registered users in the system"
             />
             <StatCard
               title="Admin"
               icon={<ShieldUser className="size-6" />}
               stat={totalAdmins}
+              description="Users with administrative privileges who manage the system"
             />
             <StatCard
               title="Customers"
               icon={<UserRound className="size-6" />}
               stat={totalCustomers}
+              description="Regular users who can place orders and interact with your platform"
             />
           </div>
         </>

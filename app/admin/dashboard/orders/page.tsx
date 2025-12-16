@@ -6,15 +6,37 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useOrders } from "@/store/useOrders";
 import { useUsers } from "@/store/useUsers";
 import { useEffect } from "react";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "./data-table";
 import { columns } from "./columns";
-
+import { toast } from "sonner";
+type OrderStatus = "pending" | "processing" | "completed" | "cancelled";
 export default function OrdersPage() {
   const { fetchOrders, orders, loading: ordersLoading } = useOrders();
   const { fetchUsers, users, loading: usersLoading } = useUsers();
 
   const loading = ordersLoading || usersLoading;
+  async function updateOrderStatus(id: string, newStatus: OrderStatus) {
+    try {
+      console.log("Updating order:", id, newStatus);
+      const res = await fetch(`/api/admin/orders/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      const data = await res.json();
+      console.log("PATCH response:", data);
 
+      if (!res.ok) {
+        throw new Error("Failed to update order status");
+      }
+      toast.success(`Order ${id} status successfully updated`);
+    } catch (error: any) {
+      toast.error("Failed to update order status", error.message);
+      console.error(error);
+    }
+  }
   useEffect(() => {
     fetchOrders();
     fetchUsers();
@@ -94,7 +116,11 @@ export default function OrdersPage() {
           {/* Orders table */}
           <div className="mt-8">
             <h1 className="text-2xl mb-4">All Orders</h1>
-            <DataTable data={orders} columns={columns(users)} />
+            <DataTable
+              data={orders}
+              onStatusChange={updateOrderStatus}
+              columns={columns(users)}
+            />
           </div>
         </>
       )}

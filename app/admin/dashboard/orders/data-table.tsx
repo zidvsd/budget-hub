@@ -16,19 +16,30 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+type OrderStatus = "pending" | "processing" | "completed" | "cancelled";
+
+type TableMeta = {
+  onStatusChange: (id: string, newStatus: OrderStatus) => void;
+};
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  onStatusChange: (id: string, newStatus: OrderStatus) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  onStatusChange,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    meta: {
+      onStatusChange: onStatusChange,
+    } as TableMeta,
   });
 
   return (

@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase/server-client";
 import { requireAdmin } from "@/lib/utils/admin/utils";
+
 // get single order
 export async function GET(
   req: NextRequest,
@@ -81,7 +82,22 @@ export async function PATCH(
     // ------------------------------
     const body = await req.json();
 
-    const { status, total_price, order_items } = body;
+    const { status, total_price } = body;
+    const allowedStatuses = ["pending", "processing", "completed", "cancelled"];
+
+    // status validation
+    if (status && !allowedStatuses.includes(status)) {
+      return NextResponse.json(
+        { success: false, error: "Invalid order status" },
+        { status: 400 }
+      );
+    }
+    if (status === undefined && total_price === undefined) {
+      return NextResponse.json(
+        { success: false, error: "No fields provided to update" },
+        { status: 400 }
+      );
+    }
 
     // ------------------------------
     // UPDATE MAIN ORDER FIELDS
@@ -89,8 +105,8 @@ export async function PATCH(
     const { error: orderError } = await supabaseAdmin
       .from("orders")
       .update({
-        ...(status && { status }),
-        ...(total_price && { total_price }),
+        ...(status !== undefined && { status }),
+        ...(total_price !== undefined && { total_price }),
         updated_at: new Date().toISOString(),
       })
       .eq("id", orderId);

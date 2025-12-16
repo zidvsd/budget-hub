@@ -40,9 +40,8 @@ export default function page() {
     <div className="w-full ">
       {loading ? (
         <div className="flex flex-col gap-2 items-start">
-          <Skeleton className=" w-92 h-18 rounded-md animate-pulse" />
-          <Skeleton className=" w-4 h-16 rounded-md animate-pulse" />
-          <Skeleton className=" w-92 h-14 rounded-md animate-pulse" />
+          <Skeleton className="h-8 w-1/3 mb-2" />
+          <Skeleton className="h-5 w-2/3 mb-6" />
         </div>
       ) : (
         <>

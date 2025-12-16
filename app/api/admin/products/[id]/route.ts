@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/utils/admin/utils";
 import { supabaseAdmin } from "@/lib/supabase/server-client";
-import { json } from "stream/consumers";
 
 // update product
 export async function PATCH(req: NextRequest) {

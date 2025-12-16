@@ -11,7 +11,12 @@ import { columns } from "./columns";
 import { toast } from "sonner";
 type OrderStatus = "pending" | "processing" | "completed" | "cancelled";
 export default function OrdersPage() {
-  const { fetchOrders, orders, loading: ordersLoading } = useOrders();
+  const {
+    fetchOrders,
+    orders,
+    loading: ordersLoading,
+    updateOrderLocally,
+  } = useOrders();
   const { fetchUsers, users, loading: usersLoading } = useUsers();
 
   const loading = ordersLoading || usersLoading;
@@ -25,12 +30,16 @@ export default function OrdersPage() {
         },
         body: JSON.stringify({ status: newStatus }),
       });
-      const data = await res.json();
-      console.log("PATCH response:", data);
 
       if (!res.ok) {
         throw new Error("Failed to update order status");
       }
+      const result = await res.json();
+      if (result.success && result.data) {
+        // Use the new local action instead of a full fetch
+        updateOrderLocally(result.data);
+      }
+
       toast.success(`Order ${id} status successfully updated`);
     } catch (error: any) {
       toast.error("Failed to update order status", error.message);

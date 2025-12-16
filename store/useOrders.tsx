@@ -8,13 +8,21 @@ interface OrdersState {
   error: string | null;
   fetchOrders: () => Promise<void>;
   clearOrders: () => void;
+  updateOrderLocally: (updatedOrder: Order) => void;
 }
 
 export const useOrders = create<OrdersState>((set) => ({
   orders: [],
   loading: true,
   error: null,
-
+  updateOrderLocally: (updatedOrder) => {
+    set((state) => ({
+      orders: state.orders.map((order) =>
+        // Find the order by its ID and replace the entire object
+        order.id === updatedOrder.id ? updatedOrder : order
+      ),
+    }));
+  },
   fetchOrders: async () => {
     set({ loading: true, error: null });
     try {

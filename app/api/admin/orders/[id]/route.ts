@@ -68,8 +68,8 @@ export async function PATCH(
     const adminCheck = await requireAdmin(req);
     if (adminCheck) return adminCheck;
 
-    const orderId = params.id;
-
+    const resolvedParams = await params;
+    const orderId = resolvedParams.id;
     if (!orderId) {
       return NextResponse.json(
         { success: false, error: "Order ID not provided" },

@@ -4,8 +4,10 @@ import { Order } from "@/lib/types/orders";
 import { User } from "@/lib/types/users";
 import { formatDate, formatPrice, truncateId } from "@/lib/utils";
 import Link from "next/link";
-import { Eye, ChevronDown } from "lucide-react";
+import { Copy, Check, Eye, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { toast } from "sonner";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,9 +35,29 @@ type OrderTableMeta = {
 export const columns = (users: User[]): ColumnDef<Order>[] => [
   {
     accessorKey: "id",
-    header: "Order ID",
+    header: "Copy ID",
     cell: ({ row }) => {
-      return truncateId(row.original.id);
+      const id = row.original.id;
+
+      const handleCopy = async () => {
+        await navigator.clipboard.writeText(id);
+        toast.success("Order ID copied");
+      };
+
+      return (
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-sm">{truncateId(id)}</span>
+
+          <Button
+            variant={"nav"}
+            onClick={handleCopy}
+            className="border dark:border-none"
+            aria-label="Copy order ID"
+          >
+            <Copy className="h-4 w-4 opacity-70 hover:opacity-100" />
+          </Button>
+        </div>
+      );
     },
   },
   {

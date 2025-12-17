@@ -172,3 +172,7 @@ footer a {
 .toast-error {
   @apply bg-black;
 }
+
+.order-info span {
+  @apply text-neutral-600 dark:text-neutral-300;
+}

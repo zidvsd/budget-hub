@@ -40,9 +40,9 @@ export function ChartAreaDefault() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Area Chart</CardTitle>
+        <CardTitle>Revenue Growth</CardTitle>
         <CardDescription>
-          Showing total visitors for the last 6 months
+          Total revenue generated over the selected period{" "}
         </CardDescription>
       </CardHeader>
       <CardContent>

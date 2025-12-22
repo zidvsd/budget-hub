@@ -1,52 +1,253 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import { useState, useEffect, useCallback } from "react";
-import { Product } from "@/lib/types/products";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import { useProducts } from "@/store/useProducts";
+import {
+  formatPrice,
+  formatDate,
+  truncateId,
+  upperCaseFirstLetter,
+} from "@/lib/utils";
 
-export default function Page() {
+import { Product } from "@/lib/types/products";
+export default function ProductPage() {
   const params = useParams();
+  const router = useRouter();
+  const [toggleTruncate, setToggleTruncate] = useState(true);
   const productId = params.id as string;
 
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { products, loading: productsLoading, fetchProducts } = useProducts();
+  const loading = productsLoading;
 
-  const fetchSingleProduct = useCallback(async (id: string) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch(`/api/products/${id}`);
-      if (!res.ok) throw new Error("Failed to fetch product data.");
-
-      const resData = await res.json();
-      setProduct(resData.data); // <-- match your API response
-    } catch (err: any) {
-      setError(err.message || "An unexpected error occurred.");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const cardStyle =
+    "bg-card p-5 transition-all duration-300 rounded-xl shadow-sm hover:shadow-lg";
 
   useEffect(() => {
-    if (productId) fetchSingleProduct(productId);
-  }, [productId, fetchSingleProduct]);
+    if (!products.length) fetchProducts();
+  }, [fetchProducts, products.length]);
 
-  if (loading)
-    return <div className="custom-container">Loading product details...</div>;
-  if (error)
-    return <div className="custom-container text-red-500">Error: {error}</div>;
-  if (!product)
-    return <div className="custom-container">Product not found.</div>;
+  const product: Product | undefined = useMemo(
+    () => products.find((p) => p.id === productId),
+    [products, productId]
+  );
+
+  // Guard clause for loading
+  if (loading) {
+    return (
+      <div className="product-info w-full px-4 md:px-8 animate-pulse">
+        {/* Header Skeleton */}
+        <div className="flex items-center gap-4 mb-6">
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-48" />
+            <Skeleton className="h-4 w-32" />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-6">
+          {/* Main Image Skeleton */}
+          <Skeleton className="w-full h-[300px] md:h-[500px] rounded-lg shadow-md" />
+
+          {/* Info + Metadata Grid Skeleton */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Product Info Card */}
+            <div className={`${cardStyle} space-y-4`}>
+              <div className="flex justify-between">
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-4 w-20" />
+              </div>
+              <div className="flex justify-between">
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-6 w-24 rounded-full" />
+              </div>
+              <div className="flex justify-between">
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-4 w-20" />
+              </div>
+            </div>
+
+            {/* Metadata Card */}
+            <div className={`${cardStyle} space-y-4`}>
+              <div className="flex justify-between">
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-4 w-32" />
+              </div>
+              <div className="flex justify-between">
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-4 w-28" />
+              </div>
+              <div className="flex justify-between">
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-4 w-28" />
+              </div>
+            </div>
+          </div>
+
+          {/* Description Card Skeleton */}
+          <div className={cardStyle}>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-[90%]" />
+              <Skeleton className="h-4 w-[75%]" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Guard clause for "Not Found" (after loading is done)
+  if (!product) {
+    return (
+      <div className="flex flex-col items-center justify-center p-20 text-center">
+        <h1 className="text-2xl font-bold">Product not found</h1>
+        <Button onClick={() => router.back()} className="mt-4">
+          Go Back
+        </Button>
+      </div>
+    );
+  }
 
   return (
-    <div className="custom-container">
-      <h1 className="text-2xl font-bold mb-4">Edit {product.name}</h1>
-      <p>Product ID: {product.id}</p>
-      <p>Category: {product.category}</p>
-      <p>Price: ${product.price}</p>
-      <p>Stock: {product.stock}</p>
-      {/* Add your editing form components here */}
+    <div className="product-info w-full ">
+      {/* Header */}
+      {loading ? (
+        <div className="flex flex-col gap-2 mb-6">
+          <Skeleton className="h-10 w-1/3" />
+          <Skeleton className="h-6 w-2/3" />
+        </div>
+      ) : (
+        <div className="flex items-center gap-4 mb-6">
+          <Button variant="ghost" onClick={() => router.back()}>
+            <ArrowLeft className="size-5" />
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold">{product?.name}</h1>
+            <p className="text-muted-foreground">Product Details</p>
+          </div>
+        </div>
+      )}
+
+      <div className="flex flex-col gap-6">
+        {/* Full-width Thumbnail */}
+        <div className="w-full rounded-lg overflow-hidden shadow-md">
+          {loading ? (
+            <Skeleton className="w-full h-72" />
+          ) : (
+            <Image
+              src={product.image_path}
+              alt={product.name}
+              width={1440}
+              height={48}
+              className=" object-cover"
+            />
+          )}
+        </div>
+
+        {/* Product Info + Metadata */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Product Info */}
+          <div className={`${cardStyle} space-y-4`}>
+            {loading ? (
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="h-4 w-1/3" />
+                <Skeleton className="h-4 w-2/3" />
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="font-medium">Price</span>
+                  <span className="text-accent  font-semibold">
+                    {formatPrice(product?.price)}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium">Stock</span>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      product.stock === 0
+                        ? "bg-red-100 text-red-800"
+                        : product.stock < 5
+                        ? "bg-yellow-100 text-yellow-800"
+                        : "bg-green-100 text-green-800"
+                    }`}
+                  >
+                    {product.stock === 0
+                      ? "Out of stock"
+                      : product.stock < 5
+                      ? "Low stock"
+                      : "In stock"}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium">Category</span>
+                  <span className="text-muted-foreground">
+                    {upperCaseFirstLetter(product.category)}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Metadata */}
+          <div className={`${cardStyle} space-y-2`}>
+            {loading ? (
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="h-4 w-1/3" />
+                <Skeleton className="h-4 w-2/3" />
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <div
+                  className="flex justify-between cursor-pointer hover:text-accent"
+                  onClick={() => setToggleTruncate((prev) => !prev)}
+                >
+                  <span className="hover-utility">Product ID</span>
+                  <span className="text-muted-foreground">
+                    {toggleTruncate ? truncateId(product.id) : product.id}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Date Created</span>
+                  <span className="text-muted-foreground">
+                    {formatDate(product.created_at)}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Last Updated</span>
+                  <span className="text-muted-foreground">
+                    {formatDate(product.updated_at)}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Description */}
+        <div className={`${cardStyle}`}>
+          {loading ? (
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-5/6" />
+              <Skeleton className="h-4 w-3/4" />
+            </div>
+          ) : (
+            <>
+              <h1 className="font-medium">Description</h1>
+              <p className="text-sm mt-2 text-muted-foreground">
+                {product.description}
+              </p>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

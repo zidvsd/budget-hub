@@ -40,8 +40,10 @@ export function ChartLineDefault() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Line Chart</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>User Track</CardTitle>
+        <CardDescription>
+          Daily active users navigating your storefront
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>

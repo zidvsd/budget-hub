@@ -39,7 +39,7 @@ export const columns: ColumnDef<Product>[] = [
             alt={row.original.name}
             height={42}
             width={42}
-            className="rounded-md object-cover"
+            className=" object-cover"
           />
         </Link>
       );
@@ -66,17 +66,34 @@ export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) =>
-      row.original.stock > 0 ? (
-        <span className="px-3 py-1 rounded-full bg-green-100 text-chart-2 text-xs font-medium">
-          In Stock
-        </span>
-      ) : (
-        <span className="px-3 py-1 rounded-full bg-red-100 text-destructive text-xs font-medium">
-          Out of Stock
-        </span>
-      ),
+    cell: ({ row }) => {
+      const stock = row.original.stock;
+
+      switch (true) {
+        case stock === 0:
+          return (
+            <span className="px-3 py-1 rounded-full bg-red-100 text-destructive text-xs font-medium">
+              Out of Stock
+            </span>
+          );
+
+        case stock > 0 && stock < 6:
+          return (
+            <span className="px-3 py-1 rounded-full bg-yellow-100 text-yellow-800 text-xs font-medium">
+              Low Stock
+            </span>
+          );
+
+        default:
+          return (
+            <span className="px-3 py-1 rounded-full bg-green-100 text-chart-2 text-xs font-medium">
+              In Stock
+            </span>
+          );
+      }
+    },
   },
+
   {
     accessorKey: "actions",
     header: "Actions",

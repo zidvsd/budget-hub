@@ -58,8 +58,10 @@ export function ChartBarActive() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Bar Chart - Active</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Top Performing Products</CardTitle>
+        <CardDescription>
+          The most popular items based on sales volume
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>

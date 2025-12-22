@@ -32,3 +32,6 @@ export function formatPrice(price: number) {
 export function truncateId(text: string) {
   return text.slice(0, 8) + "...";
 }
+export function upperCaseFirstLetter(text: string) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}

@@ -5,6 +5,7 @@ type DataTableProps<TData, TValue> = {
 };
 import * as React from "react";
 import { DataTablePagination } from "./data-table-pagination";
+import Link from "next/link";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -82,7 +83,7 @@ export function DataTable<TData, TValue>({
     <div>
       {/* FILTER INPUT */}
       <h1 className="text-2xl font-semibold">All Products</h1>
-      <div className="flex flex-col sm:flex-row items-start sm:items-center  py-4 gap-2 ">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between  py-4 gap-2 ">
         <Input
           placeholder="Filter by name..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -92,29 +93,37 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
 
-        {/* COLUMN TOGGLE */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="accent" className=" sm:ml-auto">
-              Columns
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="bg-background" align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => (
-                <DropdownMenuCheckboxItem
-                  key={column.id}
-                  className="capitalize"
-                  checked={column.getIsVisible()}
-                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                >
-                  {column.id}
-                </DropdownMenuCheckboxItem>
-              ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex items-center gap-2 md:self-end">
+          {/* add products */}
+          <Link href={"/admin/dashboard/inventory/add-products"}>
+            <Button variant={"secondary"}>Add Product</Button>
+          </Link>
+          {/* column toggle */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="accent" className=" sm:ml-auto">
+                Columns
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-background" align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
       {/* TABLE */}

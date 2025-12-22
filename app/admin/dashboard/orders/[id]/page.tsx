@@ -54,6 +54,7 @@ export default function Page() {
       return {
         ...item,
         productName: product?.name ?? "Unknown product",
+        image_path: product?.image_path ?? null,
       };
     });
   }, [order, products]);

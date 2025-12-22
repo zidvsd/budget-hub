@@ -16,6 +16,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import Image from "next/image";
 type TableMeta = {
   onDelete: (id: string) => void;
 };
@@ -23,6 +24,28 @@ type TableMeta = {
 // You can use a Zod schema here if you want.
 
 export const columns: ColumnDef<Product>[] = [
+  {
+    accessorKey: "img_path",
+    header: "Image",
+    cell: ({ row }) => {
+      const imagePath = row.original.image_path;
+
+      if (!imagePath) return null;
+
+      return (
+        <Link href={`/admin/dashboard/inventory/${row.original.id}`}>
+          <Image
+            src={imagePath}
+            alt={row.original.name}
+            height={42}
+            width={42}
+            className="rounded-md object-cover"
+          />
+        </Link>
+      );
+    },
+  },
+
   {
     accessorKey: "name",
     header: "Name",

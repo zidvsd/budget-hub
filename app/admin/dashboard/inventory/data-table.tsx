@@ -4,6 +4,7 @@ type DataTableProps<TData, TValue> = {
   data: TData[];
 };
 import * as React from "react";
+import { DataTablePagination } from "./data-table-pagination";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -51,7 +52,10 @@ export function DataTable<TData, TValue>({
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
-
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
   const table = useReactTable<TData>({
     data,
     columns,
@@ -62,10 +66,12 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    onPaginationChange: setPagination,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
+      pagination,
     },
     meta: {
       onDelete,
@@ -152,6 +158,9 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
+      </div>
+      <div className="mt-4">
+        <DataTablePagination table={table} />
       </div>
     </div>
   );

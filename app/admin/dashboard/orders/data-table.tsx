@@ -92,7 +92,7 @@ export function DataTable<TData, TValue>({
         {/* COLUMN TOGGLE */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="sm:ml-auto">
+            <Button variant="accent" className="sm:ml-auto">
               Columns
             </Button>
           </DropdownMenuTrigger>

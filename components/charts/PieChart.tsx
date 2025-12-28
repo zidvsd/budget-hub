@@ -86,8 +86,9 @@ export function ChartPieLabelList({ data }: OrderPieProps) {
             </Pie>
             {/* The Legend component adds the color key at the bottom */}
             <ChartLegend
+              // @ts-ignore
               content={<ChartLegendContent nameKey="status" />}
-              className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4"
+              className="-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center"
             />
           </PieChart>
         </ChartContainer>

@@ -146,7 +146,7 @@ export default function ProductPage() {
         <div className="w-full rounded-lg overflow-hidden shadow-md">
           {imageLoading && <Skeleton className="w-full h-72" />}
           <Image
-            onLoadingComplete={() => setImageLoading(false)}
+            onLoad={() => setImageLoading(false)}
             src={product.image_path}
             alt={product.name}
             width={1440}

@@ -9,15 +9,13 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Product } from "@/lib/types/products";
 import { supabase } from "@/lib/supabase/client"; // make sure your Supabase client is imported
+import { v4 as uuidv4 } from "uuid";
+import { upperCaseFirstLetter } from "@/lib/utils";
 
 export default function AddProductForm() {
   const [product, setProduct] = useState<
-    Omit<Product, "price" | "stock"> & {
-      price: string;
-      stock: string;
-    }
+    Omit<Product, "id" | "price" | "stock"> & { price: string; stock: string }
   >({
-    id: "",
     name: "",
     description: "",
     category: "",
@@ -46,22 +44,24 @@ export default function AddProductForm() {
 
     try {
       setUploading(true);
+
+      // Generate a unique filename
       const fileExt = file.name.split(".").pop();
-      const fileName = `${Date.now()}.${fileExt}`;
+      const fileName = `${uuidv4()}.${fileExt?.toLowerCase()}`;
+
+      // Upload to Supabase
       const { data, error } = await supabase.storage
         .from("products")
         .upload(fileName, file, { upsert: true });
-
       if (error) throw error;
 
       // Get public URL
-      const { publicURL, error: urlError } = supabase.storage
+      const { data: publicData } = supabase.storage
         .from("products")
-        .getPublicUrl(data.path);
+        .getPublicUrl(fileName);
 
-      if (urlError) throw urlError;
-
-      updateField("image_path", publicURL);
+      // Assign to product
+      updateField("image_path", publicData.publicUrl);
       toast.success("Image uploaded successfully");
     } catch (err) {
       console.error(err);
@@ -77,6 +77,9 @@ export default function AddProductForm() {
 
       const payload: Product = {
         ...product,
+        name: product.name.trim(),
+        category: upperCaseFirstLetter(product.category.trim()),
+        description: product.description.trim(),
         price: Number(product.price),
         stock: Number(product.stock),
       } as Product;
@@ -93,7 +96,6 @@ export default function AddProductForm() {
 
       // Reset form
       setProduct({
-        id: "",
         name: "",
         description: "",
         category: "",

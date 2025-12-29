@@ -3,9 +3,10 @@
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, SquarePen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 import { useProducts } from "@/store/useProducts";
 import {
   formatPrice,
@@ -19,6 +20,7 @@ export default function ProductPage() {
   const params = useParams();
   const router = useRouter();
   const [toggleTruncate, setToggleTruncate] = useState(true);
+  const [imageLoading, setImageLoading] = useState(true);
   const productId = params.id as string;
 
   const { products, loading: productsLoading, fetchProducts } = useProducts();
@@ -121,31 +123,36 @@ export default function ProductPage() {
           <Skeleton className="h-6 w-2/3" />
         </div>
       ) : (
-        <div className="flex items-center gap-4 mb-6">
-          <Button variant="ghost" onClick={() => router.back()}>
-            <ArrowLeft className="size-5" />
-          </Button>
-          <div>
-            <h1 className="text-3xl font-bold">{product?.name}</h1>
-            <p className="text-muted-foreground">Product Details</p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4 mb-6">
+            <Button variant="ghost" onClick={() => router.back()}>
+              <ArrowLeft className="size-5" />
+            </Button>
+            <div>
+              <h1 className="text-3xl font-bold">{product?.name}</h1>
+              <p className="text-muted-foreground">Product Details</p>
+            </div>
           </div>
+          <Button variant="accent" size="icon" asChild>
+            <Link href={`/admin/dashboard/inventory/${product.id}/edit`}>
+              <SquarePen className="size-4" />
+            </Link>
+          </Button>
         </div>
       )}
 
       <div className="flex flex-col gap-6">
         {/* Full-width Thumbnail */}
         <div className="w-full rounded-lg overflow-hidden shadow-md">
-          {loading ? (
-            <Skeleton className="w-full h-72" />
-          ) : (
-            <Image
-              src={product.image_path}
-              alt={product.name}
-              width={1440}
-              height={48}
-              className=" object-cover"
-            />
-          )}
+          {imageLoading && <Skeleton className="w-full h-72" />}
+          <Image
+            onLoadingComplete={() => setImageLoading(false)}
+            src={product.image_path}
+            alt={product.name}
+            width={1440}
+            height={48}
+            className=" object-cover"
+          />
         </div>
 
         {/* Product Info + Metadata */}
@@ -188,6 +195,16 @@ export default function ProductPage() {
                   <span className="font-medium">Category</span>
                   <span className="text-muted-foreground">
                     {upperCaseFirstLetter(product.category)}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium">Availability</span>
+                  <span
+                    className={
+                      product.is_active ? "text-green-500" : "text-red-500"
+                    }
+                  >
+                    {product.is_active ? "Available" : "Unavailable"}
                   </span>
                 </div>
               </div>

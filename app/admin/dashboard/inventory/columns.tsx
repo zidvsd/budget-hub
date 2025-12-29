@@ -2,7 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Product } from "@/lib/types/products";
 import { formatPrice } from "@/lib/utils";
-import { SquarePen, Trash } from "lucide-react";
+import { SquarePen, Trash, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
@@ -61,7 +61,24 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     accessorKey: "stock",
-    header: "Stock",
+    header: () => <div className="text-right">Stock</div>,
+    cell: ({ row }) => {
+      return <div className="text-right font-medium">{row.original.stock}</div>;
+    },
+  },
+  {
+    accessorKey: "is_active",
+    header: "Public Visibility",
+    cell: ({ row }) => {
+      const isAvailable = row.original.is_active;
+      return (
+        <div className="text-center">
+          <span className={isAvailable ? "text-green-500" : "text-red-500"}>
+            {isAvailable ? "Available" : "Unavailable"}
+          </span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "status",
@@ -99,41 +116,13 @@ export const columns: ColumnDef<Product>[] = [
     header: "Actions",
     cell: ({ row, table }) => {
       const id = row.original.id;
-      const meta = table.options.meta as TableMeta | undefined;
       return (
         <div className="flex items-center gap-2">
           <Button variant={"nav"} className="border">
             <Link href={`/admin/dashboard/inventory/${id}`}>
-              <SquarePen className="size-4" />
+              <Eye className="size-4" />
             </Link>
           </Button>
-
-          {/* Delete with confirmation */}
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive">
-                <Trash className="size-4" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This will permanently delete the product.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={() => {
-                    meta?.onDelete(id);
-                  }}
-                >
-                  Delete
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
         </div>
       );
     },

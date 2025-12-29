@@ -7,8 +7,16 @@ export async function PATCH(req: NextRequest) {
   try {
     const adminCheck = await requireAdmin(req);
     if (adminCheck) return adminCheck;
-    const { id, name, category, description, price, stock, image_path } =
-      await req.json();
+    const {
+      id,
+      name,
+      category,
+      description,
+      price,
+      stock,
+      image_path,
+      is_active,
+    } = await req.json();
     if (!id)
       return NextResponse.json(
         { success: false, error: "Missing product id" },
@@ -23,6 +31,7 @@ export async function PATCH(req: NextRequest) {
         stock,
         image_path,
         category,
+        is_active,
         updated_at: new Date().toISOString(),
       })
       .eq("id", id)

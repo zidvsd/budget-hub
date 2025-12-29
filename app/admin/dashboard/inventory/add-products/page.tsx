@@ -1,5 +1,8 @@
-"use client";
-
+import AddProductForm from "@/components/admin/AddProductForm";
 export default function page() {
-  return <div className="custom-container">add products page</div>;
+  return (
+    <div>
+      <AddProductForm />
+    </div>
+  );
 }

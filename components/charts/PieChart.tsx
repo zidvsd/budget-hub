@@ -6,6 +6,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
+  CardFooter,
   CardTitle,
 } from "@/components/ui/card";
 import {
@@ -93,6 +94,27 @@ export function ChartPieLabelList({ data }: OrderPieProps) {
           </PieChart>
         </ChartContainer>
       </CardContent>
+      <CardFooter className="flex flex-col gap-2 text-sm">
+        {/* Total orders */}
+        <div className="flex items-center gap-2 font-medium leading-none">
+          Total Orders: {data.reduce((sum, d) => sum + d.count, 0)}
+        </div>
+
+        {/* Most common status */}
+        {data.length > 0 &&
+          (() => {
+            const mostStatus = data.reduce((prev, curr) =>
+              curr.count > prev.count ? curr : prev
+            );
+            return (
+              <div className="flex items-center gap-2 leading-none text-muted-foreground">
+                Most orders are{" "}
+                <span className="capitalize">{mostStatus.status}</span> (
+                {mostStatus.count})
+              </div>
+            );
+          })()}
+      </CardFooter>
     </Card>
   );
 }

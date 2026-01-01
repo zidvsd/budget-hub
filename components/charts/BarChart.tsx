@@ -53,8 +53,27 @@ const chartConfig = {
     color: "var(--chart-5)",
   },
 } satisfies ChartConfig;
+type TopProduct = {
+  name: string;
+  quantity: number;
+};
 
-export function ChartBarActive() {
+interface ChartBarActiveProps {
+  data: TopProduct[];
+}
+
+export function ChartBarActive({ data }: ChartBarActiveProps) {
+  const chartData = data.map((item, index) => ({
+    product: item.name,
+    sales: item.quantity,
+    fill: `var(--chart-${index + 1})`, // assign different colors dynamically
+  }));
+
+  const chartConfig = data.reduce((acc, item, index) => {
+    acc[item.name] = { label: item.name, color: `var(--chart-${index + 1})` };
+    return acc;
+  }, {} as Record<string, { label: string; color: string }>);
+
   return (
     <Card>
       <CardHeader>
@@ -68,45 +87,48 @@ export function ChartBarActive() {
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="browser"
+              dataKey="product"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) =>
-                chartConfig[value as keyof typeof chartConfig]?.label
-              }
+              tickFormatter={(value) => chartConfig[value]?.label}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
             <Bar
-              dataKey="visitors"
+              dataKey="sales"
               strokeWidth={2}
               radius={8}
               activeIndex={2}
-              activeBar={({ ...props }) => {
-                return (
-                  <Rectangle
-                    {...props}
-                    fillOpacity={0.8}
-                    stroke={props.payload.fill}
-                    strokeDasharray={4}
-                    strokeDashoffset={4}
-                  />
-                );
-              }}
+              activeBar={({ ...props }) => (
+                <Rectangle
+                  {...props}
+                  fillOpacity={0.8}
+                  stroke={props.payload.fill}
+                  strokeDasharray={4}
+                  strokeDashoffset={4}
+                />
+              )}
             />
           </BarChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 leading-none font-medium">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="text-muted-foreground leading-none">
-          Showing total visitors for the last 6 months
-        </div>
+        {data.length > 0 ? (
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2 font-medium">
+              Top product: {data[0].name} ({data[0].quantity} sold)
+              <TrendingUp className="h-4 w-4 text-green-500" />
+            </div>
+            <div className="text-muted-foreground">
+              Showing top {data.length} selling products
+            </div>
+          </div>
+        ) : (
+          <div className="text-muted-foreground">No sales yet</div>
+        )}
       </CardFooter>
     </Card>
   );

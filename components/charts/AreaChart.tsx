@@ -73,9 +73,31 @@ export function ChartAreaDefault({ revenueData }: ChartAreaDefaultProps) {
       <CardFooter>
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
-            <div className="flex items-center gap-2 leading-none font-medium">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-            </div>
+            {/* Revenue change */}
+            {revenueData.length >= 2 &&
+              (() => {
+                const first = revenueData[revenueData.length - 2].revenue;
+                const last = revenueData[revenueData.length - 1].revenue;
+                const change = first
+                  ? (((last - first) / first) * 100).toFixed(1)
+                  : "0";
+                const isPositive = Number(change) >= 0;
+
+                return (
+                  <div className="flex items-center gap-2 leading-none font-medium">
+                    Revenue {isPositive ? "up" : "down"} {change}% this month
+                    <TrendingUp
+                      className={`h-4 w-4 ${
+                        isPositive
+                          ? "text-green-500"
+                          : "rotate-180 text-red-500"
+                      }`}
+                    />
+                  </div>
+                );
+              })()}
+
+            {/* Month range */}
             <div className="text-muted-foreground flex items-center gap-2 leading-none">
               {revenueData[0]?.month} -{" "}
               {revenueData[revenueData.length - 1]?.month}

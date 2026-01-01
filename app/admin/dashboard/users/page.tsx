@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { StatCard } from "@/components/ui/stat-card";
 import { ShieldUser, UserRound, UserSquare2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "./data-table";
 import { columns } from "./columns";
 export default function page() {
   const { fetchUsers, users, loading: userLoading } = useUsers();
@@ -25,8 +25,7 @@ export default function page() {
         <>
           <Skeleton className="h-8 w-1/3 mb-2" />
           <Skeleton className="h-5 w-2/3 mb-6" />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
-            <Skeleton className="h-24 w-full" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-8">
             <Skeleton className="h-24 w-full" />
             <Skeleton className="h-24 w-full" />
             <Skeleton className="h-24 w-full" />
@@ -38,7 +37,7 @@ export default function page() {
           <p className="page-subheading">
             View and manage registered users Total Users
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-8">
             <StatCard
               title="Total Users"
               icon={<UserSquare2 className="size-6" />}

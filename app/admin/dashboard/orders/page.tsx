@@ -124,7 +124,6 @@ export default function OrdersPage() {
 
           {/* Orders table */}
           <div className="mt-8">
-            <h1 className="text-2xl mb-4">All Orders</h1>
             <DataTable
               data={orders}
               onStatusChange={updateOrderStatus}

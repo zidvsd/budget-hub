@@ -13,6 +13,7 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+
 import {
   Table,
   TableBody,
@@ -40,13 +41,11 @@ type TableMeta = {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  onStatusChange: (id: string, newStatus: OrderStatus) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  onStatusChange,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -70,18 +69,16 @@ export function DataTable<TData, TValue>({
       columnFilters,
       columnVisibility,
     },
-    meta: {
-      onStatusChange,
-    } as TableMeta,
+    meta: {} as TableMeta,
   });
 
   return (
     <div>
+      <h1 className="text-2xl font-semibold">All Users</h1>
       {/* FILTERS */}
-      <h1 className="text-2xl font-semibold">All Orders</h1>
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 py-4">
         <Input
-          placeholder="Search orders..."
+          placeholder="Search user..."
           value={(table.getColumn("id")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("id")?.setFilterValue(event.target.value)

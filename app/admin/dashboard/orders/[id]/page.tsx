@@ -12,6 +12,7 @@ import { useProducts } from "@/store/useProducts";
 import { truncateId, formatDate, formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { orderStatusClasses } from "@/lib/styles/badgeClasses";
+import Link from "next/link";
 
 export default function Page() {
   const params = useParams();
@@ -126,7 +127,11 @@ export default function Page() {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span>Name</span>
-                  <h2>{user.full_name}</h2>
+                  <Link href={`/admin/dashboard/users/${user.id}`}>
+                    <h2 className="hover-utility hover:text-accent">
+                      {user.full_name}
+                    </h2>
+                  </Link>
                 </div>
                 {user.phone && (
                   <div className="flex items-center justify-between gap-2">

@@ -72,7 +72,7 @@ export default function Page() {
       },
       {
         title: "Total Spent",
-        value: `₱${totalSpent}`,
+        value: `₱${totalSpent.toLocaleString()}`,
         description: "Total amount spent",
         icon: <DollarSign className="w-6 h-6" />,
       },

@@ -13,9 +13,11 @@ export default function page() {
     fetchUsers();
   }, [fetchUsers]);
 
-  const totalUsers = users.length;
-  const totalAdmins = users.filter((user) => user.role === "admin").length;
-  const totalCustomers = users.filter((user) => user.role === "user").length;
+  const totalUser = users?.length ?? 0;
+  const totalAdmins =
+    users?.filter((user) => user.role === "admin").length ?? 0;
+  const totalCustomers =
+    users?.filter((user) => user.role === "user").length ?? 0;
   const loading = userLoading;
   return (
     <div>
@@ -40,7 +42,7 @@ export default function page() {
             <StatCard
               title="Total Users"
               icon={<UserSquare2 className="size-6" />}
-              stat={totalUsers}
+              stat={totalUser}
               description="Total number of registered users in the system"
             />
             <StatCard
@@ -64,7 +66,7 @@ export default function page() {
         {loading ? (
           <Skeleton className=" w-full h-42 rounded-md animate-pulse" />
         ) : (
-          <DataTable data={users} columns={columns} />
+          <DataTable data={users ?? []} columns={columns} />
         )}
       </div>
     </div>

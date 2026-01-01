@@ -1,13 +1,14 @@
 "use client";
+
 import { ColumnDef } from "@tanstack/react-table";
 import { Order } from "@/lib/types/orders";
 import { User } from "@/lib/types/users";
 import { formatDate, formatPrice, truncateId } from "@/lib/utils";
 import Link from "next/link";
-import { Copy, Check, Eye, ChevronDown } from "lucide-react";
+import { Copy, Eye, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import { toast } from "sonner";
+import { orderStatusClasses } from "@/lib/styles/badgeClasses";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,18 +17,10 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
-// Define allowed statuses for type safety
+// Define allowed statuses
 export type OrderStatus = "pending" | "processing" | "completed" | "cancelled";
 
-// Map statuses to colors
-export const statusColors: Record<OrderStatus, string> = {
-  pending: "bg-yellow-100 text-yellow-800",
-  processing: "bg-blue-100 text-blue-800",
-  completed: "bg-green-100 text-green-800",
-  cancelled: "bg-red-100 text-red-800",
-};
-
-// Define the structure for table metadata (for updating status)
+// Table meta for status change callback
 type OrderTableMeta = {
   onStatusChange: (id: string, newStatus: OrderStatus) => void;
 };
@@ -47,9 +40,8 @@ export const columns = (users: User[]): ColumnDef<Order>[] => [
       return (
         <div className="flex items-center gap-2">
           <span className="font-mono text-sm">{truncateId(id)}</span>
-
           <Button
-            variant={"nav"}
+            variant="nav"
             onClick={handleCopy}
             className="border dark:border-none"
             aria-label="Copy order ID"
@@ -65,7 +57,6 @@ export const columns = (users: User[]): ColumnDef<Order>[] => [
     header: "Customer",
     cell: ({ row }) => {
       const user = users.find((u) => u.id === row.original.user_id);
-      // Fallback to user_id if user is not found
       return user?.full_name ?? truncateId(row.original.user_id);
     },
   },
@@ -79,12 +70,12 @@ export const columns = (users: User[]): ColumnDef<Order>[] => [
     header: "Status",
     cell: ({ row }) => {
       const status = row.original.status as OrderStatus;
-      const colorClass = statusColors[status] ?? "bg-gray-100 text-gray-800";
+      const statusClass =
+        orderStatusClasses[status] ??
+        "px-2 py-1 rounded-full bg-gray-100 text-gray-800 text-sm font-medium";
 
       return (
-        <span
-          className={`px-2 py-1 rounded-full text-sm font-medium ${colorClass}`}
-        >
+        <span className={statusClass}>
           {status.charAt(0).toUpperCase() + status.slice(1)}
         </span>
       );
@@ -95,17 +86,14 @@ export const columns = (users: User[]): ColumnDef<Order>[] => [
     header: "Date Placed",
     cell: ({ row }) => formatDate(row.original.created_at),
   },
-  // --- New Actions Column ---
   {
     id: "actions",
     header: "Actions",
     cell: ({ row, table }) => {
       const orderId = row.original.id;
       const currentStatus = row.original.status as OrderStatus;
-      // Get the meta object from the table options
       const meta = table.options.meta as OrderTableMeta | undefined;
 
-      // Define the available status options
       const statusOptions: OrderStatus[] = [
         "pending",
         "processing",
@@ -115,19 +103,14 @@ export const columns = (users: User[]): ColumnDef<Order>[] => [
 
       return (
         <div className="flex items-center gap-2">
-          {/* 1. View Order Button (Eye Icon) */}
+          {/* View Order */}
           <Link href={`/admin/dashboard/orders/${orderId}`} passHref>
-            <Button
-              variant={"nav"}
-              className="border hover:border-muted"
-              size="icon"
-              title="View Order Details"
-            >
-              <Eye className="size-4 " />
+            <Button variant="nav" className="border" size="icon">
+              <Eye className="size-4" />
             </Button>
           </Link>
 
-          {/* 2. Status Change Dropdown */}
+          {/* Status Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -146,14 +129,9 @@ export const columns = (users: User[]): ColumnDef<Order>[] => [
               {statusOptions.map((status) => (
                 <DropdownMenuItem
                   key={status}
-                  // Disable the item if it's the current status
                   disabled={status === currentStatus}
-                  onClick={() => {
-                    // Call the handler function from the meta prop
-                    meta?.onStatusChange(orderId, status);
-                  }}
+                  onClick={() => meta?.onStatusChange(orderId, status)}
                 >
-                  {/* Optional: Add visual indicator for the current status */}
                   {status === currentStatus && "✓ "}
                   {status.charAt(0).toUpperCase() + status.slice(1)}
                 </DropdownMenuItem>

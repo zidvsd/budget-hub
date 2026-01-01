@@ -20,7 +20,7 @@ export default function Page() {
   useEffect(() => {
     if (!products.length) fetchProducts();
     if (!orders.length) fetchOrders();
-    if (!users.length) fetchUsers();
+    if (!users?.length) fetchUsers();
 
     const fetchMetrics = async () => {
       try {

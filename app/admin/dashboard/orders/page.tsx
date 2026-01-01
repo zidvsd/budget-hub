@@ -128,7 +128,7 @@ export default function OrdersPage() {
             <DataTable
               data={orders}
               onStatusChange={updateOrderStatus}
-              columns={columns(users)}
+              columns={columns(users ?? [])}
             />
           </div>
         </>

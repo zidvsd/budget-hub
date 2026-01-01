@@ -6,7 +6,7 @@ interface OrdersState {
   orders: Order[];
   loading: boolean;
   error: string | null;
-  fetchOrders: () => Promise<void>;
+  fetchOrders: (userId?: string) => Promise<void>;
   clearOrders: () => void;
   updateOrderLocally: (updatedOrder: Order) => void;
 }
@@ -23,13 +23,17 @@ export const useOrders = create<OrdersState>((set) => ({
       ),
     }));
   },
-  fetchOrders: async () => {
+  fetchOrders: async (userId?: string) => {
     set({ loading: true, error: null });
     try {
       const role = getRoleFromCookie();
 
-      const endpoint =
+      let endpoint =
         role === "admin" ? "/api/admin/orders" : "/api/client/orders";
+
+      if (userId) {
+        endpoint += `?user_id=${userId}`;
+      }
 
       const res = await fetch(endpoint, {
         method: "GET",

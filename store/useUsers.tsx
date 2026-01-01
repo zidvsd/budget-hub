@@ -3,7 +3,7 @@ import { User } from "@/lib/types/users";
 import { getRoleFromCookie } from "@/lib/utils";
 
 interface UsersState {
-  users: User[];
+  users: User[] | null;
   loading: boolean;
   error: string | null;
 
@@ -12,7 +12,7 @@ interface UsersState {
 }
 
 export const useUsers = create<UsersState>((set) => ({
-  users: [],
+  users: null,
   loading: true,
   error: null,
 
@@ -36,7 +36,7 @@ export const useUsers = create<UsersState>((set) => ({
       const json = await res.json();
 
       if ("success" in json && json.success === false) {
-        set({ error: json.error, loading: false, users: [] });
+        set({ error: json.error, loading: false, users: null });
         return;
       }
 
@@ -45,5 +45,5 @@ export const useUsers = create<UsersState>((set) => ({
       set({ error: err.message, loading: false });
     }
   },
-  clearUsers: () => set({ users: [], error: null }),
+  clearUsers: () => set({ users: null, error: null }),
 }));

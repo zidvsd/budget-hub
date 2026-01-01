@@ -28,7 +28,7 @@ export default function DashboardPage() {
 
   const totalProducts = products.length;
   const totalOrders = orders.length;
-  const totalUsers = users.length;
+  const totalUsers = users?.length ?? 0;
   const totalPendingOrders = orders.filter(
     (order) => order.status === "pending"
   ).length;

@@ -11,8 +11,8 @@ import { useUsers } from "@/store/useUsers";
 import { useProducts } from "@/store/useProducts";
 import { truncateId, formatDate, formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { statusColors } from "../columns";
-import { OrderStatus } from "../columns";
+import { orderStatusClasses } from "@/lib/styles/badgeClasses";
+
 export default function Page() {
   const params = useParams();
   const router = useRouter();
@@ -30,7 +30,7 @@ export default function Page() {
   /* fetch ALL if empty */
   useEffect(() => {
     if (!orders.length) fetchOrders();
-    if (!users.length) fetchUsers();
+    if (!users?.length) fetchUsers();
     if (!products.length) fetchProducts();
   }, [fetchOrders, fetchUsers, fetchProducts]);
 
@@ -42,7 +42,7 @@ export default function Page() {
 
   /* derive user from order */
   const user = useMemo(
-    () => users.find((u) => u.id === order?.user_id),
+    () => users?.find((u) => u.id === order?.user_id),
     [users, order]
   );
 
@@ -94,12 +94,13 @@ export default function Page() {
               <div className="flex justify-between items-center">
                 <span>Status</span>
                 <h2
-                  className={`px-2 py-1 rounded-full text-sm font-medium ${
-                    statusColors[order.status as OrderStatus]
-                  }`}
+                  className={
+                    orderStatusClasses[order.status] ??
+                    "px-2 py-1 rounded-full bg-gray-100 text-gray-800 text-sm font-medium"
+                  }
                 >
                   {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                </h2>{" "}
+                </h2>
               </div>
               <div className="flex justify-between">
                 <span>Date</span>

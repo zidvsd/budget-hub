@@ -1,27 +1,22 @@
 "use client";
+
 import { ColumnDef } from "@tanstack/react-table";
 import { Product } from "@/lib/types/products";
 import { formatPrice } from "@/lib/utils";
-import { SquarePen, Trash, Eye } from "lucide-react";
+import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+  availabilityClasses,
+  stockStatusClasses,
+} from "@/lib/styles/badgeClasses";
+import Link from "next/link";
 import Image from "next/image";
+
 type TableMeta = {
   onDelete: (id: string) => void;
 };
+
 // This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -39,7 +34,7 @@ export const columns: ColumnDef<Product>[] = [
             alt={row.original.name}
             height={42}
             width={42}
-            className=" object-cover"
+            className="object-cover"
           />
         </Link>
       );
@@ -73,7 +68,13 @@ export const columns: ColumnDef<Product>[] = [
       const isAvailable = row.original.is_active;
       return (
         <div className="text-center">
-          <span className={isAvailable ? "text-green-500" : "text-red-500"}>
+          <span
+            className={
+              isAvailable
+                ? availabilityClasses.available
+                : availabilityClasses.unavailable
+            }
+          >
             {isAvailable ? "Available" : "Unavailable"}
           </span>
         </div>
@@ -86,44 +87,34 @@ export const columns: ColumnDef<Product>[] = [
     cell: ({ row }) => {
       const stock = row.original.stock;
 
-      switch (true) {
-        case stock === 0:
-          return (
-            <span className="px-3 py-1 rounded-full bg-red-100 text-destructive text-xs font-medium">
-              Out of Stock
-            </span>
-          );
+      let statusText = "";
+      let statusClass = "";
 
-        case stock > 0 && stock < 6:
-          return (
-            <span className="px-3 py-1 rounded-full bg-yellow-100 text-yellow-800 text-xs font-medium">
-              Low Stock
-            </span>
-          );
-
-        default:
-          return (
-            <span className="px-3 py-1 rounded-full bg-green-100 text-chart-2 text-xs font-medium">
-              In Stock
-            </span>
-          );
+      if (stock === 0) {
+        statusText = "Out of Stock";
+        statusClass = stockStatusClasses.outOfStock;
+      } else if (stock > 0 && stock < 6) {
+        statusText = "Low Stock";
+        statusClass = stockStatusClasses.lowStock;
+      } else {
+        statusText = "In Stock";
+        statusClass = stockStatusClasses.inStock;
       }
+
+      return <span className={statusClass}>{statusText}</span>;
     },
   },
-
   {
     accessorKey: "actions",
     header: "Actions",
     cell: ({ row, table }) => {
       const id = row.original.id;
       return (
-        <div className="flex items-center gap-2">
-          <Button variant={"nav"} className="border">
-            <Link href={`/admin/dashboard/inventory/${id}`}>
-              <Eye className="size-4" />
-            </Link>
+        <Link href={`/admin/dashboard/inventory/${id}`}>
+          <Button variant="nav" className="border">
+            <Eye className="size-4" />
           </Button>
-        </div>
+        </Link>
       );
     },
   },

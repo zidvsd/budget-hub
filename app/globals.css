@@ -165,7 +165,6 @@ footer a {
   @apply hover:text-accent transition duration-300 ease-in-out;
 }
 
-
 .order-info span {
   @apply text-neutral-600 dark:text-neutral-300;
 }

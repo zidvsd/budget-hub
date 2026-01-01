@@ -34,10 +34,10 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       return (
         <span
-          className={`${
+          className={`px-2 rounded-full text-xs font-medium ${
             row.original.role === "admin"
-              ? "text-white bg-accent rounded-full px-2"
-              : ""
+              ? "bg-red-600 text-white" // Admin is red
+              : "bg-gray-200 text-gray-800" // User is gray
           }`}
         >
           {row.original.role}

@@ -7,6 +7,10 @@ import { ArrowLeft, SquarePen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  availabilityClasses,
+  stockStatusClasses,
+} from "@/lib/styles/badgeClasses";
 import { useProducts } from "@/store/useProducts";
 import {
   formatPrice,
@@ -178,13 +182,13 @@ export default function ProductPage() {
                 <div className="flex justify-between">
                   <span className="font-medium">Stock</span>
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${
+                    className={
                       product.stock === 0
-                        ? "bg-red-100 text-red-800"
+                        ? stockStatusClasses.outOfStock
                         : product.stock < 5
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-green-100 text-green-800"
-                    }`}
+                        ? stockStatusClasses.lowStock
+                        : stockStatusClasses.inStock
+                    }
                   >
                     {product.stock === 0
                       ? "Out of stock"
@@ -203,7 +207,9 @@ export default function ProductPage() {
                   <span className="font-medium">Availability</span>
                   <span
                     className={
-                      product.is_active ? "text-green-500" : "text-red-500"
+                      product.is_active
+                        ? availabilityClasses.available
+                        : availabilityClasses.unavailable
                     }
                   >
                     {product.is_active ? "Available" : "Unavailable"}

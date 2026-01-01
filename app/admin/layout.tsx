@@ -3,7 +3,7 @@ import "../globals.css";
 import { AppSidebar } from "@/components/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { adminMenu } from "@/lib/layoutMenus";
-
+import Link from "next/link";
 export default function AdminLayout({
   children,
 }: {
@@ -15,6 +15,12 @@ export default function AdminLayout({
       <main className="w-full p-4 lg:p-6 max-w-[1440px]">
         <div className="flex justify-between">
           <SidebarTrigger />
+          {/* logo */}
+          <Link className="" href="/">
+            <h1 className="text-2xl font-bold bg-linear-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-text text-transparent">
+              GadyetHub
+            </h1>
+          </Link>
         </div>
         <div className="mt-4">{children}</div>
       </main>

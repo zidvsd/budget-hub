@@ -22,7 +22,7 @@ export default function Navbar() {
   const { users, loading: userLoading, fetchUsers } = useUsers();
   const loading = AuthLoading || userLoading;
   useEffect(() => {
-    if (!users.length) fetchUsers(); // fetch only if empty
+    if (!users?.length) fetchUsers(); // fetch only if empty
   }, [users, fetchUsers]);
   return (
     <nav className="sticky top-0 bg-transparent border-b border-neutral-300 shadow dark:border-neutral-700 z-50">

@@ -27,7 +27,7 @@ export default function ProductPage() {
   const loading = productsLoading;
 
   const cardStyle =
-    "bg-card p-5 transition-all duration-300 rounded-xl shadow-sm hover:shadow-lg";
+    "bg-card p-5  rounded-xl  border border-neutral-200 shadow-md dark:shadow-none dark:border-none";
 
   useEffect(() => {
     if (!products.length) fetchProducts();
@@ -143,16 +143,18 @@ export default function ProductPage() {
 
       <div className="flex flex-col gap-6">
         {/* Full-width Thumbnail */}
-        <div className="w-full rounded-lg overflow-hidden shadow-md">
+        <div className="w-full rounded-lg overflow-hidden border border-neutral-200 shadow-md dark:shadow-none dark:border-none">
           {imageLoading && <Skeleton className="w-full h-72" />}
-          <Image
-            onLoad={() => setImageLoading(false)}
-            src={product.image_path}
-            alt={product.name}
-            width={1440}
-            height={48}
-            className=" object-cover"
-          />
+          <div className="w-full  flex justify-center items-center">
+            <Image
+              onLoad={() => setImageLoading(false)}
+              src={product.image_path}
+              alt={product.name}
+              width={1024}
+              height={1024}
+              className="  object-cover"
+            />
+          </div>
         </div>
 
         {/* Product Info + Metadata */}

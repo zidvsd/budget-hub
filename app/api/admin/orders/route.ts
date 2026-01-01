@@ -8,9 +8,20 @@ export async function GET(req: NextRequest) {
     const adminCheck = await requireAdmin(req);
     if (adminCheck) return adminCheck;
 
-    const { data, error } = await supabaseAdmin
+    const { searchParams } = new URL(req.url);
+    const userId = searchParams.get("user_id");
+
+    let query = supabaseAdmin
       .from("orders")
-      .select(`*, order_items(*, product:products(name)) `);
+      .select(
+        `*, order_items(*, product:products(name)
+  )`
+      )
+      .order("created_at", { ascending: false });
+    if (userId) {
+      query = query.eq("user_id", userId);
+    }
+    const { data, error } = await query;
 
     if (error) throw error;
 
@@ -29,11 +40,12 @@ export async function POST(req: NextRequest) {
   try {
     const adminCheck = await requireAdmin(req);
     if (adminCheck) return adminCheck;
-
+    const body = await req.json();
     const { data, error } = await supabaseAdmin
       .from("orders")
-      .insert("")
-      .select();
+      .insert(body)
+      .select()
+      .single();
 
     if (error) throw error;
 

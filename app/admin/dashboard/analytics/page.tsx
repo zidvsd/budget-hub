@@ -1,25 +1,50 @@
 "use client";
-import { ChartPieLabelList } from "@/components/charts/PieChart";
-import { Skeleton } from "@/components/ui/skeleton";
-import { ChartAreaDefault } from "@/components/charts/AreaChart";
-import { ChartBarActive } from "@/components/charts/BarChart";
-import { ChartLineDefault } from "@/components/charts/LineChart";
+import { useState, useEffect, useMemo } from "react";
+
+// ...other imports
 import { useProducts } from "@/store/useProducts";
 import { useOrders } from "@/store/useOrders";
 import { useUsers } from "@/store/useUsers";
-import { useEffect, useMemo } from "react";
-
-export default function page() {
+import { ChartAreaDefault } from "@/components/charts/AreaChart";
+import { ChartPieLabelList } from "@/components/charts/PieChart";
+import { ChartBarActive } from "@/components/charts/BarChart";
+import { ChartLineDefault } from "@/components/charts/LineChart";
+export default function Page() {
   const { products, fetchProducts, loading: productsLoading } = useProducts();
   const { orders, fetchOrders, loading: ordersLoading } = useOrders();
   const { users, fetchUsers, loading: usersLoading } = useUsers();
 
+  const [totalRevenue, setTotalRevenue] = useState<number>(0);
+  const [loadingRevenue, setLoadingRevenue] = useState(false);
+
   useEffect(() => {
-    if (!products.length || !orders.length || !users.length) {
-      fetchOrders(), fetchProducts(), fetchUsers();
-    }
-  }, [fetchOrders, fetchProducts, fetchUsers]);
-  const loading = productsLoading || ordersLoading || usersLoading;
+    if (!products.length) fetchProducts();
+    if (!orders.length) fetchOrders();
+    if (!users.length) fetchUsers();
+
+    const fetchMetrics = async () => {
+      try {
+        setLoadingRevenue(true);
+        const res = await fetch("/api/admin/metrics");
+        const json = await res.json();
+        if (res.ok && json.success) {
+          setTotalRevenue(json.totalRevenue);
+          console.log(totalRevenue);
+        } else {
+          console.error("Failed to fetch metrics:", json.error);
+        }
+      } catch (err) {
+        console.error("Metrics fetch error:", err);
+      } finally {
+        setLoadingRevenue(false);
+      }
+    };
+
+    fetchMetrics();
+  }, [fetchProducts, fetchOrders, fetchUsers]);
+
+  const loading =
+    productsLoading || ordersLoading || usersLoading || loadingRevenue;
 
   const pieData = useMemo(() => {
     const counts = {
@@ -52,37 +77,21 @@ export default function page() {
       },
     ];
   }, [orders]);
+
   return (
-    <div className="">
-      {loading ? (
-        <div className="space-y-2">
-          <Skeleton className="w-72 h-10 rounded-md" />
-          <Skeleton className="w-48 h-8  rounded-md" />
-        </div>
-      ) : (
-        <>
-          <h1 className="page-heading">Analytics Management</h1>
-
-          <p className="page-subheading">Monitor your store's performance</p>
-        </>
-      )}
-
-      {loading ? (
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
-          <Skeleton className="h-72 w-full" />
-          <Skeleton className="h-72 w-full" />
-          <Skeleton className="h-72 w-full" />
-          <Skeleton className="h-72 w-full" />
-        </div>
-      ) : (
+    <div>
+      {/* ...loading skeletons */}
+      {!loading && (
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {/* pie chart - order status */}
           <ChartPieLabelList data={pieData} />
-          {/* area chart - revenue over time */}
-          <ChartAreaDefault />
-          {/* bar chart - top selling products */}
+          <ChartAreaDefault
+            revenueData={[
+              { month: "January", revenue: 1200 },
+              { month: "February", revenue: 2300 },
+              { month: "March", revenue: 1800 },
+            ]}
+          />
           <ChartBarActive />
-          {/* line chart - users */}
           <ChartLineDefault />
         </div>
       )}

@@ -35,35 +35,23 @@ export default function AddProductForm() {
   };
 
   const handleFileUpload = async (file: File) => {
-    if (!file) return;
-
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("File size exceeds 5MB");
-      return;
-    }
+    const formData = new FormData();
+    formData.append("file", file);
 
     try {
       setUploading(true);
+      const res = await fetch("/api/admin/upload", {
+        method: "POST",
+        body: formData,
+      });
 
-      // Generate a unique filename
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${uuidv4()}.${fileExt?.toLowerCase()}`;
+      const json = await res.json();
+      if (!res.ok || !json.success)
+        throw new Error(json.error || "Upload failed");
 
-      // Upload to Supabase
-      const { data, error } = await supabase.storage
-        .from("products")
-        .upload(fileName, file, { upsert: true });
-      if (error) throw error;
-
-      // Get public URL
-      const { data: publicData } = supabase.storage
-        .from("products")
-        .getPublicUrl(fileName);
-
-      // Assign to product
-      updateField("image_path", publicData.publicUrl);
+      updateField("image_path", json.publicUrl);
       toast.success("Image uploaded successfully");
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       toast.error("Failed to upload image");
     } finally {

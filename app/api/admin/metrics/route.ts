@@ -7,9 +7,9 @@ export async function GET(req: NextRequest) {
 
   const { data, error } = await supabaseAdmin
     .from("orders")
-    .select("total_revenue:sum(total_price)")
-    .eq("status", "completed")
-    .single();
+    .select("total_price:total_price.sum()")
+    .eq("status", "completed");
+
   if (error) {
     console.error("Supabase Revenue Aggregation Error:", error);
     return NextResponse.json(
@@ -17,7 +17,9 @@ export async function GET(req: NextRequest) {
       { status: 500 }
     );
   }
-  const totalRevenue = data?.total_revenue || 0;
+
+  const totalRevenue =
+    data?.reduce((sum, o) => sum + Number(o.total_price), 0) || 0;
 
   return NextResponse.json({ success: true, totalRevenue });
 }

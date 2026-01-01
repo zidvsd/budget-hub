@@ -24,12 +24,7 @@ export async function GET(
       .from("orders")
       .select(
         `
-      id,
-      user_id,
-      total_price,
-      status,
-      created_at,
-      updated_at,
+        *,
       order_items(
         quantity,
         price,

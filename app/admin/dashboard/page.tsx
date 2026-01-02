@@ -42,7 +42,7 @@ export default function DashboardPage() {
         <>
           <Skeleton className="h-8 w-1/3 mb-2" />
           <Skeleton className="h-5 w-2/3 mb-6" />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full">
             <Skeleton className="h-24 w-full" />
             <Skeleton className="h-24 w-full" />
             <Skeleton className="h-24 w-full" />
@@ -53,7 +53,7 @@ export default function DashboardPage() {
         <>
           <h1 className="page-heading">Dashboard</h1>
           <p className="page-subheading">Welcome to your admin dashboard</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full mt-5">
             <StatCard
               title="Total Products"
               icon={<Package className="size-6" />}

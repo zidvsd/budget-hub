@@ -121,29 +121,22 @@ export default function ProductPage() {
   return (
     <div className="product-info w-full ">
       {/* Header */}
-      {loading ? (
-        <div className="flex flex-col gap-2 mb-6">
-          <Skeleton className="h-10 w-1/3" />
-          <Skeleton className="h-6 w-2/3" />
-        </div>
-      ) : (
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4 mb-6">
-            <Button variant="ghost" onClick={() => router.back()}>
-              <ArrowLeft className="size-5" />
-            </Button>
-            <div>
-              <h1 className="text-3xl font-bold">{product?.name}</h1>
-              <p className="text-muted-foreground">Product Details</p>
-            </div>
-          </div>
-          <Button variant="accent" size="icon" asChild>
-            <Link href={`/admin/dashboard/inventory/${product.id}/edit`}>
-              <SquarePen className="size-4" />
-            </Link>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4 mb-6">
+          <Button variant="ghost" onClick={() => router.back()}>
+            <ArrowLeft className="size-5" />
           </Button>
+          <div>
+            <h1 className="text-3xl font-bold">{product?.name}</h1>
+            <p className="text-muted-foreground">Product Details</p>
+          </div>
         </div>
-      )}
+        <Button variant="accent" size="icon" asChild>
+          <Link href={`/admin/dashboard/inventory/${product.id}/edit`}>
+            <SquarePen className="size-4" />
+          </Link>
+        </Button>
+      </div>
 
       <div className="flex flex-col gap-6">
         {/* Full-width Thumbnail */}
@@ -165,112 +158,86 @@ export default function ProductPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Product Info */}
           <div className={`${cardStyle} space-y-4`}>
-            {loading ? (
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-1/2" />
-                <Skeleton className="h-4 w-1/3" />
-                <Skeleton className="h-4 w-2/3" />
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span className="font-medium">Price</span>
+                <span className="text-accent  font-semibold">
+                  {formatPrice(product?.price)}
+                </span>
               </div>
-            ) : (
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="font-medium">Price</span>
-                  <span className="text-accent  font-semibold">
-                    {formatPrice(product?.price)}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium">Stock</span>
-                  <span
-                    className={
-                      product.stock === 0
-                        ? stockStatusClasses.outOfStock
-                        : product.stock < 5
-                        ? stockStatusClasses.lowStock
-                        : stockStatusClasses.inStock
-                    }
-                  >
-                    {product.stock === 0
-                      ? "Out of stock"
+              <div className="flex justify-between">
+                <span className="font-medium">Stock</span>
+                <span
+                  className={
+                    product.stock === 0
+                      ? stockStatusClasses.outOfStock
                       : product.stock < 5
-                      ? "Low stock"
-                      : "In stock"}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium">Category</span>
-                  <span className="text-muted-foreground">
-                    {upperCaseFirstLetter(product.category)}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium">Availability</span>
-                  <span
-                    className={
-                      product.is_active
-                        ? availabilityClasses.available
-                        : availabilityClasses.unavailable
-                    }
-                  >
-                    {product.is_active ? "Available" : "Unavailable"}
-                  </span>
-                </div>
+                      ? stockStatusClasses.lowStock
+                      : stockStatusClasses.inStock
+                  }
+                >
+                  {product.stock === 0
+                    ? "Out of stock"
+                    : product.stock < 5
+                    ? "Low stock"
+                    : "In stock"}
+                </span>
               </div>
-            )}
+              <div className="flex justify-between">
+                <span className="font-medium">Category</span>
+                <span className="text-muted-foreground">
+                  {upperCaseFirstLetter(product.category)}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">Availability</span>
+                <span
+                  className={
+                    product.is_active
+                      ? availabilityClasses.available
+                      : availabilityClasses.unavailable
+                  }
+                >
+                  {product.is_active ? "Available" : "Unavailable"}
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* Metadata */}
           <div className={`${cardStyle} space-y-2`}>
-            {loading ? (
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-1/2" />
-                <Skeleton className="h-4 w-1/3" />
-                <Skeleton className="h-4 w-2/3" />
+            <div className="space-y-2">
+              <div
+                className="flex justify-between cursor-pointer hover:text-accent"
+                onClick={() => setToggleTruncate((prev) => !prev)}
+              >
+                <span className="hover-utility">Product ID</span>
+                <span className="text-muted-foreground">
+                  {toggleTruncate ? truncateId(product.id) : product.id}
+                </span>
               </div>
-            ) : (
-              <div className="space-y-2">
-                <div
-                  className="flex justify-between cursor-pointer hover:text-accent"
-                  onClick={() => setToggleTruncate((prev) => !prev)}
-                >
-                  <span className="hover-utility">Product ID</span>
-                  <span className="text-muted-foreground">
-                    {toggleTruncate ? truncateId(product.id) : product.id}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Date Created</span>
-                  <span className="text-muted-foreground">
-                    {formatDate(product.created_at)}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Last Updated</span>
-                  <span className="text-muted-foreground">
-                    {formatDate(product.updated_at)}
-                  </span>
-                </div>
+              <div className="flex justify-between">
+                <span>Date Created</span>
+                <span className="text-muted-foreground">
+                  {formatDate(product.created_at)}
+                </span>
               </div>
-            )}
+              <div className="flex justify-between">
+                <span>Last Updated</span>
+                <span className="text-muted-foreground">
+                  {formatDate(product.updated_at)}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Description */}
         <div className={`${cardStyle}`}>
-          {loading ? (
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-5/6" />
-              <Skeleton className="h-4 w-3/4" />
-            </div>
-          ) : (
-            <>
-              <h1 className="font-medium">Description</h1>
-              <p className="text-sm mt-2 text-muted-foreground">
-                {product.description}
-              </p>
-            </>
-          )}
+          <h1 className="font-medium">Description</h1>
+          <p className="text-sm mt-2 text-muted-foreground">
+            {product.description}
+          </p>
         </div>
       </div>
     </div>

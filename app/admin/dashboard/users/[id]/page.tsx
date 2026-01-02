@@ -54,10 +54,10 @@ export default function Page() {
   // Compute stats
   const stats = useMemo(() => {
     const totalOrders = orders.length;
-    const totalSpent = orders.reduce(
-      (acc, order) => acc + order.total_price,
-      0
-    );
+    const totalSpent = orders
+      .filter((o) => o.status === "completed")
+      .reduce((acc, order) => acc + order.total_price, 0);
+
     const pendingOrders = orders.filter((o) => o.status === "pending").length;
     const completedOrders = orders.filter(
       (o) => o.status === "completed"
@@ -132,7 +132,7 @@ export default function Page() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         {stats.map((s) => (
           <StatCard
             key={s.title}

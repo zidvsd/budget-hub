@@ -8,6 +8,7 @@ import Footer from "@/components/client/Footer";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useUsers } from "@/store/useUsers";
 import { useEffect } from "react";
+import Link from "next/link";
 export default function ClientLayout({
   children,
 }: {
@@ -25,16 +26,21 @@ export default function ClientLayout({
         {/* Desktop: Navbar + Content */}
         <div className="hidden md:block">
           <Navbar />
-          <main className="custom-container min-h-screen">{children}</main>
+          <main className="min-h-screen">{children}</main>
         </div>
 
         {/* Mobile/Tablet: Sidebar + Content */}
         <SidebarProvider className="md:hidden">
           <AppSidebar items={clientMenu} />
-          <div className="flex flex-col w-full custom-container">
-            <div className="flex justify-between items-center">
+          <div className="flex flex-col w-full ">
+            <div className="flex justify-between items-center pt-2 w-full p-2">
               <SidebarTrigger />
-              <h1>Logo</h1>
+              {/* logo */}
+              <Link className="" href="/">
+                <h1 className="text-2xl font-bold bg-linear-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-text text-transparent">
+                  GadyetHub
+                </h1>
+              </Link>
             </div>
 
             <main className="w-full  min-h-screen">{children}</main>

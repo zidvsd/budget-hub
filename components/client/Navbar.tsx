@@ -78,7 +78,9 @@ export default function Navbar() {
                       <UserIcon className="w-4 h-4 shrink-0 text-black dark:text-white group-hover:text-white transition" />
                       {loading
                         ? "Loading..."
-                        : getFirstName(users[0]?.full_name) || "Account"}
+                        : users && users.length > 0
+                        ? getFirstName(users[0].full_name)
+                        : "Account"}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>

@@ -8,7 +8,7 @@ import { ChartAreaDefault } from "@/components/charts/AreaChart";
 import { ChartPieLabelList } from "@/components/charts/PieChart";
 import { ChartBarActive } from "@/components/charts/BarChart";
 import { ChartLineDefault } from "@/components/charts/LineChart";
-
+import { Skeleton } from "@/components/ui/skeleton";
 export default function Page() {
   const { products, fetchProducts, loading: productsLoading } = useProducts();
   const { orders, fetchOrders, loading: ordersLoading } = useOrders();
@@ -117,27 +117,38 @@ export default function Page() {
     <div className="space-y-6">
       {loading ? (
         <div className="space-y-4">
-          <div className="h-8 w-1/3 bg-gray-200 rounded animate-pulse" />
-          <div className="h-5 w-2/3 bg-gray-200 rounded animate-pulse" />
+          <Skeleton className="h-8 w-1/3 bg-gray-200 rounded animate-pulse" />
+          <Skeleton className="h-5 w-2/3 bg-gray-200 rounded animate-pulse" />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
-            <div className="h-64 bg-gray-200 rounded animate-pulse" />
-            <div className="h-64 bg-gray-200 rounded animate-pulse" />
-            <div className="h-64 bg-gray-200 rounded animate-pulse" />
-            <div className="h-64 bg-gray-200 rounded animate-pulse" />
+            <Skeleton className="h-64 bg-gray-200 rounded animate-pulse" />
+            <Skeleton className="h-64 bg-gray-200 rounded animate-pulse" />
+            <Skeleton className="h-64 bg-gray-200 rounded animate-pulse" />
+            <Skeleton className="h-64 bg-gray-200 rounded animate-pulse" />
           </div>
         </div>
       ) : (
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <ChartPieLabelList data={pieData} />
-          <ChartAreaDefault
-            revenueData={[
-              { month: "January", revenue: 1200 },
-              { month: "February", revenue: 2300 },
-              { month: "March", revenue: 1800 },
-            ]}
-          />
-          <ChartBarActive data={topSellingProducts} />
-          <ChartLineDefault data={userActivityData} />
+        <div>
+          <>
+            <h1 className="page-heading">Analytics</h1>
+            <p className="page-subheading">
+              {" "}
+              Get insights on products, orders, and user activity to make
+              informed decisions
+            </p>
+          </>
+
+          <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <ChartPieLabelList data={pieData} />
+            <ChartAreaDefault
+              revenueData={[
+                { month: "January", revenue: 1200 },
+                { month: "February", revenue: 2300 },
+                { month: "March", revenue: 1800 },
+              ]}
+            />
+            <ChartBarActive data={topSellingProducts} />
+            <ChartLineDefault data={userActivityData} />
+          </div>
         </div>
       )}
     </div>

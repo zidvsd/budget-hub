@@ -3,6 +3,7 @@
 import { supabase } from "@/lib/supabase/client";
 import { Session } from "@supabase/supabase-js";
 import Hero from "@/components/client/home/Hero";
+import Cta from "@/components/client/Cta";
 import Categories from "@/components/client/home/Categories";
 import FeatureBar from "@/components/client/FeatureBar";
 import FeaturedProducts from "@/components/client/home/FeaturedProducts";
@@ -16,6 +17,7 @@ export default function page() {
         <Categories />
       </div>
       <FeaturedProducts />
+      <Cta />
     </div>
   );
 }

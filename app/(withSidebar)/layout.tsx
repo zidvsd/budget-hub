@@ -33,13 +33,14 @@ export default function ClientLayout({
         <SidebarProvider className="md:hidden">
           <AppSidebar items={clientMenu} />
           <div className="flex flex-col w-full ">
-            <div className="flex justify-between items-center pt-2 w-full p-2">
+            <nav className="sticky top-0 z-50 flex justify-between items-center pt-2 w-full p-2 bg-background border-b border-neutral-300  shadow dark:border-muted">
+              {" "}
               <SidebarTrigger />
               {/* logo */}
               <Link className="" href="/">
                 <h1 className="logo">GadyetHub</h1>
               </Link>
-            </div>
+            </nav>
 
             <main className="w-full  min-h-screen">{children}</main>
           </div>

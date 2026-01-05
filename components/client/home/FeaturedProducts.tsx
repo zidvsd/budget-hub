@@ -2,9 +2,13 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useEffect } from "react";
+import { useProducts } from "@/store/useProducts";
+
 export default function FeaturedProducts() {
+  const { products, fetchProducts } = useProducts();
   return (
-    <section className="bg-sidebar">
+    <section className="bg-sidebar dark:bg-muted py-16">
       <div className="custom-container">
         <div className="flex items-center justify-between ">
           <div>
@@ -13,7 +17,7 @@ export default function FeaturedProducts() {
               Discover the gadgets our customers love the most
             </span>
           </div>
-          <Link href={"/categories"}>
+          <Link className="hidden md:block" href={"/categories"}>
             <Button className="flex items-center gap-2 " variant={"ghost"}>
               View All
               <ArrowRight />

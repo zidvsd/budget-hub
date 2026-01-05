@@ -2,10 +2,10 @@
 
 import { ShoppingCart, Bell, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { ModeToggle } from "../../ModeToggle";
 import { useAuthFromCookies } from "@/hooks/useAuth";
-import { Button } from "../../ui/button";
-import LogoutButton from "../../ui/logout";
+import { Button } from "@/components/ui/button";
+import LogoutButton from "@/components/ui/logout";
+import { ModeToggle } from "@/components/ModeToggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,7 +29,7 @@ export default function Navbar() {
       <div className="custom-container flex items-center justify-between py-3">
         {/* Logo */}
         <Link href={"/"}>
-          <h1 className="logo">GadyetHub</h1>
+          <h1 className="logo">GadyetHu</h1>
         </Link>
 
         {/* Search */}

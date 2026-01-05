@@ -2,10 +2,10 @@
 
 import { ShoppingCart, Bell, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { ModeToggle } from "../ModeToggle";
+import { ModeToggle } from "../../ModeToggle";
 import { useAuthFromCookies } from "@/hooks/useAuth";
-import { Button } from "../ui/button";
-import LogoutButton from "../ui/logout";
+import { Button } from "../../ui/button";
+import LogoutButton from "../../ui/logout";
 import {
   DropdownMenu,
   DropdownMenuContent,

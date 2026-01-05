@@ -170,5 +170,20 @@ footer a {
 }
 
 .logo {
-  @apply text-2xl font-bold bg-linear-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-text text-transparent;
+  @apply text-2xl font-bold bg-clip-text text-transparent;
+
+  /* Increased contrast by tightening the 'white' stop to the very end */
+  background-image: linear-gradient(135deg,
+      #0f051d 0%,
+      /* Ultra-dark purple anchor */
+      var(--accent) 45%,
+      /* Your OKLCH color - the "meat" of the logo */
+      var(--accent) 75%,
+      /* Holding the color longer for visibility */
+      #ffffff 100%
+      /* Just a highlight at the edge */
+    );
+
+  /* This adds a "substance" to the transparent text */
+  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.3));
 }

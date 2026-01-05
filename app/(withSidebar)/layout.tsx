@@ -3,8 +3,8 @@ import "../globals.css";
 import { AppSidebar } from "@/components/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { clientMenu } from "@/lib/layoutMenus";
-import Navbar from "@/components/client/Navbar";
-import Footer from "@/components/client/Footer";
+import Navbar from "@/components/client/layout/Navbar";
+import Footer from "@/components/client/layout/Footer";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useUsers } from "@/store/useUsers";
 import { useEffect } from "react";
@@ -19,7 +19,7 @@ export default function ClientLayout({
   useEffect(() => {
     fetchUsers();
   }, [fetchUsers]);
-  const publicPages = ["/", "/category", "/products"];
+  const publicPages = ["/"];
   return (
     <>
       <ProtectedRoute role="user" publicPages={publicPages}>

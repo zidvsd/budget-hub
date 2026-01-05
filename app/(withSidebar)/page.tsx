@@ -8,16 +8,16 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Hero from "@/components/client/home/Hero";
 import Categories from "@/components/client/home/Categories";
-import Link from "next/link";
 import FeatureBar from "@/components/client/FeatureBar";
 export default function page() {
   return (
     <div>
+      <Hero />
+      <FeatureBar />
+
       <div className="custom-container">
-        <Hero />
         <Categories />
       </div>
-      <FeatureBar />
     </div>
   );
 }

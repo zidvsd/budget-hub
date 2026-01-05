@@ -2,7 +2,6 @@
 
 import { ShoppingCart, Bell, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
 import { ModeToggle } from "../ModeToggle";
 import { useAuthFromCookies } from "@/hooks/useAuth";
 import { Button } from "../ui/button";
@@ -16,6 +15,7 @@ import {
 import { useUsers } from "@/store/useUsers";
 import { User as UserIcon } from "lucide-react";
 import { useEffect } from "react";
+import Link from "next/link";
 import { getFirstName } from "@/lib/utils";
 export default function Navbar() {
   const { role, loading: AuthLoading } = useAuthFromCookies();
@@ -28,8 +28,8 @@ export default function Navbar() {
     <nav className="sticky top-0 bg-background border-b border-neutral-300 shadow dark:border-neutral-700 z-50">
       <div className="custom-container flex items-center justify-between py-3">
         {/* Logo */}
-        <Link href={"/"} className="text-xl font-bold">
-          GadyetHub
+        <Link href={"/"}>
+          <h1 className="logo">GadyetHub</h1>
         </Link>
 
         {/* Search */}

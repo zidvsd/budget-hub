@@ -17,9 +17,7 @@ export default function AdminLayout({
           <SidebarTrigger />
           {/* logo */}
           <Link className="" href="/">
-            <h1 className="text-2xl font-bold bg-linear-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-text text-transparent">
-              GadyetHub
-            </h1>
+            <h1 className="logo">GadyetHub</h1>
           </Link>
         </div>
         <div className="mt-4">{children}</div>

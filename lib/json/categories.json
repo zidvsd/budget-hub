@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Electronics",
+    "slug": "electronics",
+    "icon": "Cpu"
+  },
+  {
+    "name": "Mobiles",
+    "slug": "mobiles",
+    "icon": "Smartphone"
+  },
+  {
+    "name": "Computers",
+    "slug": "computers",
+    "icon": "Laptop"
+  },
+  {
+    "name": "Audio",
+    "slug": "audio",
+    "icon": "Headphones"
+  },
+  {
+    "name": "Gaming",
+    "slug": "gaming",
+    "icon": "Gamepad2"
+  },
+  {
+    "name": "Wearables",
+    "slug": "wearables",
+    "icon": "Watch"
+  },
+  {
+    "name": "Cameras",
+    "slug": "cameras",
+    "icon": "Camera"
+  },
+  {
+    "name": "Accessories",
+    "slug": "accessories",
+    "icon": "Package"
+  }
+]

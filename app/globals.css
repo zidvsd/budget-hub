@@ -168,3 +168,7 @@ footer a {
 .order-info span {
   @apply text-neutral-600 dark:text-neutral-300;
 }
+
+.logo {
+  @apply text-2xl font-bold bg-linear-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-text text-transparent;
+}

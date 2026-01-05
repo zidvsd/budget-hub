@@ -1,37 +1,62 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 
 export default function Hero() {
   function handleScroll() {
-    const categoriesSection = document.getElementById("categories");
-    if (categoriesSection) {
-      categoriesSection.scrollIntoView({ behavior: "smooth" });
-    }
+    document.getElementById("categories")?.scrollIntoView({
+      behavior: "smooth",
+    });
   }
+
   return (
-    <div className="custom-container space-y-2 py-8">
-      <h1 className="text-3xl font-bold ">Discover the Latest</h1>
-      <h1 className="text-3xl font-bold text-accent">Tech & Gadgets</h1>
-      <p className="text-neutral-400">
-        Explore our curated collection of cutting-edge technology and
-        accessories
-      </p>
-      <div className="flex flex-col sm:flex-row sm:items-start items-center gap-2 ">
-        <Link href="/product/categories" className="flex items-center gap-2">
-          <Button variant={"accent"} className="w-full sm:w-auto">
-            Shop Now
-            <ArrowRight />
-          </Button>
-        </Link>
-        <Button
-          onClick={handleScroll}
-          variant={"nav"}
-          className="w-full sm:w-auto"
-        >
-          Learn More
-        </Button>
+    <section className="relative h-[480px] md:h-[520px] flex items-center overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0">
+        <Image
+          src="/hero-bg.jpg"
+          alt="Hero"
+          fill
+          priority
+          className="object-cover"
+        />
+
+        {/* Gradient overlay (ONLY affects image) */}
+        <div className="absolute inset-0 bg-linear-to-r from-background/95 via-background/75 to-background/30" />
       </div>
-    </div>
+
+      {/* Content */}
+      <div className="relative z-10 custom-container w-full">
+        <div className="max-w-xl space-y-4 w-full">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight ">
+            Discover the Latest
+            <span className="block bg-hero-gradient bg-clip-text text-accent">
+              Tech & Gadgets
+            </span>
+          </h1>
+
+          <p className="text-lg md:text-xl  max-w-md text-neutral-500 dark:text-neutral-400">
+            Explore our curated collection of cutting-edge technology and
+            accessories
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Link href="/categories">
+              <Button variant="accent" className="w-full">
+                Shop Now
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
+
+            <Button onClick={handleScroll} variant="secondary" size="lg">
+              Learn More
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }

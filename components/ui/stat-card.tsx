@@ -89,9 +89,7 @@ export function StatCard({
                 "bg-white dark:bg-sidebar border border-neutral-200 dark:border-neutral-800"
               )}
             >
-              <div className="h-6 w-6 text-neutral-600 dark:text-neutral-400 group-hover:text-primary transition-colors">
-                {icon}
-              </div>
+              <div className="h-6 w-6 text-accent ">{icon}</div>
             </div>
           </div>
 

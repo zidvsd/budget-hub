@@ -7,6 +7,7 @@ export interface Product {
   stock: number;
   image_path: string;
   is_active: boolean;
+  is_featured: boolean;
   created_at: string;
   updated_at: string;
 }

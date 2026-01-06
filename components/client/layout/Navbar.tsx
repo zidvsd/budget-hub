@@ -29,7 +29,7 @@ export default function Navbar() {
       <div className="custom-container flex items-center justify-between py-3">
         {/* Logo */}
         <Link href={"/"}>
-          <h1 className="logo">GadyetHu</h1>
+          <h1 className="logo">GadyetHub</h1>
         </Link>
 
         {/* Search */}

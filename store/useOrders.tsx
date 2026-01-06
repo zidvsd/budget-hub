@@ -11,9 +11,9 @@ interface OrdersState {
   updateOrderLocally: (updatedOrder: Order) => void;
 }
 
-export const useOrders = create<OrdersState>((set) => ({
+export const useOrders = create<OrdersState>((set, get) => ({
   orders: [],
-  loading: true,
+  loading: false,
   error: null,
   updateOrderLocally: (updatedOrder) => {
     set((state) => ({
@@ -24,6 +24,10 @@ export const useOrders = create<OrdersState>((set) => ({
     }));
   },
   fetchOrders: async (userId?: string) => {
+    const { loading } = get();
+
+    if (loading) return;
+
     set({ loading: true, error: null });
     try {
       const role = getRoleFromCookie();
@@ -51,7 +55,6 @@ export const useOrders = create<OrdersState>((set) => ({
 
       set({ orders: json.data ?? json, loading: false });
     } catch (error: any) {
-      console.error("Failed to fetch orders:", error);
       set({
         error: error.message ?? "Unknown error",
         loading: false,
@@ -60,5 +63,5 @@ export const useOrders = create<OrdersState>((set) => ({
     }
   },
 
-  clearOrders: () => set({ orders: [], error: null }),
+  clearOrders: () => set({ orders: [], error: null, loading: false }),
 }));

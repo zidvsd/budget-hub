@@ -21,9 +21,9 @@ export default function Page() {
   useEffect(() => {
     const fetchAllData = async () => {
       try {
-        if (!products.length) fetchProducts();
-        if (!orders.length) fetchOrders();
-        if (!users?.length) fetchUsers();
+        fetchProducts();
+        fetchOrders();
+        fetchUsers();
 
         setLoadingRevenue(true);
         const res = await fetch("/api/admin/metrics");

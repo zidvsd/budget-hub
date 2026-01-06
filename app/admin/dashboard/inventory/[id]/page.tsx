@@ -34,8 +34,8 @@ export default function ProductPage() {
     "bg-card p-5  rounded-xl  border border-neutral-200 shadow-md dark:shadow-none dark:border-none";
 
   useEffect(() => {
-    if (!products.length) fetchProducts();
-  }, [fetchProducts, products.length]);
+    fetchProducts();
+  }, [fetchProducts]);
 
   const product: Product | undefined = useMemo(
     () => products.find((p) => p.id === productId),

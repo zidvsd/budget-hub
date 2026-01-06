@@ -7,6 +7,10 @@ import { useProducts } from "@/store/useProducts";
 
 export default function FeaturedProducts() {
   const { products, fetchProducts } = useProducts();
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
   return (
     <section className="bg-sidebar dark:bg-muted py-16">
       <div className="custom-container">

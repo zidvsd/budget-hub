@@ -29,9 +29,9 @@ export default function Page() {
     "group relative bg-card p-4 overflow-hidden transition-all duration-300 ease-out hover:shadow-lg hover:-translate-y-0.5 border-2 border-neutral-200 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700 rounded-xl";
 
   useEffect(() => {
-    if (!orders.length) fetchOrders();
-    if (!users?.length) fetchUsers();
-    if (!products.length) fetchProducts();
+    fetchOrders();
+    fetchUsers();
+    fetchProducts();
   }, [fetchOrders, fetchUsers, fetchProducts]);
 
   const order = useMemo(

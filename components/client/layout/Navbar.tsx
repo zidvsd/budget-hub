@@ -22,8 +22,8 @@ export default function Navbar() {
   const { users, loading: userLoading, fetchUsers } = useUsers();
   const loading = AuthLoading || userLoading;
   useEffect(() => {
-    if (!users?.length) fetchUsers(); // fetch only if empty
-  }, [users, fetchUsers]);
+    fetchUsers(); // fetch only if empty
+  }, [fetchUsers]);
   return (
     <nav className="sticky top-0 bg-background border-b border-neutral-300 shadow dark:border-neutral-700 z-50">
       <div className="custom-container flex items-center justify-between py-3">

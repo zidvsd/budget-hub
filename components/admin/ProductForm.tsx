@@ -21,8 +21,8 @@ export default function ProductEditPage() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (!products.length) fetchProducts();
-  }, [products.length, fetchProducts]);
+    fetchProducts();
+  }, [fetchProducts]);
 
   useEffect(() => {
     const found = products.find((p) => p.id === id);

@@ -20,6 +20,7 @@ export default function OrdersPage() {
   const { fetchUsers, users, loading: usersLoading } = useUsers();
 
   const loading = ordersLoading || usersLoading;
+
   async function updateOrderStatus(id: string, newStatus: OrderStatus) {
     try {
       console.log("Updating order:", id, newStatus);

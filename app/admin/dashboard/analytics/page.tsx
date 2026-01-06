@@ -38,14 +38,7 @@ export default function Page() {
     };
 
     fetchAllData();
-  }, [
-    fetchProducts,
-    fetchOrders,
-    fetchUsers,
-    products.length,
-    orders.length,
-    users?.length,
-  ]);
+  }, [fetchProducts, fetchOrders, fetchUsers]);
 
   const loading =
     productsLoading || ordersLoading || usersLoading || loadingRevenue;

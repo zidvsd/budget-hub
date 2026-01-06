@@ -33,7 +33,7 @@ export default function ClientLayout({
         <SidebarProvider className="md:hidden">
           <AppSidebar items={clientMenu} />
           <div className="flex flex-col w-full ">
-            <nav className="sticky top-0 z-50 flex justify-between items-center pt-2 w-full p-2 bg-background border-b border-neutral-300  shadow dark:border-muted">
+            <nav className="sticky top-0 z-50 flex justify-between items-center pt-2 w-full p-4 bg-background border-b border-neutral-300  shadow dark:border-muted">
               {" "}
               <SidebarTrigger />
               {/* logo */}

@@ -24,9 +24,9 @@ export const useOrders = create<OrdersState>((set, get) => ({
     }));
   },
   fetchOrders: async (userId?: string) => {
-    const { loading } = get();
+    const { orders, loading } = get();
 
-    if (loading) return;
+    if (loading || orders.length > 0) return;
 
     set({ loading: true, error: null });
     try {

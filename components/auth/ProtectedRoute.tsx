@@ -2,20 +2,17 @@
 
 import { supabase } from "@/lib/supabase/client";
 import { useEffect, useState, ReactNode } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { toast } from "sonner";
 
 interface Props {
   children: ReactNode;
-  role?: "user" | "admin";
   publicPages?: string[];
 }
 
-export default function ProtectedRoute({
-  children,
-  role,
-  publicPages = [],
-}: Props) {
+export default function ProtectedRoute({ children, publicPages = [] }: Props) {
   const router = useRouter();
+  const pathname = usePathname();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -27,25 +24,28 @@ export default function ProtectedRoute({
       return acc;
     }, {} as Record<string, string>);
 
-    const token = cookiesList["access-token"];
-    const roleCookie = cookiesList["role"];
-
+    const roleCookie = cookiesList["role"] || "guest";
+    const currentPath = window.location.pathname;
     // If page is public, allow access
-    if (publicPages.includes(window.location.pathname)) {
+    if (publicPages.includes(currentPath)) return;
+
+    if (roleCookie === "guest") {
+      toast.error("Access Denied", {
+        description: "Please login to access this page.",
+      });
+      router.replace("/login");
       return;
     }
-
-    if (!token) {
-      router.push("/login");
+    if (roleCookie !== "user") {
+      toast.warning("Unauthorized", {
+        description: "You do not have permission to view this section.",
+      });
+      router.replace("/");
       return;
     }
+  }, [router, publicPages, pathname]);
 
-    if (role && roleCookie !== role) {
-      router.push("/"); // redirect if role mismatch
-    }
-  }, [router, role, publicPages]);
-
-  if (!isClient) return null; // avoid SSR mismatch
+  if (!isClient) return null;
 
   return <>{children}</>;
 }

@@ -2,41 +2,49 @@
   {
     "name": "Electronics",
     "slug": "electronics",
-    "icon": "Cpu"
+    "icon": "Cpu",
+    "description": "Explore the latest electronic devices and smart technology for everyday use."
   },
   {
     "name": "Mobiles",
     "slug": "mobiles",
-    "icon": "Smartphone"
+    "icon": "Smartphone",
+    "description": "Smartphones and mobile devices with cutting-edge features and performance."
   },
   {
     "name": "Computers",
     "slug": "computers",
-    "icon": "Laptop"
+    "icon": "Laptop",
+    "description": "Desktops, laptops, and computing solutions for work, study, and gaming."
   },
   {
     "name": "Audio",
     "slug": "audio",
-    "icon": "Headphones"
+    "icon": "Headphones",
+    "description": "Headphones, speakers, and audio gear for immersive sound experiences."
   },
   {
     "name": "Gaming",
     "slug": "gaming",
-    "icon": "Gamepad2"
+    "icon": "Gamepad2",
+    "description": "Consoles, games, and accessories built for serious and casual gamers."
   },
   {
     "name": "Wearables",
     "slug": "wearables",
-    "icon": "Watch"
+    "icon": "Watch",
+    "description": "Smartwatches and wearable tech designed to keep you connected and active."
   },
   {
     "name": "Cameras",
     "slug": "cameras",
-    "icon": "Camera"
+    "icon": "Camera",
+    "description": "Capture moments with cameras, lenses, and photography equipment."
   },
   {
     "name": "Accessories",
     "slug": "accessories",
-    "icon": "Package"
+    "icon": "Package",
+    "description": "Essential accessories to complement and enhance your devices."
   }
 ]

@@ -5,7 +5,7 @@ import { Linkedin, Instagram, Mail, Github } from "lucide-react";
 export default function Footer() {
   return (
     <footer className="bg-primary-foreground dark:bg-muted w-full ">
-      <div className="custom-container py-10">
+      <div className="custom-container pt-12 pb-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {/* About */}
           <div>

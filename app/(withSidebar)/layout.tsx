@@ -22,11 +22,11 @@ export default function ClientLayout({
   const publicPages = ["/"];
   return (
     <>
-      <ProtectedRoute role="user" publicPages={publicPages}>
+      <ProtectedRoute publicPages={publicPages}>
         {/* Desktop: Navbar + Content */}
         <div className="hidden md:block">
           <Navbar />
-          <main className="min-h-screen">{children}</main>
+          <main>{children}</main>
         </div>
 
         {/* Mobile/Tablet: Sidebar + Content */}
@@ -42,7 +42,7 @@ export default function ClientLayout({
               </Link>
             </nav>
 
-            <main className="w-full  min-h-screen">{children}</main>
+            <main className="w-full  ">{children}</main>
           </div>
         </SidebarProvider>
         <Footer />

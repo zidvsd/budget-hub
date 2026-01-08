@@ -66,18 +66,19 @@ export default function Categories() {
                 <CarouselItem
                   key={category.slug}
                   className="
-                    basis-1/2
-                    sm:basis-1/3
-                    md:basis-1/4
-                    lg:basis-1/5
-                  "
+        basis-1/2
+        sm:basis-1/3
+        md:basis-1/4
+        lg:basis-1/5
+      "
                 >
                   <Link
-                    href={`/categories/${category.slug}`}
+                    // Updated href with query param instead of slug path
+                    href={`/categories?category=${category.slug}`}
                     className="group hover-utility relative flex flex-col items-center justify-center gap-2 p-4 rounded-xl
-                      bg-linear-to-br from-muted/80 to-muted/50
-                      shadow-md hover:shadow-xl hover:scale-105
-                      transition-transform duration-300 cursor-pointer"
+          bg-linear-to-br from-muted/80 to-muted/50
+          shadow-md hover:shadow-xl hover:scale-105
+          transition-transform duration-300 cursor-pointer"
                   >
                     {/* Icon */}
                     <div className="p-3 rounded-full bg-accent/10 group-hover:bg-accent/20 transition-colors">

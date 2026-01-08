@@ -2,6 +2,7 @@
 
 import { supabase } from "@/lib/supabase/client";
 import { Session } from "@supabase/supabase-js";
+import { Suspense } from "react";
 import Hero from "@/components/client/home/Hero";
 import Cta from "@/components/client/Cta";
 import Categories from "@/components/client/home/Categories";
@@ -16,7 +17,9 @@ export default function page() {
       <div className="custom-container">
         <Categories />
       </div>
-      <FeaturedProducts />
+      <Suspense>
+        <FeaturedProducts />
+      </Suspense>
       <Cta />
     </div>
   );

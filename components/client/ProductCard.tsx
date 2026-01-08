@@ -38,18 +38,15 @@ export default function ProductCard({
   }
 
   return (
-    <div className="product-card group">
+    <div className="product-card group relative">
+      {/* <-- add relative here */}
       {product.is_featured && (
-        <span className="product-card-featured   absolute top-4 left-4 rounded-full px-2 py-1 text-xs font-bold bg-accent text-white shadow-md;">
+        <span className="absolute top-4 left-4 rounded-full px-2 py-1 text-xs font-bold bg-accent text-white shadow-md z-5">
           Featured
         </span>
       )}
-
       {/* Image */}
-      <div
-        className="product-card-image relative"
-        onClick={() => router.push(`/product/${product.id}`)}
-      >
+      <div className="product-card-image relative cursor-pointer">
         <Image
           src={product.image_path || "/placeholder.png"}
           alt={product.name}
@@ -57,11 +54,14 @@ export default function ProductCard({
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
 
-        {/* Hover overlay */}
-        <div className="product-card-hover">
+        {/* Full image overlay */}
+        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+        {/* Buttons at bottom */}
+        <div className="absolute bottom-0 left-0 right-0 flex items-center justify-center gap-2 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <Button
             variant={"accent"}
-            className="w-full flex items-center gap-2 hover:bg-accent/90"
+            className="flex-1 flex items-center justify-center gap-2 hover:bg-accent/90"
             onClick={(e) => {
               e.stopPropagation();
               handleAddToCart?.(product.id);
@@ -75,13 +75,12 @@ export default function ProductCard({
             href={`/products/${product.id}`}
             className="w-10 h-10 rounded-full flex items-center justify-center"
           >
-            <Button className="w-full h-full p-0 flex items-center justify-center border bg-white dark:bg-sidebar text-gray-700 dark:text-white hover:bg-gray-200 dark:hover:bg-sidebar/90">
+            <Button className="w-full h-full p-0 flex items-center justify-center border bg-white text-gray-700 hover:bg-gray-200">
               <Eye className="w-4 h-4" />
             </Button>
           </Link>
         </div>
       </div>
-
       {/* Content */}
       <div className="p-4 flex flex-col gap-2">
         <div className="flex items-center justify-between">

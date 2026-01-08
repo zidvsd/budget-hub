@@ -6,14 +6,14 @@
     "description": "Explore the latest electronic devices and smart technology for everyday use."
   },
   {
-    "name": "Mobiles",
-    "slug": "mobiles",
+    "name": "Smartphones",
+    "slug": "smartphones",
     "icon": "Smartphone",
     "description": "Smartphones and mobile devices with cutting-edge features and performance."
   },
   {
-    "name": "Computers",
-    "slug": "computers",
+    "name": "Laptops",
+    "slug": "laptops",
     "icon": "Laptop",
     "description": "Desktops, laptops, and computing solutions for work, study, and gaming."
   },
@@ -46,5 +46,11 @@
     "slug": "accessories",
     "icon": "Package",
     "description": "Essential accessories to complement and enhance your devices."
+  },
+  {
+    "name": "Peripherals",
+    "slug": "peripherals",
+    "icon": "Package",
+    "description": "Keyboards, mice, cables, and other peripheral devices to enhance your setup."
   }
 ]

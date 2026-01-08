@@ -40,12 +40,14 @@ export default function ProductCard({
   return (
     <div className="product-card group">
       {product.is_featured && (
-        <span className="product-card-featured">Featured</span>
+        <span className="product-card-featured   absolute top-4 left-4 rounded-full px-2 py-1 text-xs font-bold bg-accent text-white shadow-md;">
+          Featured
+        </span>
       )}
 
       {/* Image */}
       <div
-        className="product-card-image"
+        className="product-card-image relative"
         onClick={() => router.push(`/product/${product.id}`)}
       >
         <Image

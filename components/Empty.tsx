@@ -1,28 +1,31 @@
 import * as LucideIcon from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   Empty,
-  EmptyContent,
-  EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
+  EmptyDescription,
 } from "@/components/ui/empty";
-type EmptyDemoProps = {
-  icon: React.ElementType; // Accept a React component for the icon
+
+type EmptyStateProps = {
+  icon?: React.ElementType; // Optional icon
+  title?: string; // Optional custom title
+  description?: string; // Optional custom description
 };
 
-export function EmptyDemo({ icon: Icon }: EmptyDemoProps) {
+export function EmptyState({
+  icon: Icon = LucideIcon.Box,
+  title = "No Products Found",
+  description = "Try adding more products.",
+}: EmptyStateProps) {
   return (
     <Empty>
       <EmptyHeader>
         <EmptyMedia variant="default">
-          <Icon className="w-12 h-12 text-muted-foreground" />{" "}
-          {/* Render the icon */}
+          {Icon && <Icon className="w-12 h-12 text-muted-foreground" />}
         </EmptyMedia>
-
-        <EmptyTitle>No Products Found</EmptyTitle>
-        <EmptyDescription>Try adding more products.</EmptyDescription>
+        <EmptyTitle>{title}</EmptyTitle>
+        <EmptyDescription>{description}</EmptyDescription>
       </EmptyHeader>
     </Empty>
   );

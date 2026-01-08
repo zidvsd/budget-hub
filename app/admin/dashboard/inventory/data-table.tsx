@@ -36,7 +36,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { EmptyDemo } from "@/components/Empty";
+import { EmptyState } from "@/components/Empty";
 type TableMeta = {
   onDelete?: (id: string) => void;
 };
@@ -161,7 +161,7 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center">
-                  <EmptyDemo icon={ShoppingCart} />
+                  <EmptyState icon={ShoppingCart} />
                 </TableCell>
               </TableRow>
             )}

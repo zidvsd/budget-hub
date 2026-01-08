@@ -52,10 +52,13 @@ export default function CategoriesPage() {
   };
   // Find the description from categories.json
   const categoryInfo =
-    category === "all Products"
+    category === "all-products"
       ? { description: "Browse all available products." }
-      : categories.find((c) => c.name === category);
-
+      : categories.find((c) => c.slug === category);
+  const categoryDisplay =
+    category === "all-products"
+      ? "All Products"
+      : categories.find((c) => c.slug === category)?.name || category;
   // Filter products (compare lowercase)
   const filteredProducts = products.filter(
     (p) => category === "all products" || p.category.toLowerCase() === category
@@ -65,14 +68,18 @@ export default function CategoriesPage() {
     <div className="custom-container pt-12">
       <BreadCrumb links={breadcrumbLinks} />
       <div className="mt-4">
-        <h1 className="text-2xl font-bold">{upperCaseFirstLetter(category)}</h1>
+        <h1 className="text-2xl font-bold">
+          {upperCaseFirstLetter(categoryDisplay)}
+        </h1>
         {/* Category description */}
         <span className="text-gray-600">{categoryInfo?.description}</span>
       </div>
       {/* Dropdown for categories */}
       <DropdownMenu>
         <DropdownMenuTrigger className="px-4 py-2 border rounded-md mt-4">
-          {selectedCategory?.name || "All Products"} {/* display name */}
+          {category === "all-products"
+            ? "All Products"
+            : categories.find((c) => c.slug === category)?.name}
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-48">
           {/* First, "All Products" */}

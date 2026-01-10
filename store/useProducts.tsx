@@ -5,7 +5,7 @@ interface ProductsState {
   products: Product[];
   loading: boolean;
   error: string | null;
-  fetchProducts: () => Promise<void>;
+  fetchProducts: (query?: string) => Promise<void>;
   clearProducts: () => void;
 }
 
@@ -14,15 +14,16 @@ export const useProducts = create<ProductsState>((set, get) => ({
   loading: false,
   error: null,
 
-  fetchProducts: async () => {
-    const { products, loading } = get();
-
-    if (loading || products.length > 0) return;
+  fetchProducts: async (query?: string) => {
+    if (get().loading) return;
 
     set({ loading: true, error: null });
 
     try {
-      const res = await fetch("/api/products");
+      let url = "/api/products";
+      if (query) url += `?q=${encodeURIComponent(query)}`;
+
+      const res = await fetch(url);
       if (!res.ok) throw new Error("Unable to fetch products");
 
       const json = await res.json();

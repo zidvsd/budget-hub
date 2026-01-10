@@ -164,7 +164,7 @@ export default function CategoriesPage() {
             <div className="flex md:hidden items-center w-full gap-4">
               {/* Category Dropdown */}
               <DropdownMenu>
-                <DropdownMenuTrigger className="cursor-pointer px-4 py-2 border rounded-md flex items-center justify-between whitespace-nowrap cursor-pointer ">
+                <DropdownMenuTrigger className=" px-4 py-2 border rounded-md flex items-center justify-between whitespace-nowrap cursor-pointer ">
                   <span>
                     {category === "all-products"
                       ? "All Products"
@@ -452,7 +452,7 @@ export default function CategoriesPage() {
       )}
 
       {/* Products Section */}
-      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 border-t pt-6">
+      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 border-t pt-6">
         {loading ? (
           Array.from({ length: 6 }).map((_, i) => (
             <ProductCard key={i} loading />

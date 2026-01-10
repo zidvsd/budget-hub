@@ -47,15 +47,20 @@ export default function ProductCard({
       )}
       {/* Image */}
       <div className="product-card-image relative cursor-pointer">
-        <Image
-          src={product.image_path || "/placeholder.png"}
-          alt={product.name}
-          fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
-        />
+        <Link
+          href={`/products/${product.id}`}
+          className="w-10 h-10 rounded-full flex items-center justify-center"
+        >
+          <Image
+            src={product.image_path || "/placeholder.png"}
+            alt={product.name}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        </Link>
 
         {/* Full image overlay */}
-        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
 
         {/* Buttons at bottom */}
         <div className="absolute bottom-0 left-0 right-0 flex items-center justify-center gap-2 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">

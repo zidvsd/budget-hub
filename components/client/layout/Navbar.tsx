@@ -14,16 +14,33 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useUsers } from "@/store/useUsers";
 import { User as UserIcon } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getFirstName } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 export default function Navbar() {
   const { role, loading: AuthLoading } = useAuthFromCookies();
   const { users, loading: userLoading, fetchUsers } = useUsers();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const router = useRouter();
+
   const loading = AuthLoading || userLoading;
+
   useEffect(() => {
-    fetchUsers(); // fetch only if empty
+    const handler = setTimeout(() => {
+      const params = new URLSearchParams();
+      if (searchTerm) params.set("q", searchTerm);
+      router.push(`/search?${params.toString()}`);
+    }, 500); // 500ms debounce
+
+    return () => clearTimeout(handler); // cleanup if user types again
+  }, [searchTerm, router]);
+
+  useEffect(() => {
+    fetchUsers();
   }, [fetchUsers]);
+
   return (
     <nav className="sticky top-0 bg-background border-b border-neutral-300 shadow dark:border-neutral-700 z-50">
       <div className="custom-container flex items-center justify-between py-3">
@@ -35,7 +52,11 @@ export default function Navbar() {
         {/* Search */}
         <div className="self-center flex justify-center items-center w-full">
           <div className="mx-4 md:w-1/2 lg:w-1/2">
-            <Input placeholder="Search..." className="w-full " />
+            <Input
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search..."
+              className="w-full "
+            />
           </div>
           <div className="w-fit">
             <ModeToggle variant="nav" />
@@ -92,7 +113,9 @@ export default function Navbar() {
               </DropdownMenu>
             ) : (
               <Link href={"/login"}>
-                <Button variant="accent">Login</Button>
+                <Button className="px-6" variant="accent">
+                  Login
+                </Button>
               </Link>
             )}
           </div>

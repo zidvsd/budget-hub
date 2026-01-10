@@ -29,8 +29,10 @@ export default function Navbar() {
 
   useEffect(() => {
     const handler = setTimeout(() => {
+      if (!searchTerm.trim()) return;
+
       const params = new URLSearchParams();
-      if (searchTerm) params.set("q", searchTerm);
+      params.set("q", searchTerm.trim());
       router.push(`/search?${params.toString()}`);
     }, 500); // 500ms debounce
 

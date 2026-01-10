@@ -21,18 +21,15 @@ export default function ProductsPage() {
 
   // Fetch products when the query changes
   useEffect(() => {
-    fetchProducts(queryParam || undefined);
-  }, [fetchProducts, queryParam]);
-
-  // Update URL as user types (debounce)
-  useEffect(() => {
     const handler = setTimeout(() => {
-      const params = new URLSearchParams();
-      if (searchTerm) params.set("q", searchTerm);
-      router.push(`/search?${params.toString()}`);
-    }, 500);
+      if (!searchTerm.trim()) return;
 
-    return () => clearTimeout(handler);
+      const params = new URLSearchParams();
+      params.set("q", searchTerm.trim());
+      router.push(`/search?${params.toString()}`);
+    }, 500); // 500ms debounce
+
+    return () => clearTimeout(handler); // cleanup if user types again
   }, [searchTerm, router]);
 
   return (

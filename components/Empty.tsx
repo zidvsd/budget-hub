@@ -22,7 +22,9 @@ export function EmptyState({
     <Empty>
       <EmptyHeader>
         <EmptyMedia variant="default">
-          {Icon && <Icon className="w-12 h-12 text-muted-foreground" />}
+          {Icon && (
+            <Icon className="size-24 text-muted-foreground rounded-full bg-sidebar p-6" />
+          )}
         </EmptyMedia>
         <EmptyTitle>{title}</EmptyTitle>
         <EmptyDescription>{description}</EmptyDescription>

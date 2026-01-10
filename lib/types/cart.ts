@@ -3,7 +3,7 @@ export interface Cart {
   user_id: string;
   created_at: string;
   updated_at: string;
-  order_items: CartItem[];
+  items: CartItem[];
 }
 export interface CartItem {
   id: string;
@@ -13,5 +13,8 @@ export interface CartItem {
   price: number;
 }
 export interface ProductItem {
+  id: string;
   name: string;
+  price: number;
+  image?: string;
 }

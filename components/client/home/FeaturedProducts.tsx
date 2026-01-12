@@ -19,10 +19,6 @@ export default function FeaturedProducts() {
 
   const router = useRouter();
 
-  function handleAddToCart(productId: string) {
-    console.log("Add to cart:", productId);
-  }
-
   return (
     <section className="bg-sidebar dark:bg-muted py-16">
       <div className="custom-container">
@@ -51,11 +47,7 @@ export default function FeaturedProducts() {
               ))
             : // Render actual products
               featuredProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  handleAddToCart={handleAddToCart}
-                />
+                <ProductCard key={product.id} product={product} />
               ))}
         </div>
       </div>

@@ -458,13 +458,7 @@ export default function CategoriesPage() {
             <ProductCard key={i} loading />
           ))
         ) : filteredProducts.length > 0 ? (
-          filteredProducts.map((p) => (
-            <ProductCard
-              key={p.id}
-              product={p}
-              handleAddToCart={(id) => console.log("Add to cart:", id)}
-            />
-          ))
+          filteredProducts.map((p) => <ProductCard key={p.id} product={p} />)
         ) : (
           <div className="col-span-full">
             <EmptyState

@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Eye, ShoppingCart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
-
+import { toast } from "sonner";
+import { useCart } from "@/store/useCart";
 interface ProductCardProps {
   product?: {
     id: string;
@@ -23,9 +24,9 @@ interface ProductCardProps {
 
 export default function ProductCard({
   product,
-  handleAddToCart,
   loading = false,
 }: ProductCardProps) {
+  const { addToCart } = useCart();
   const router = useRouter();
 
   if (loading || !product) {
@@ -36,7 +37,16 @@ export default function ProductCard({
       </div>
     );
   }
+  const handleAddToCart = async () => {
+    try {
+      console.log("Adding to cart product.id:", product.id);
 
+      await addToCart(product.id);
+      toast.success(`${product.name} added to cart`);
+    } catch (err: any) {
+      toast.error(`Failed to add to cart ${err.message}`);
+    }
+  };
   return (
     <div className="product-card group relative">
       {/* <-- add relative here */}
@@ -69,7 +79,8 @@ export default function ProductCard({
             className="flex-1 flex items-center justify-center gap-2 hover:bg-accent/90"
             onClick={(e) => {
               e.stopPropagation();
-              handleAddToCart?.(product.id);
+              handleAddToCart();
+              console.log("hi");
             }}
           >
             <ShoppingCart className="size-4" />

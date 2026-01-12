@@ -18,11 +18,12 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getFirstName } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { useCart } from "@/store/useCart";
 export default function Navbar() {
   const { role, loading: AuthLoading } = useAuthFromCookies();
   const { users, loading: userLoading, fetchUsers } = useUsers();
   const [searchTerm, setSearchTerm] = useState("");
-
+  const { items, fetchCart } = useCart();
   const router = useRouter();
 
   const loading = AuthLoading || userLoading;
@@ -41,7 +42,13 @@ export default function Navbar() {
 
   useEffect(() => {
     fetchUsers();
-  }, [fetchUsers]);
+    fetchCart();
+    console.log(items);
+  }, [fetchUsers, fetchCart]);
+
+  // handle add to cart
+
+  const handleAddToCart = (productId: string) => {};
 
   return (
     <nav className="sticky top-0 bg-background border-b border-neutral-300 shadow dark:border-neutral-700 z-50">
@@ -77,10 +84,25 @@ export default function Navbar() {
               </Link>
               <Link
                 href="/cart"
-                className="group hover:bg-muted rounded-lg p-2 hover-utility"
+                className="relative group inline-flex items-center justify-center rounded-lg p-2 transition-colors hover:bg-muted hover-utility"
+                aria-label={`Shopping cart, ${items.length} items`}
               >
-                <ShoppingCart className="size-4 cursor-pointer hover-utility group-hover:text-accent" />
-              </Link>{" "}
+                <ShoppingCart className="size-4 transition-colors group-hover:text-accent hover-utility" />
+
+                {items.length > 0 && (
+                  <div
+                    className="
+        absolute top-[-1] right-[-1]
+        flex h-4 w-4 items-center justify-center 
+        rounded-full border border-transparent 
+        bg-accent p-0 text-xs font-semibold text-primary-foreground 
+        transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2
+      "
+                  >
+                    {items.length}
+                  </div>
+                )}
+              </Link>
             </>
           )}
 

@@ -13,10 +13,19 @@ interface Props {
 export default function ProtectedRoute({ children, publicPages = [] }: Props) {
   const router = useRouter();
   const pathname = usePathname();
-  const [isClient, setIsClient] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setIsClient(true);
+    setLoading(true);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (publicPages.includes(pathname)) {
+      setIsAuthorized(true);
+      setLoading(false);
+      return;
+    }
 
     const cookiesList = document.cookie.split("; ").reduce((acc, c) => {
       const [key, value] = c.split("=");
@@ -25,9 +34,6 @@ export default function ProtectedRoute({ children, publicPages = [] }: Props) {
     }, {} as Record<string, string>);
 
     const roleCookie = cookiesList["role"] || "guest";
-    const currentPath = window.location.pathname;
-    // If page is public, allow access
-    if (publicPages.includes(currentPath)) return;
 
     if (roleCookie === "guest") {
       toast.error("Access Denied", {
@@ -43,9 +49,12 @@ export default function ProtectedRoute({ children, publicPages = [] }: Props) {
       router.replace("/");
       return;
     }
+    setIsAuthorized(true);
+    setLoading(false);
   }, [router, publicPages, pathname]);
 
-  if (!isClient) return null;
+  if (loading) return null; // or a skeleton/loading indicator
+  if (!isAuthorized) return null; // safety fallback
 
   return <>{children}</>;
 }

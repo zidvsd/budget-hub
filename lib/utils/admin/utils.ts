@@ -1,43 +1,34 @@
 import { NextRequest, NextResponse } from "next/server";
+import { supabaseAdmin } from "@/lib/supabase/server-client";
 import { createClient } from "@/lib/supabase/server";
-export async function requireAdmin() {
+export async function requireAdmin(req: NextRequest) {
   const supabase = await createClient();
-
   // 1. Get user from Supabase (Safe check)
   const {
     data: { user },
-    error: userError,
+    error: authError,
   } = await supabase.auth.getUser();
 
-  if (!user || userError) {
+  console.log("GUARD CHECK - User found:", !!user);
+  if (authError || !user) {
     return NextResponse.json(
       { message: "Unauthorized: Please log in.", success: false },
       { status: 401 }
     );
   }
-
-  // 3️⃣ Fetch the user's role from the 'profiles' table
-  const { data: profile, error: profileError } = await supabase
-    .from("users")
+  // Note: Check if your table is called 'users' or 'profiles'
+  const { data: userData, error: dbError } = await supabaseAdmin
+    .from("users") // or "users"
     .select("role")
     .eq("id", user.id)
     .single();
 
-  if (profileError || !profile) {
+  if (dbError || userData?.role !== "admin") {
     return NextResponse.json(
-      { message: "Unauthorized: Profile not found.", success: false },
-      { status: 401 }
-    );
-  }
-
-  // 4️⃣ Check if the role is 'admin'
-  if (profile.role !== "admin") {
-    return NextResponse.json(
-      { message: "Forbidden: Admin access required.", success: false },
+      { message: "Forbidden: Admin access required", success: false },
       { status: 403 }
     );
   }
 
-  // ✅ User is admin — allow access
   return null;
 }

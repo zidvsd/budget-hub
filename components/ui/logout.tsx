@@ -29,6 +29,7 @@ export default function LogoutButton({ showText = true }: LogoutButtonProps) {
       document.cookie = "role=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
       toast.success("Logged out successfully!");
       router.push("/login");
+      router.refresh();
     } catch (err: any) {
       console.error("Logout failed:", err.message);
       toast.error("Logout failed: " + err.message);

@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabase/server-client";
+import { createClient } from "@/lib/supabase/server";
+
 export async function GET() {
+  const supabase = await createClient();
   try {
     const {
       data: { user },
       error: userError,
-    } = await supabaseAdmin.auth.getUser();
+    } = await supabase.auth.getUser();
 
     if (userError || !user) {
       return NextResponse.json(
@@ -14,17 +16,19 @@ export async function GET() {
       );
     }
 
-    const { data: cart, error: cartError } = await supabaseAdmin
+    const { data: cart, error: cartError } = await supabase
       .from("carts")
       .select("*")
       .eq("user_id", user.id)
       .maybeSingle();
 
-    if (cartError || !cart) {
-      return NextResponse.json({ success: true, data: { items: [] } });
-    }
+    if (cartError)
+      return NextResponse.json(
+        { success: false, error: cartError.message },
+        { status: 500 }
+      );
 
-    const { data: items, error: cartItemsError } = await supabaseAdmin
+    const { data: items, error: cartItemsError } = await supabase
       .from("cart_items")
       .select(`*, product:products(id, name, price, image_path)`)
       .eq("cart_id", cart.id);
@@ -49,11 +53,12 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const supabase = await createClient();
   try {
     const {
       data: { user },
       error: userError,
-    } = await supabaseAdmin.auth.getUser();
+    } = await supabase.auth.getUser();
 
     if (userError || !user) {
       return NextResponse.json(
@@ -61,10 +66,9 @@ export async function POST(req: NextRequest) {
         { status: 401 }
       );
     }
-    const body = await req.json();
 
-    const { product_id, quantity = 1 } = body;
-    console.log("Received product_id:", product_id);
+    const { product_id, quantity = 1 } = await req.json();
+
     if (!product_id) {
       return NextResponse.json(
         { success: false, error: "Product ID required" },
@@ -79,7 +83,7 @@ export async function POST(req: NextRequest) {
       );
     }
     // fetch price from db
-    const { data: product, error: productError } = await supabaseAdmin
+    const { data: product, error: productError } = await supabase
       .from("products")
       .select("price")
       .eq("id", product_id)
@@ -95,7 +99,7 @@ export async function POST(req: NextRequest) {
 
     // get cart / create cart if no cart
 
-    let { data: cart, error: cartError } = await supabaseAdmin
+    let { data: cart, error: cartError } = await supabase
       .from("carts")
       .select("*")
       .eq("user_id", user.id)
@@ -110,7 +114,7 @@ export async function POST(req: NextRequest) {
 
     // create cart if theres no existing one
     if (!cart) {
-      const res = await supabaseAdmin
+      const res = await supabase
         .from("carts")
         .insert({ user_id: user.id })
         .select("*")
@@ -120,7 +124,7 @@ export async function POST(req: NextRequest) {
     }
 
     // merge item if already exists
-    const { data: existingItem } = await supabaseAdmin
+    const { data: existingItem } = await supabase
       .from("cart_items")
       .select("*")
       .eq("cart_id", cart.id)
@@ -128,12 +132,12 @@ export async function POST(req: NextRequest) {
       .maybeSingle();
 
     if (existingItem) {
-      await supabaseAdmin
+      await supabase
         .from("cart_items")
         .update({ quantity: existingItem.quantity + quantity })
         .eq("id", existingItem.id);
     } else {
-      await supabaseAdmin.from("cart_items").insert({
+      await supabase.from("cart_items").insert({
         cart_id: cart.id,
         product_id,
         quantity,

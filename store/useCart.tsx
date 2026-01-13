@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { toast } from "sonner";
 import { getRoleFromCookie } from "@/lib/utils";
 import { CartItem } from "@/lib/types/cart";
 interface CartState {
@@ -7,7 +8,7 @@ interface CartState {
   error: string | null;
 
   fetchCart: () => Promise<void>; // Fetch all cart items
-  addToCart: (productId: string, quantity?: number) => Promise<void>; // Add locally (and optionally send to backend)
+  addToCart: (productId: string, quantity?: number) => Promise<boolean>; // Add locally (and optionally send to backend)
   removeFromCart: (productId: string) => Promise<void>; // Add locally (and optionally send to backend)
   clearCart: () => void;
 }
@@ -41,7 +42,12 @@ export const useCart = create<CartState>((set) => ({
     }
   },
 
-  addToCart: async (productId, quantity = 1) => {
+  addToCart: async (productId, quantity = 1): Promise<boolean> => {
+    const role = getRoleFromCookie();
+    if (!role) {
+      throw new Error("Please login to add items to cart");
+    }
+
     const res = await fetch("/api/client/user/cart", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -54,6 +60,8 @@ export const useCart = create<CartState>((set) => ({
       throw new Error(data.error || "Failed to add to cart");
     }
     await useCart.getState().fetchCart();
+
+    return true;
   },
 
   removeFromCart: async (itemId) => {

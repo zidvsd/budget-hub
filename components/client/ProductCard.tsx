@@ -8,6 +8,9 @@ import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { useCart } from "@/store/useCart";
+import { getRoleFromCookie } from "@/lib/utils";
+import { description } from "../charts/BarChart";
+
 interface ProductCardProps {
   product?: {
     id: string;
@@ -39,12 +42,12 @@ export default function ProductCard({
   }
   const handleAddToCart = async () => {
     try {
-      console.log("Adding to cart product.id:", product.id);
-
-      await addToCart(product.id);
-      toast.success(`${product.name} added to cart`);
+      const success = await addToCart(product.id, 1);
+      if (success) toast.success(`${product.name} added to cart`);
     } catch (err: any) {
-      toast.error(`Failed to add to cart ${err.message}`);
+      toast.error(`Failed to add item to cart`, {
+        description: `${err.message}`,
+      });
     }
   };
   return (

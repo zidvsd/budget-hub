@@ -3,6 +3,7 @@
 import { supabase } from "@/lib/supabase/client";
 import { useEffect, useState, ReactNode } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { Spinner } from "../ui/spinner";
 import { toast } from "sonner";
 
 interface Props {
@@ -53,8 +54,14 @@ export default function ProtectedRoute({ children, publicPages = [] }: Props) {
     setLoading(false);
   }, [router, publicPages, pathname]);
 
-  if (loading) return null; // or a skeleton/loading indicator
-  if (!isAuthorized) return null; // safety fallback
+  if (loading || !isAuthorized) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen gap-4">
+        <Spinner className="text-accent size-12" />
+        <p className="text-accent text-lg font-medium">Checking access...</p>
+      </div>
+    );
+  }
 
   return <>{children}</>;
 }

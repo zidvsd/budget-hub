@@ -62,91 +62,79 @@ export async function POST(req: NextRequest) {
 
     if (userError || !user) {
       return NextResponse.json(
-        { success: false, error: "User not authenticated" },
+        { success: false, error: "Unauthorized" },
         { status: 401 }
       );
     }
 
     const { product_id, quantity = 1 } = await req.json();
+    const productIdTrimmed = (product_id as string)?.trim();
 
-    if (!product_id) {
-      return NextResponse.json(
-        { success: false, error: "Product ID required" },
-        { status: 400 }
-      );
-    }
-
-    if (quantity <= 0) {
-      return NextResponse.json(
-        { success: false, error: "Invalid quantity" },
-        { status: 400 }
-      );
-    }
-    // fetch price from db
+    // 1. Fetch Price (Ensures Product exists)
     const { data: product, error: productError } = await supabase
       .from("products")
       .select("price")
-      .eq("id", product_id)
+      .eq("id", productIdTrimmed) // uuid comparison
       .single();
 
     if (productError || !product) {
-      console.log("Product not found:", product_id);
+      console.error("Product check failed:", productIdTrimmed);
       return NextResponse.json(
         { success: false, error: "Product not found" },
         { status: 404 }
       );
     }
 
-    // get cart / create cart if no cart
-
+    // 2. Get or Create Cart
     let { data: cart, error: cartError } = await supabase
       .from("carts")
-      .select("*")
+      .select("id")
       .eq("user_id", user.id)
       .maybeSingle();
 
-    if (cartError) {
-      return NextResponse.json(
-        { success: false, error: cartError.message },
-        { status: 500 }
-      );
-    }
-
-    // create cart if theres no existing one
     if (!cart) {
-      const res = await supabase
+      const { data: newCart, error: createError } = await supabase
         .from("carts")
         .insert({ user_id: user.id })
-        .select("*")
+        .select("id")
         .single();
 
-      cart = res.data;
+      if (createError) throw createError;
+      cart = newCart;
     }
 
-    // merge item if already exists
+    // 3. Handle Cart Items (Join int8 and uuid)
     const { data: existingItem } = await supabase
       .from("cart_items")
-      .select("*")
-      .eq("cart_id", cart.id)
-      .eq("product_id", product_id)
+      .select("id, quantity")
+      .eq("cart_id", cart.id) // cart.id is int8
+      .eq("product_id", productIdTrimmed) // product_id is uuid
       .maybeSingle();
 
     if (existingItem) {
-      await supabase
+      const { error: updateError } = await supabase
         .from("cart_items")
         .update({ quantity: existingItem.quantity + quantity })
         .eq("id", existingItem.id);
+
+      if (updateError) throw updateError;
     } else {
-      await supabase.from("cart_items").insert({
+      const { error: insertError } = await supabase.from("cart_items").insert({
         cart_id: cart.id,
-        product_id,
+        product_id: productIdTrimmed,
         quantity,
         price: product.price,
       });
+
+      if (insertError) throw insertError;
     }
 
+    // 4. Return Fresh Data
+    // Instead of calling GET() directly (which can cause header issues),
+    // it's cleaner to return a success status or re-fetch logic.
     return GET();
   } catch (error: any) {
+    console.error("Cart API Error:", error.message);
     return NextResponse.json(
       { success: false, error: error.message || "Server Error" },
       { status: 500 }

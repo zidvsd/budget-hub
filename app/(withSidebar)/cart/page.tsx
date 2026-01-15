@@ -7,10 +7,13 @@ import { EmptyState } from "@/components/Empty";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect } from "react";
+import { QuantityInput } from "@/components/client/QuantityInput";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export default function Page() {
-  const { items, fetchCart, loading } = useCart();
+  const { items, fetchCart, loading, updateQuantity, removeFromCart } =
+    useCart();
   const router = useRouter();
 
   useEffect(() => {
@@ -64,8 +67,7 @@ export default function Page() {
                     key={item.id}
                     className={`flex items-center gap-4 border-b bg-card p-4
                       ${isFirst ? "rounded-t-lg" : ""}
-                      ${isLast ? "rounded-b-lg border-b-0" : ""}
-                    `}
+                      ${isLast ? "rounded-b-lg border-b-0" : ""}`}
                   >
                     <Image
                       src={item.product.image_path ?? "/placeholder.png"}
@@ -75,18 +77,44 @@ export default function Page() {
                       className="rounded-md"
                     />
 
-                    <div className="flex-1">
+                    <div className="flex-1 space-y-2">
                       <h3 className="font-semibold">{item.product.name}</h3>
                       <span className="text-sm text-muted-foreground">
                         ₱{item.price.toFixed(2)} each
                       </span>
+
+                      <div className="flex items-center gap-4">
+                        <QuantityInput
+                          value={item.quantity}
+                          onChange={async (newQty) => {
+                            try {
+                              await updateQuantity(item.id, newQty);
+                            } catch (err: any) {
+                              toast.error(
+                                err.message || "Failed to update quantity"
+                              );
+                            }
+                          }}
+                        />
+
+                        <span className="font-semibold">
+                          ₱{(item.price * item.quantity).toFixed(2)}
+                        </span>
+                      </div>
                     </div>
 
-                    <div className="">
+                    <div>
                       <Button
                         variant="ghost"
                         size="icon"
                         className="text-destructive"
+                        onClick={async () => {
+                          try {
+                            await removeFromCart(item.id);
+                          } catch (err: any) {
+                            toast.error(err.message || "Failed to remove item");
+                          }
+                        }}
                       >
                         <Trash size={18} />
                       </Button>

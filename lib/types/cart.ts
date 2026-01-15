@@ -1,12 +1,13 @@
 export interface Cart {
-  id: string;
+  id: number;
   user_id: string;
   created_at: string;
   updated_at: string;
   items: CartItem[];
 }
 export interface CartItem {
-  id: string;
+  id: number;
+  cart_id: number;
   product: ProductItem; // <-- single object
   product_id: string;
   quantity: number;

@@ -34,7 +34,10 @@ export function QuantityInput({
         value={value}
         min={min}
         max={max}
-        onChange={(e) => onChange(Number(e.target.value))}
+        onChange={(e) => {
+          const num = Number(e.target.value);
+          if (!isNaN(num)) onChange(num);
+        }}
         className="w-12 text-center outline-none"
       />
 

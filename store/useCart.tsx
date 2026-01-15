@@ -9,6 +9,7 @@ interface CartState {
 
   fetchCart: () => Promise<void>; // Fetch all cart items
   addToCart: (productId: string, quantity?: number) => Promise<boolean>; // Add locally (and optionally send to backend)
+  updateQuantity: (productId: string, quantity: number) => Promise<void>;
   removeFromCart: (productId: string) => Promise<void>; // Add locally (and optionally send to backend)
   clearCart: () => void;
 }
@@ -64,14 +65,42 @@ export const useCart = create<CartState>((set) => ({
     return true;
   },
 
-  removeFromCart: async (itemId) => {
-    await fetch(`/api/client/user/cart/${itemId}`, {
-      method: "DELETE",
-      credentials: "include",
-    });
-
-    await useCart.getState().fetchCart();
+  updateQuantity: async (itemId, quantity) => {
+    try {
+      const res = await fetch(`/api/client/user/cart/${itemId}`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cart_item_id: itemId, quantity: quantity }),
+      });
+      const json = await res.json();
+      if (!json.success) {
+        toast.error(json.error || "Failed to update quantity");
+        return;
+      }
+      await useCart.getState().fetchCart();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to update quantity");
+    }
   },
 
+  removeFromCart: async (itemId: string) => {
+    try {
+      const res = await fetch(`/api/client/user/cart/${itemId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      const json = await res.json();
+
+      if (!json.success) {
+        toast.error(json.error || "Failed to remove item");
+        return;
+      }
+      await useCart.getState().fetchCart();
+      toast.success("Item removed from cart!");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to remove item");
+    }
+  },
   clearCart: () => set({ items: [], error: null }),
 }));

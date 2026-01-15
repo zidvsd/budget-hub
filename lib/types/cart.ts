@@ -16,5 +16,5 @@ export interface ProductItem {
   id: string;
   name: string;
   price: number;
-  image?: string;
+  image_path: string;
 }

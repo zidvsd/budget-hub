@@ -87,7 +87,7 @@ export default function Navbar() {
                 className="relative group inline-flex items-center justify-center rounded-lg p-2 transition-colors hover:bg-muted hover-utility"
                 aria-label={`Shopping cart, ${items.length} items`}
               >
-                <ShoppingCart className="size-4 transition-colors group-hover:text-accent hover-utility" />
+                <ShoppingCart className="size-4 group-hover:text-accent hover-utility" />
 
                 {items.length > 0 && (
                   <div
@@ -95,7 +95,7 @@ export default function Navbar() {
         absolute top-[-1] right-[-1]
         flex h-4 w-4 items-center justify-center 
         rounded-full border border-transparent 
-        bg-accent p-0 text-xs font-semibold text-primary-foreground 
+        bg-accent p-0 text-xs font-semibold text-white
         transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2
       "
                   >

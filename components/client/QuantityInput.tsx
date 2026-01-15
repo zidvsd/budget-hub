@@ -24,12 +24,13 @@ export function QuantityInput({
       <button
         type="button"
         onClick={decrease}
-        className="px-3 py-1 text-lg hover:bg-muted"
+        className="px-2  text-lg hover:bg-muted"
       >
         −
       </button>
 
       <input
+        inputMode="numeric"
         type="number"
         value={value}
         min={min}
@@ -38,13 +39,13 @@ export function QuantityInput({
           const num = Number(e.target.value);
           if (!isNaN(num)) onChange(num);
         }}
-        className="w-12 text-center outline-none"
+        className="w-12 text-center outline-none appearance-none"
       />
 
       <button
         type="button"
         onClick={increase}
-        className="px-3 py-1 text-lg hover:bg-muted"
+        className="px-2  text-lg hover:bg-muted"
       >
         +
       </button>

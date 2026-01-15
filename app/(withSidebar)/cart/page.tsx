@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { QuantityInput } from "@/components/client/QuantityInput";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-
+import Link from "next/link";
 export default function Page() {
   const { items, fetchCart, loading, updateQuantity, removeFromCart } =
     useCart();
@@ -69,21 +69,27 @@ export default function Page() {
                       ${isFirst ? "rounded-t-lg" : ""}
                       ${isLast ? "rounded-b-lg border-b-0" : ""}`}
                   >
-                    <Image
-                      src={item.product.image_path ?? "/placeholder.png"}
-                      alt={item.product.name}
-                      width={72}
-                      height={72}
-                      className="rounded-md"
-                    />
+                    <Link href={`/products/${item.product_id}`}>
+                      <Image
+                        src={item.product.image_path ?? "/placeholder.png"}
+                        alt={item.product.name}
+                        width={72}
+                        height={72}
+                        className="rounded-md"
+                      />
+                    </Link>
 
                     <div className="flex-1 space-y-2">
-                      <h3 className="font-semibold">{item.product.name}</h3>
+                      <Link href={`/products/${item.product_id}`}>
+                        <h3 className="font-semibold hover-utility hover:text-accent">
+                          {item.product.name}
+                        </h3>
+                      </Link>
                       <span className="text-sm text-muted-foreground">
                         ₱{item.price.toFixed(2)} each
                       </span>
 
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-4 mt-2">
                         <QuantityInput
                           value={item.quantity}
                           onChange={async (newQty) => {
@@ -97,28 +103,25 @@ export default function Page() {
                           }}
                         />
 
-                        <span className="font-semibold">
+                        <span className="font-semibold text-accent">
                           ₱{(item.price * item.quantity).toFixed(2)}
                         </span>
                       </div>
                     </div>
 
-                    <div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-destructive"
-                        onClick={async () => {
-                          try {
-                            await removeFromCart(item.id);
-                          } catch (err: any) {
-                            toast.error(err.message || "Failed to remove item");
-                          }
-                        }}
-                      >
-                        <Trash size={18} />
-                      </Button>
-                    </div>
+                    <Button
+                      className="bg-transparent text-destructive hover:bg-destructive/20 "
+                      onClick={async () => {
+                        try {
+                          await removeFromCart(item.id);
+                        } catch (err: any) {
+                          toast.error(err.message || "Failed to remove item");
+                        }
+                      }}
+                    >
+                      <Trash size={18} />
+                      <span className="text-destructive">Remove</span>
+                    </Button>
                   </div>
                 );
               })}
@@ -135,20 +138,20 @@ export default function Page() {
 
             <div className="flex justify-between text-sm">
               <span>Shipping</span>
-              <span>Free</span>
+              <span className="text-green-500">Free</span>
             </div>
 
             <div className="border-t pt-4 flex justify-between font-semibold">
               <span>Total</span>
-              <span>₱{subtotal.toFixed(2)}</span>
+              <span className="text-accent">₱{subtotal.toFixed(2)}</span>
             </div>
 
             <div className="flex items-center gap-4 text-xs text-muted-foreground">
               <div className="flex items-center gap-2">
-                <Shield size={14} /> Secure checkout
+                <Truck size={14} /> Free delivery
               </div>
               <div className="flex items-center gap-2">
-                <Truck size={14} /> Free delivery
+                <Shield size={14} /> Secure checkout
               </div>
             </div>
 

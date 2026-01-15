@@ -208,3 +208,14 @@ footer a {
 .product-card-desc {
   @apply text-sm text-neutral-500 dark:text-neutral-400 line-clamp-2;
 }
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Remove spinner for Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}

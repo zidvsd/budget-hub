@@ -8,8 +8,6 @@ import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { useCart } from "@/store/useCart";
-import { getRoleFromCookie } from "@/lib/utils";
-import { description } from "../charts/BarChart";
 
 interface ProductCardProps {
   product?: {
@@ -111,7 +109,12 @@ export default function ProductCard({
           </h2>
           <span className="product-card-stock">{product.stock} in stock</span>
         </div>
-        <span className="product-card-price">${product.price.toFixed(2)}</span>
+        <span className="product-card-price">
+          $
+          {typeof product.price === "number"
+            ? product.price.toFixed(2)
+            : "0.00"}
+        </span>
         <p className="product-card-desc">{product.description}</p>
       </div>
     </div>

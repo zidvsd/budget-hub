@@ -19,26 +19,32 @@ import Link from "next/link";
 import { getFirstName } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/store/useCart";
+import { useSearchParams } from "next/navigation";
 export default function Navbar() {
   const { role, loading: AuthLoading } = useAuthFromCookies();
   const { users, loading: userLoading, fetchUsers } = useUsers();
   const [searchTerm, setSearchTerm] = useState("");
   const { items, fetchCart } = useCart();
   const router = useRouter();
-
   const loading = AuthLoading || userLoading;
+
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      if (!searchTerm.trim()) return;
+      if (searchTerm.trim()) {
+        router.push(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
+      } else {
+        router.push("/search");
+      }
+    }, 500);
 
-      const params = new URLSearchParams();
-      params.set("q", searchTerm.trim());
-      router.push(`/search?${params.toString()}`);
-    }, 500); // 500ms debounce
-
-    return () => clearTimeout(handler); // cleanup if user types again
+    return () => clearTimeout(handler);
   }, [searchTerm, router]);
+
+  useEffect(() => {
+    setSearchTerm(searchParams.get("q") ?? "");
+  }, [searchParams]);
 
   useEffect(() => {
     fetchUsers();
@@ -124,8 +130,8 @@ export default function Navbar() {
                       {loading
                         ? "Loading..."
                         : users && users.length > 0
-                        ? getFirstName(users[0].full_name)
-                        : "Account"}
+                          ? getFirstName(users[0].full_name)
+                          : "Account"}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>

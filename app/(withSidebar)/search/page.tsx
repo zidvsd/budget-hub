@@ -10,6 +10,7 @@ import { Search } from "lucide-react";
 import Link from "next/link";
 import { EmptyState } from "@/components/Empty";
 import { Button } from "@/components/ui/button";
+import { Product } from "@/lib/types/products";
 export default function ProductsPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -18,19 +19,18 @@ export default function ProductsPage() {
   const [searchTerm, setSearchTerm] = useState(queryParam);
 
   const { products, fetchProducts, loading } = useProducts();
-
-  // Fetch products when the query changes
+  const filteredProducts: Product[] = queryParam
+    ? products.filter((product) =>
+        product.name.toLowerCase().includes(queryParam.toLowerCase().trim()),
+      )
+    : products;
   useEffect(() => {
-    const handler = setTimeout(() => {
-      if (!searchTerm.trim()) return;
+    fetchProducts();
+  }, []);
 
-      const params = new URLSearchParams();
-      params.set("q", searchTerm.trim());
-      router.push(`/search?${params.toString()}`);
-    }, 500); // 500ms debounce
-
-    return () => clearTimeout(handler); // cleanup if user types again
-  }, [searchTerm, router]);
+  useEffect(() => {
+    setSearchTerm(queryParam);
+  }, [queryParam]);
 
   return (
     <div className="custom-container mt-8">
@@ -58,7 +58,7 @@ export default function ProductsPage() {
       </div>
 
       {/* Empty state if no results */}
-      {!loading && products.length === 0 && (
+      {!loading && filteredProducts.length === 0 && (
         <div className="w-full items-center justify-center flex flex-col">
           <EmptyState
             icon={Search}
@@ -80,7 +80,7 @@ export default function ProductsPage() {
           ? Array.from({ length: 6 }).map((_, i) => (
               <ProductCard key={i} loading />
             ))
-          : products.map((product) => (
+          : filteredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
       </div>

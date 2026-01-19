@@ -51,7 +51,7 @@ export default function Page() {
       {items.length > 0 && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
-          <div className="lg:col-span-2 rounded-lg border overflow-hidden">
+          <div className="lg:col-span-2 rounded-lg border overflow-hidden shadow-md">
             {loading &&
               Array.from({ length: 3 }).map((_, i) => (
                 <Skeleton key={i} className="h-24 w-full" />
@@ -128,7 +128,7 @@ export default function Page() {
           </div>
 
           {/* Order Summary */}
-          <div className="bg-card rounded-md border p-6 h-fit space-y-4">
+          <div className="bg-card rounded-md border p-6 h-fit space-y-4 shadow-md ">
             <h2 className="text-xl font-semibold">Order Summary</h2>
 
             <div className="flex justify-between text-sm">
@@ -138,7 +138,7 @@ export default function Page() {
 
             <div className="flex justify-between text-sm">
               <span>Shipping</span>
-              <span className="text-green-500">Free</span>
+              <span className="text-green-500 font-bold">Free</span>
             </div>
 
             <div className="border-t pt-4 flex justify-between font-semibold">

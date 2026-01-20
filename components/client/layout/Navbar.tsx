@@ -31,8 +31,6 @@ export default function Navbar() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (!searchTerm) return;
-
     const handler = setTimeout(() => {
       if (searchTerm.trim()) {
         router.push(`/search?q=${encodeURIComponent(searchTerm.trim())}`);

@@ -27,7 +27,7 @@ export function formatDate(date: string) {
 }
 
 export function formatPrice(price: number) {
-  return `₱${price.toFixed(2)}`;
+  return `₱${price.toLocaleString()}`;
 }
 export function truncateId(text: string) {
   return text.slice(0, 8) + "...";

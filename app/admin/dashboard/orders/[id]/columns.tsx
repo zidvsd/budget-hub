@@ -67,6 +67,6 @@ export const columns: ColumnDef<OrderItemRow>[] = [
   {
     accessorKey: "price",
     header: "Subtotal",
-    cell: ({ row }) => `$${row.original.price.toFixed(2)}`, // format price
+    cell: ({ row }) => `$${row.original.price.toLocaleString()}`, // format price
   },
 ];

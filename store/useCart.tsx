@@ -6,21 +6,24 @@ interface CartState {
   items: CartItem[];
   loading: boolean;
   error: string | null;
-
-  fetchCart: () => Promise<void>; // Fetch all cart items
+  isAdding: boolean;
+  fetchCart: (force?: boolean, silent?: boolean) => Promise<void>; // Fetch all cart items
   addToCart: (productId: string, quantity?: number) => Promise<boolean>; // Add locally (and optionally send to backend)
   updateQuantity: (cartItemId: number, quantity: number) => Promise<void>;
   removeFromCart: (cartItemId: number) => Promise<void>; // Add locally (and optionally send to backend)
   clearCart: () => void;
 }
 
-export const useCart = create<CartState>((set) => ({
+export const useCart = create<CartState>((set, get) => ({
   items: [],
   loading: false,
+  isAdding: false,
   error: null,
 
-  fetchCart: async () => {
-    set({ loading: true, error: null });
+  fetchCart: async (force = false, silent = false) => {
+    const currentItems = get().items;
+    if (currentItems.length > 0 && !force) return;
+    if (!silent) set({ loading: true, error: null });
 
     try {
       const res = await fetch("/api/client/user/cart", {
@@ -37,9 +40,10 @@ export const useCart = create<CartState>((set) => ({
     } catch (error: any) {
       set({
         error: error.message ?? "Unknown error",
-        loading: false,
         items: [],
       });
+    } finally {
+      if (!silent) set({ loading: false });
     }
   },
 
@@ -49,26 +53,34 @@ export const useCart = create<CartState>((set) => ({
       throw new Error("Please login to add items to cart");
     }
 
-    const res = await fetch("/api/client/user/cart", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ product_id: productId, quantity }),
-    });
+    set({ isAdding: true, error: null });
+    try {
+      const res = await fetch("/api/client/user/cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ product_id: productId, quantity }),
+      });
 
-    if (!res.ok) {
-      const data = await res.json();
-      throw new Error(data.error || "Failed to add to cart");
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to add to cart");
+      }
+      await get().fetchCart(true, true);
+
+      return true;
+    } catch (err: any) {
+      toast.error(err.message);
+      return false;
+    } finally {
+      set({ isAdding: false });
     }
-    await useCart.getState().fetchCart();
-
-    return true;
   },
 
   updateQuantity: async (cartItemId, quantity) => {
     set((state) => ({
       items: state.items.map((item) =>
-        item.id === cartItemId ? { ...item, quantity } : item
+        item.id === cartItemId ? { ...item, quantity } : item,
       ),
     }));
 

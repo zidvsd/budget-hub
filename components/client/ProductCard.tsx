@@ -39,12 +39,26 @@ export default function ProductCard({
     );
   }
   const handleAddToCart = async () => {
+    if (!product) return;
+
     try {
       const success = await addToCart(product.id, 1);
-      if (success) toast.success(`${product.name} added to cart`);
+
+      if (success) {
+        toast.success(`${product.name} added to cart`, {
+          action: {
+            label: "View Cart",
+            onClick: () => router.push("/cart"),
+          },
+        });
+      } else {
+        toast.error("Could not add to cart", {
+          description: "Please check your connection or login status.",
+        });
+      }
     } catch (err: any) {
-      toast.error(`Failed to add item to cart`, {
-        description: `${err.message}`,
+      toast.error("An unexpected error occurred", {
+        description: err.message,
       });
     }
   };
@@ -103,7 +117,7 @@ export default function ProductCard({
         <div className="flex items-center justify-between">
           <h2
             className="product-card-title"
-            onClick={() => router.push(`/product/${product.id}`)}
+            onClick={() => router.push(`/products/${product.id}`)}
           >
             {product.name}
           </h2>
@@ -112,7 +126,7 @@ export default function ProductCard({
         <span className="product-card-price">
           $
           {typeof product.price === "number"
-            ? product.price.toFixed(2)
+            ? product.price.toLocaleString()
             : "0.00"}
         </span>
         <p className="product-card-desc">{product.description}</p>

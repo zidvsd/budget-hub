@@ -6,7 +6,7 @@ import { Suspense } from "react";
 import Hero from "@/components/client/home/Hero";
 import Cta from "@/components/client/Cta";
 import Categories from "@/components/client/home/Categories";
-import FeatureBar from "@/components/client/FeatureBar";
+import FeatureBar from "@/components/client/home/FeatureBar";
 import FeaturedProducts from "@/components/client/home/FeaturedProducts";
 export default function page() {
   return (

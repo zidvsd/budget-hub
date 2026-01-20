@@ -57,7 +57,7 @@ export default function Categories() {
 
       {/* Carousel */}
       <div className="mt-8">
-        <Carousel opts={{ align: "start" }} className="w-full">
+        <Carousel opts={{ align: "start", loop: true }} className="w-full">
           <CarouselContent>
             {categories.map((category) => {
               const Icon = iconMap[category.icon] ?? Package;

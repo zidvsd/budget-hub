@@ -42,7 +42,7 @@ export default function ClientLayout({
               </Link>
             </nav>
 
-            <main className="w-full  ">{children}</main>
+            <main className="w-full">{children}</main>
           </div>
         </SidebarProvider>
         <Footer />

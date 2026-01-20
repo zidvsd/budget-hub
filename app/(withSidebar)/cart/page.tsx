@@ -22,7 +22,7 @@ export default function Page() {
 
   const subtotal = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
-    0
+    0,
   );
 
   return (
@@ -86,7 +86,7 @@ export default function Page() {
                         </h3>
                       </Link>
                       <span className="text-sm text-muted-foreground">
-                        ₱{item.price.toFixed(2)} each
+                        ₱{item.price.toLocaleString()} each
                       </span>
 
                       <div className="flex items-center gap-4 mt-2">
@@ -97,14 +97,14 @@ export default function Page() {
                               await updateQuantity(item.id, newQty);
                             } catch (err: any) {
                               toast.error(
-                                err.message || "Failed to update quantity"
+                                err.message || "Failed to update quantity",
                               );
                             }
                           }}
                         />
 
                         <span className="font-semibold text-accent">
-                          ₱{(item.price * item.quantity).toFixed(2)}
+                          ₱{(item.price * item.quantity).toLocaleString()}
                         </span>
                       </div>
                     </div>
@@ -133,7 +133,7 @@ export default function Page() {
 
             <div className="flex justify-between text-sm">
               <span>Subtotal</span>
-              <span>₱{subtotal.toFixed(2)}</span>
+              <span>₱{subtotal.toLocaleString()}</span>
             </div>
 
             <div className="flex justify-between text-sm">
@@ -143,7 +143,7 @@ export default function Page() {
 
             <div className="border-t pt-4 flex justify-between font-semibold">
               <span>Total</span>
-              <span className="text-accent">₱{subtotal.toFixed(2)}</span>
+              <span className="text-accent">₱{subtotal.toLocaleString()}</span>
             </div>
 
             <div className="flex items-center gap-4 text-xs text-muted-foreground">

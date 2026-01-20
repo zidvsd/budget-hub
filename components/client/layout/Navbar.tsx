@@ -31,6 +31,8 @@ export default function Navbar() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
+    if (!searchTerm) return;
+
     const handler = setTimeout(() => {
       if (searchTerm.trim()) {
         router.push(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
@@ -51,10 +53,6 @@ export default function Navbar() {
     fetchCart();
     console.log(items);
   }, [fetchUsers, fetchCart]);
-
-  // handle add to cart
-
-  const handleAddToCart = (productId: string) => {};
 
   return (
     <nav className="sticky top-0 bg-background border-b border-neutral-300 shadow dark:border-neutral-700 z-50">

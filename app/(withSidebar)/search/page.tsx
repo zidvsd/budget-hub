@@ -13,12 +13,12 @@ import { Button } from "@/components/ui/button";
 import { Product } from "@/lib/types/products";
 export default function ProductsPage() {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const queryParam = searchParams.get("q") ?? "";
 
   const [searchTerm, setSearchTerm] = useState(queryParam);
 
   const { products, fetchProducts, loading } = useProducts();
+
   const filteredProducts: Product[] = queryParam
     ? products.filter((product) =>
         product.name.toLowerCase().includes(queryParam.toLowerCase().trim()),

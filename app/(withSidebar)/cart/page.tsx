@@ -51,7 +51,7 @@ export default function Page() {
       {items.length > 0 && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
-          <div className="lg:col-span-2 rounded-lg border overflow-hidden shadow-md">
+          <div className="lg:col-span-2 h-fit rounded-lg border overflow-hidden shadow-md">
             {loading &&
               Array.from({ length: 3 }).map((_, i) => (
                 <Skeleton key={i} className="h-24 w-full" />

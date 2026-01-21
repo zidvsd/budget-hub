@@ -1,5 +1,6 @@
 "use client";
 
+import { formatPrice } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import Link from "next/link";
@@ -67,6 +68,6 @@ export const columns: ColumnDef<OrderItemRow>[] = [
   {
     accessorKey: "price",
     header: "Subtotal",
-    cell: ({ row }) => `$${row.original.price.toLocaleString()}`, // format price
+    cell: ({ row }) => `$${formatPrice(row.original.price)}`, // format price
   },
 ];

@@ -26,8 +26,12 @@ export function formatDate(date: string) {
   });
 }
 
-export function formatPrice(price: number) {
-  return `₱${price.toLocaleString()}`;
+export function formatPrice(price: number | string) {
+  const numericPrice = typeof price === "string" ? parseFloat(price) : price;
+  return numericPrice.toLocaleString("en-PH", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 }
 export function truncateId(text: string) {
   return text.slice(0, 8) + "...";

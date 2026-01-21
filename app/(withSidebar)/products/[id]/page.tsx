@@ -13,6 +13,7 @@ import { Spinner } from "@/components/ui/spinner";
 import Link from "next/link";
 import RelatedProducts from "@/components/client/RelatedProducts";
 import Categories from "@/components/client/home/Categories";
+import { formatPrice } from "@/lib/utils";
 export default function ProductPage() {
   const params = useParams();
   const productId = params.id;
@@ -26,7 +27,7 @@ export default function ProductPage() {
   } = useCart();
   const product = products.find((p) => p.id === productId);
   const cartItem = items.find((i) => i.product_id === productId);
-    const productCategory = product?.category; 
+  const productCategory = product?.category;
   const [quantity, setQuantity] = useState(1);
   const isInitialLoading = productsLoading || cartLoading;
   // Fetch product data
@@ -74,65 +75,70 @@ export default function ProductPage() {
 
   return (
     <>
-    <div className="custom-container grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 mt-8  ">
-      {/* Product Image */}
-      <div className="relative shadow-md w-full h-80 md:h-[500px] rounded-md overflow-hidden">
-        <Image
-        unoptimized
-          src={product.image_path}
-          alt={product.name}
-          fill
-          className="object-cover shadow-md rounded-md"
-        />
-      </div>
+      <div className="custom-container grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 mt-8  ">
+        {/* Product Image */}
+        <div className="relative shadow-md w-full h-80 md:h-[500px] rounded-md overflow-hidden">
+          <Image
+            unoptimized
+            src={product.image_path}
+            alt={product.name}
+            fill
+            className="object-cover shadow-md rounded-md"
+          />
+        </div>
 
-      {/* Product Details */}
-      <div className="space-y-4">
-        <h1 className="text-3xl font-bold">{product.name}</h1>
-        <p className="text-muted-foreground">{product.category}</p>
-        <p className="text-lg text-gray-600">{product.description}</p>
-        <p className="text-2xl font-semibold text-accent">
-          ${product.price.toLocaleString()}
-        </p>
-        <p
-          className={`${
-            product.stock > 0 ? "text-green-600" : "text-red-600"
-          } font-medium`}
-        >
-          {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
-        </p>
+        {/* Product Details */}
+        <div className="space-y-4">
+          <h1 className="text-3xl font-bold">{product.name}</h1>
+          <p className="text-muted-foreground">{product.category}</p>
+          <p className="text-lg text-gray-600">{product.description}</p>
+          <p className="text-2xl font-semibold text-accent">
+            ${formatPrice(product.price)}
+          </p>
+          <p
+            className={`${
+              product.stock > 0 ? "text-green-600" : "text-red-600"
+            } font-medium`}
+          >
+            {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
+          </p>
 
-        {/* Quantity selector */}
-        {product.stock > 0 && (
-          <div className="flex items-center gap-4">
-            <QuantityInput
-              value={quantity}
-              onChange={(newQty) => setQuantity(newQty)}
-              disabled={isAdding}
-            />
-            <Button
-              disabled={isAdding}
-              className={`px-20 min-w-[220px] relative ${
-                isAdding ? "bg-accent/90 text-white/90" : "bg-accent text-white"
-              }`}
-              variant="accent"
-              onClick={handleAddToCart}
-            >
-              <span className={isAdding ? "opacity-0" : "opacity-100"}>
-                Add to Cart 
-              </span>
-              {isAdding && (
-                <div className="absolute inset-0 flex items-center justify-center gap-2">
-                  <Spinner className="size-4" />
-                  <span className="text-sm">Adding...</span>
-                </div>
-              )}
-            </Button>
-          </div>
-        )}
+          {/* Quantity selector */}
+          {product.stock > 0 && (
+            <div className="flex items-center gap-4">
+              <QuantityInput
+                value={quantity}
+                onChange={(newQty) => setQuantity(newQty)}
+                disabled={isAdding}
+              />
+              <Button
+                disabled={isAdding}
+                className={`px-20 min-w-[220px] relative ${
+                  isAdding
+                    ? "bg-accent/90 text-white/90"
+                    : "bg-accent text-white"
+                }`}
+                variant="accent"
+                onClick={handleAddToCart}
+              >
+                <span className={isAdding ? "opacity-0" : "opacity-100"}>
+                  Add to Cart
+                </span>
+                {isAdding && (
+                  <div className="absolute inset-0 flex items-center justify-center gap-2">
+                    <Spinner className="size-4" />
+                    <span className="text-sm">Adding...</span>
+                  </div>
+                )}
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-    <RelatedProducts category={productCategory ?? ""} currentProductId={product.id}/>
+      <RelatedProducts
+        category={productCategory ?? ""}
+        currentProductId={product.id}
+      />
     </>
   );
 }

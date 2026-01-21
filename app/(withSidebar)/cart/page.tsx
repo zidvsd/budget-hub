@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { QuantityInput } from "@/components/client/QuantityInput";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { formatPrice } from "@/lib/utils";
 import Link from "next/link";
 export default function Page() {
   const { items, fetchCart, loading, updateQuantity, removeFromCart } =
@@ -86,7 +87,7 @@ export default function Page() {
                         </h3>
                       </Link>
                       <span className="text-sm text-muted-foreground">
-                        ₱{item.price.toLocaleString()} each
+                        ₱{formatPrice(formatPrice(item.price))} each
                       </span>
 
                       <div className="flex items-center gap-4 mt-2">
@@ -104,7 +105,7 @@ export default function Page() {
                         />
 
                         <span className="font-semibold text-accent">
-                          ₱{(item.price * item.quantity).toLocaleString()}
+                          ₱{formatPrice(item.price * item.quantity)}
                         </span>
                       </div>
                     </div>
@@ -133,7 +134,7 @@ export default function Page() {
 
             <div className="flex justify-between text-sm">
               <span>Subtotal</span>
-              <span>₱{subtotal.toLocaleString()}</span>
+              <span>₱{formatPrice(subtotal)}</span>
             </div>
 
             <div className="flex justify-between text-sm">
@@ -143,7 +144,7 @@ export default function Page() {
 
             <div className="border-t pt-4 flex justify-between font-semibold">
               <span>Total</span>
-              <span className="text-accent">₱{subtotal.toLocaleString()}</span>
+              <span className="text-accent">₱{formatPrice(subtotal)}</span>
             </div>
 
             <div className="flex items-center gap-4 text-xs text-muted-foreground">

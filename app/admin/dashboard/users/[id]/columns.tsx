@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Copy, Eye } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { formatDate } from "@/lib/utils";
+import { formatDate, formatPrice } from "@/lib/utils";
 import { Order } from "@/lib/types/orders";
 import { orderStatusClasses } from "@/lib/styles/badgeClasses";
 import { truncateId } from "@/lib/utils";
@@ -53,7 +53,7 @@ export const orderColumns: ColumnDef<Order>[] = [
   {
     accessorKey: "total_price",
     header: "Total",
-    cell: ({ row }) => `₱${row.original.total_price}`,
+    cell: ({ row }) => `₱${formatPrice(row.original.total_price)}`,
   },
   {
     accessorKey: "created_at",

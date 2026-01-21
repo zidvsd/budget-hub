@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { useCart } from "@/store/useCart";
+import { formatPrice } from "@/lib/utils";
 
 interface ProductCardProps {
   product?: {
@@ -126,7 +127,7 @@ export default function ProductCard({
         <span className="product-card-price">
           $
           {typeof product.price === "number"
-            ? product.price.toLocaleString()
+            ? formatPrice(product.price)
             : "0.00"}
         </span>
         <p className="product-card-desc">{product.description}</p>

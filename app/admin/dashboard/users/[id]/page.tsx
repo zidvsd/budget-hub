@@ -17,6 +17,7 @@ import {
   Clock,
   CheckCircle,
 } from "lucide-react";
+import { formatPrice } from "@/lib/utils";
 
 export default function Page() {
   const router = useRouter();
@@ -38,7 +39,7 @@ export default function Page() {
     if (!usersLoading && user?.role === "admin" && !toastShownRef.current) {
       toastShownRef.current = true;
       toast.error(
-        "Admins do not have purchase history. Redirecting to users page."
+        "Admins do not have purchase history. Redirecting to users page.",
       );
       router.push("/admin/dashboard/users");
     }
@@ -60,7 +61,7 @@ export default function Page() {
 
     const pendingOrders = orders.filter((o) => o.status === "pending").length;
     const completedOrders = orders.filter(
-      (o) => o.status === "completed"
+      (o) => o.status === "completed",
     ).length;
 
     return [
@@ -72,7 +73,7 @@ export default function Page() {
       },
       {
         title: "Total Spent",
-        value: `₱${totalSpent.toLocaleString()}`,
+        value: `₱${formatPrice(totalSpent)}`,
         description: "Total amount spent",
         icon: <DollarSign className="w-6 h-6" />,
       },

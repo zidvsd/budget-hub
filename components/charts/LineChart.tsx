@@ -17,6 +17,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { formatPrice } from "@/lib/utils";
 
 interface ChartLineDefaultProps {
   data: { month: string; users: number }[];
@@ -83,7 +84,7 @@ export function ChartLineDefault({ data }: ChartLineDefaultProps) {
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium">
           <Users className="h-4 w-4" />
-          Total Users: {totalUsers.toLocaleString()}
+          Total Users: {formatPrice(totalUsers)}
         </div>
         <div className="flex items-center gap-2 text-muted-foreground">
           Monthly change: {change}%{" "}

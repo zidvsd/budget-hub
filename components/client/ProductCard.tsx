@@ -29,7 +29,6 @@ export default function ProductCard({
 }: ProductCardProps) {
   const { addToCart } = useCart();
   const router = useRouter();
-
   if (loading || !product) {
     // Skeleton version
     return (
@@ -77,7 +76,7 @@ export default function ProductCard({
           className="w-10 h-10 rounded-full flex items-center justify-center"
         >
           <Image
-          unoptimized
+            unoptimized
             src={product.image_path || "/placeholder.png"}
             alt={product.name}
             fill

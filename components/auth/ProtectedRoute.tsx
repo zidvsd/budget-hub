@@ -1,6 +1,5 @@
 "use client";
 
-import { supabase } from "@/lib/supabase/client";
 import { useEffect, useState, ReactNode } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Spinner } from "../ui/spinner";
@@ -28,11 +27,14 @@ export default function ProtectedRoute({ children, publicPages = [] }: Props) {
       return;
     }
 
-    const cookiesList = document.cookie.split("; ").reduce((acc, c) => {
-      const [key, value] = c.split("=");
-      acc[key] = value;
-      return acc;
-    }, {} as Record<string, string>);
+    const cookiesList = document.cookie.split("; ").reduce(
+      (acc, c) => {
+        const [key, value] = c.split("=");
+        acc[key] = value;
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
 
     const roleCookie = cookiesList["role"] || "guest";
 

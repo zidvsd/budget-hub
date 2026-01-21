@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useUsers } from "@/store/useUsers";
 import { User as UserIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { getFirstName } from "@/lib/utils";
 import { useRouter } from "next/navigation";
@@ -27,15 +27,17 @@ export default function Navbar() {
   const { items, fetchCart } = useCart();
   const router = useRouter();
   const loading = AuthLoading || userLoading;
-
+  const isFirstRender = useRef(true);
   const searchParams = useSearchParams();
 
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     const handler = setTimeout(() => {
       if (searchTerm.trim()) {
         router.push(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
-      } else {
-        router.push("/search");
       }
     }, 500);
 
@@ -125,7 +127,7 @@ export default function Navbar() {
                       <UserIcon className="w-4 h-4 shrink-0 text-black dark:text-white group-hover:text-white transition" />
                       {loading
                         ? "Loading..."
-                        : users && users.length > 0
+                        : users && users.length > 0 && users[0].full_name
                           ? getFirstName(users[0].full_name)
                           : "Account"}
                     </Link>

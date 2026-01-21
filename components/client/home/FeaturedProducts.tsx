@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import ProductCard from "../ProductCard";
 export default function FeaturedProducts() {
   const { products, fetchProducts, loading } = useProducts();
+  console.log(products);
   const featuredProducts = products.filter((p) => p.is_featured);
 
   useEffect(() => {

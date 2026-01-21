@@ -5,10 +5,9 @@ export const clientMenu: {
   icon: keyof typeof LucideIcons;
 }[] = [
   { title: "Home", url: "/", icon: "Home" },
-  { title: "Inbox", url: "/inbox", icon: "Inbox" },
-  { title: "Calendar", url: "/calendar", icon: "Calendar" },
-  { title: "Search", url: "/search", icon: "Search" },
-  { title: "Settings", url: "/settings", icon: "Settings" },
+  { title: "Categories", url: "/categories", icon: "LayoutGrid" },
+  { title: "Notifications", url: "/notifications", icon: "Bell" },
+  { title: "Account", url: "/account", icon: "User" },
 ];
 export const adminMenu: {
   title: string;

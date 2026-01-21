@@ -19,7 +19,7 @@ export function EmptyState({
   description = "Try adding more products.",
 }: EmptyStateProps) {
   return (
-    <Empty>
+    <Empty className="min-h-screen">
       <EmptyHeader>
         <EmptyMedia variant="default">
           {Icon && (

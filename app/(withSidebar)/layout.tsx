@@ -8,16 +8,22 @@ import Footer from "@/components/client/layout/Footer";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useUsers } from "@/store/useUsers";
 import { useEffect } from "react";
+import { ShoppingCart, Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { getRoleFromCookie } from "@/lib/utils";
+import { useCart } from "@/store/useCart";
 export default function ClientLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { fetchUsers } = useUsers();
-
+  const { users, fetchUsers } = useUsers();
+  const { fetchCart, items } = useCart();
+  const role = getRoleFromCookie();
   useEffect(() => {
     fetchUsers();
+    fetchCart();
   }, [fetchUsers]);
   const publicPages = ["/"];
   return (
@@ -33,9 +39,46 @@ export default function ClientLayout({
         <SidebarProvider className="md:hidden">
           <AppSidebar items={clientMenu} />
           <div className="flex flex-col w-full ">
-            <nav className="sticky top-0 z-50 flex justify-between items-center pt-2 w-full p-4 bg-background border-b border-neutral-300  shadow dark:border-muted">
+            <nav className="sticky top-0 z-50 flex justify-between items-center pt-2 w-full p-2 bg-background border-b border-neutral-300  shadow dark:border-muted">
               {" "}
-              <SidebarTrigger />
+              <div className="flex items-center gap-4">
+                <Button variant={"nav"} className="px-3" asChild>
+                  <SidebarTrigger />
+                </Button>
+                {role && (
+                  <Link
+                    href="/cart"
+                    className="relative group inline-flex items-center justify-center rounded-lg p-2 transition-colors hover:bg-muted hover-utility"
+                    aria-label={`Shopping cart, ${items.length} items`}
+                  >
+                    <Button variant={"nav"}>
+                      <ShoppingCart className="size-4 group-hover:text-accent hover-utility" />
+
+                      {items.length > 0 && (
+                        <div
+                          className="
+        absolute top-[-1] right-[-1]
+        flex h-4 w-4 items-center justify-center 
+        rounded-full border border-transparent 
+        bg-accent p-0 text-xs font-semibold text-white
+        transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2
+      "
+                        >
+                          {items.length}
+                        </div>
+                      )}
+                    </Button>
+                  </Link>
+                )}
+
+                {role && (
+                  <Link href={"/search"}>
+                    <Button variant={"nav"}>
+                      <Search className="" />
+                    </Button>
+                  </Link>
+                )}
+              </div>
               {/* logo */}
               <Link className="" href="/">
                 <h1 className="logo">GadyetHub</h1>

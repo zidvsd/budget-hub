@@ -11,10 +11,11 @@ import { QuantityInput } from "@/components/client/QuantityInput";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
 import Link from "next/link";
+import RelatedProducts from "@/components/client/RelatedProducts";
+import Categories from "@/components/client/home/Categories";
 export default function ProductPage() {
   const params = useParams();
   const productId = params.id;
-
   const { products, fetchProducts, loading: productsLoading } = useProducts();
   const {
     items,
@@ -25,6 +26,7 @@ export default function ProductPage() {
   } = useCart();
   const product = products.find((p) => p.id === productId);
   const cartItem = items.find((i) => i.product_id === productId);
+    const productCategory = product?.category; 
   const [quantity, setQuantity] = useState(1);
   const isInitialLoading = productsLoading || cartLoading;
   // Fetch product data
@@ -71,10 +73,12 @@ export default function ProductPage() {
     );
 
   return (
+    <>
     <div className="custom-container grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 mt-8  ">
       {/* Product Image */}
       <div className="relative shadow-md w-full h-80 md:h-[500px] rounded-md overflow-hidden">
         <Image
+        unoptimized
           src={product.image_path}
           alt={product.name}
           fill
@@ -115,7 +119,7 @@ export default function ProductPage() {
               onClick={handleAddToCart}
             >
               <span className={isAdding ? "opacity-0" : "opacity-100"}>
-                Add to Cart
+                Add to Cart 
               </span>
               {isAdding && (
                 <div className="absolute inset-0 flex items-center justify-center gap-2">
@@ -128,5 +132,7 @@ export default function ProductPage() {
         )}
       </div>
     </div>
+    <RelatedProducts category={productCategory ?? ""} currentProductId={product.id}/>
+    </>
   );
 }

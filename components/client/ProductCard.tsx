@@ -77,6 +77,7 @@ export default function ProductCard({
           className="w-10 h-10 rounded-full flex items-center justify-center"
         >
           <Image
+          unoptimized
             src={product.image_path || "/placeholder.png"}
             alt={product.name}
             fill

@@ -51,7 +51,6 @@ export default function Navbar() {
   useEffect(() => {
     fetchUsers();
     fetchCart();
-    console.log(items);
   }, [fetchUsers, fetchCart]);
 
   return (
@@ -127,8 +126,8 @@ export default function Navbar() {
                       <UserIcon className="w-4 h-4 shrink-0 text-black dark:text-white group-hover:text-white transition" />
                       {loading
                         ? "Loading..."
-                        : users && users.length > 0 && users[0].full_name
-                          ? getFirstName(users[0].full_name)
+                        : users && users.length > 0 && users[0].first_name
+                          ? getFirstName(users[0].first_name)
                           : "Account"}
                     </Link>
                   </DropdownMenuItem>

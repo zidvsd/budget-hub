@@ -36,12 +36,12 @@ export default function Page() {
 
   const order = useMemo(
     () => orders.find((o) => o.id === orderId),
-    [orders, orderId]
+    [orders, orderId],
   );
 
   const user = useMemo(
     () => users?.find((u) => u.id === order?.user_id),
-    [users, order]
+    [users, order],
   );
 
   const orderItems = useMemo(() => {
@@ -146,7 +146,8 @@ export default function Page() {
                     <span>Name</span>
                     <Link href={`/admin/dashboard/users/${user.id}`}>
                       <h2 className="hover-utility hover:text-accent">
-                        {user.full_name}
+                        {user.first_name}
+                        {user.last_name}
                       </h2>
                     </Link>
                   </div>

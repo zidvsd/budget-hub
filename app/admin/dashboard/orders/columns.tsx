@@ -57,13 +57,19 @@ export const columns = (users: User[]): ColumnDef<Order>[] => [
     header: "Customer",
     cell: ({ row }) => {
       const user = users.find((u) => u.id === row.original.user_id);
+
+      const displayName = user
+        ? user.last_name
+          ? `${user.first_name} ${user.last_name}`
+          : user.first_name
+        : truncateId(row.original.user_id);
+
       return (
         <Link
           className="hover-utility hover:text-accent"
           href={`/admin/dashboard/users/${row.original.user_id}`}
-          passHref
         >
-          {user?.full_name ?? truncateId(row.original.user_id)}
+          {displayName}
         </Link>
       );
     },

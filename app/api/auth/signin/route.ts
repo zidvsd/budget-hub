@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     if (!email || !password) {
       return NextResponse.json(
         { success: false, error: "Email and password are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     if (signUpError) {
       return NextResponse.json(
         { success: false, error: signUpError.message },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     if (!userId) {
       return NextResponse.json(
         { success: false, error: "Signup failed, user ID not returned" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     if (existingUser) {
       return NextResponse.json(
         { success: false, message: "User already exits" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -52,15 +52,16 @@ export async function POST(req: NextRequest) {
         id: userId,
         email,
         role: "user",
-        full_name: "",
+        first_name: "",
+        last_name: "",
       },
-      { onConflict: "email" }
+      { onConflict: "email" },
     );
 
     if (insertError)
       return NextResponse.json(
         { success: false, message: "Failed to add user" },
-        { status: 400 }
+        { status: 400 },
       );
 
     return NextResponse.json({
@@ -70,7 +71,7 @@ export async function POST(req: NextRequest) {
   } catch (err: any) {
     return NextResponse.json(
       { success: false, error: err.message || "Signup failed" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

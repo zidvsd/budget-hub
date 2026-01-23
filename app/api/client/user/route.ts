@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
     if (userError || !user) {
       return NextResponse.json(
         { success: false, error: "User not authenticated" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -25,14 +25,14 @@ export async function GET(req: NextRequest) {
     if (profileError || !profile) {
       return NextResponse.json(
         { success: false, error: profileError?.message || "Profile not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
     return NextResponse.json({ success: true, data: profile }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json(
       { success: false, error: error.message || "Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -49,52 +49,57 @@ export async function PATCH(req: NextRequest) {
     if (userError || !user) {
       return NextResponse.json(
         { success: false, error: "User not authenticated" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
     const { data: profile, error: profileError } = await supabase
       .from("users")
       .select("*")
-      .eq("id", user.id)
+      .eq("id", user.id);
 
     if (profileError || !profile) {
       return NextResponse.json(
         { success: false, error: profileError?.message || "Profile not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
-const body = await req.json()
+    const body = await req.json();
 
-const allowedFields = ["full_name", "address", "phone"];
-const updates: Record<string,any> = {}; 
+    const allowedFields = ["first_name", "last_name", "address", "phone"];
+    const updates: Record<string, any> = {};
 
-for (const key of allowedFields){
-  if(body[key] !== undefined){
-    updates[key] = body[key];
-  }
-}
+    for (const key of allowedFields) {
+      if (body[key] !== undefined) {
+        updates[key] = body[key];
+      }
+    }
 
     if (Object.keys(updates).length === 0) {
       return NextResponse.json(
         { success: false, error: "No valid fields to update" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    const {data, error} = await supabase.from('users').update(updates).eq("id", user.id).select().single();
+    const { data, error } = await supabase
+      .from("users")
+      .update(updates)
+      .eq("id", user.id)
+      .select()
+      .single();
 
-      if (error) {
+    if (error) {
       return NextResponse.json(
         { success: false, error: error.message },
-        { status: 400 }
+        { status: 400 },
       );
     }
     return NextResponse.json({ success: true, data: profile }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json(
       { success: false, error: error.message || "Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

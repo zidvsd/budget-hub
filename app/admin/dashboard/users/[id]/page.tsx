@@ -125,7 +125,9 @@ export default function Page() {
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <User className="size-8" />
-          <h1 className="page-heading">{user.full_name}</h1>
+          <h1 className="page-heading">
+            {user.first_name} {user.last_name}
+          </h1>
         </div>
         <p className="page-subheading">
           Displaying purchase history of {user.id}

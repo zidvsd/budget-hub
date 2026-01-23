@@ -18,12 +18,27 @@ export const getRoleFromCookie = (): string | null => {
 export function getFirstName(name: string) {
   return name.split(" ")[0];
 }
+export function getFirstChar(name: string) {
+  return name.split("")[0];
+}
 export function formatDate(date: string) {
   return new Date(date).toLocaleDateString("en-US", {
     month: "2-digit",
     day: "2-digit",
     year: "numeric",
   });
+}
+
+export function formatDateFull(dateString: string) {
+  if (!dateString) return "";
+
+  const date = new Date(dateString);
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long", // "November"
+    day: "numeric", // "26"
+    year: "numeric", // "2025"
+  }).format(date);
 }
 
 export function formatPrice(price: number | string) {

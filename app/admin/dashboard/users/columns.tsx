@@ -5,12 +5,21 @@ import { formatDate } from "@/lib/utils";
 import { Eye } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
 export const columns: ColumnDef<User>[] = [
   {
-    accessorKey: "full_name",
     header: "Name",
+    accessorFn: (row) =>
+      row.last_name ? `${row.first_name} ${row.last_name}` : row.first_name,
+
+    cell: ({ row }) => {
+      const { first_name, last_name } = row.original;
+      return (
+        <span>
+          {first_name}
+          {last_name && ` ${last_name}`}
+        </span>
+      );
+    },
   },
 
   {

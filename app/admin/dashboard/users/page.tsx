@@ -19,6 +19,7 @@ export default function page() {
   const totalCustomers =
     users?.filter((user) => user.role === "user").length ?? 0;
   const loading = userLoading;
+  console.log(users);
   return (
     <div>
       {loading ? (

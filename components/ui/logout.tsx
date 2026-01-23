@@ -6,7 +6,10 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
-
+import { useUsers } from "@/store/useUsers";
+import { useProducts } from "@/store/useProducts";
+import { useOrders } from "@/store/useOrders";
+import { useCart } from "@/store/useCart";
 interface LogoutButtonProps {
   showText?: boolean;
 }
@@ -26,6 +29,10 @@ export default function LogoutButton({ showText = true }: LogoutButtonProps) {
         return;
       }
 
+      useUsers.getState().clearUsers();
+      useOrders.getState().clearOrders();
+      useProducts.getState().clearProducts();
+      useCart.getState().clearCart();
       document.cookie = "role=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
       toast.success("Logged out successfully!");
       router.push("/login");

@@ -9,6 +9,7 @@ import OrdersCard from "@/components/client/account/orders/OrdersCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Empty } from "@/components/ui/empty";
 import OrdersTab from "@/components/client/account/orders/OrdersTab";
+import ProfileTab from "@/components/client/account/profile/ProfileTab";
 export default function Page() {
   const { orders, fetchOrders, loading: ordersLoading } = useOrders();
   const { fetchUsers, loading: usersLoading } = useUsers();
@@ -69,6 +70,7 @@ export default function Page() {
         {currentTab === "orders" && (
           <OrdersTab orders={orders} loading={ordersLoading} />
         )}
+        {currentTab === "profile" && <ProfileTab />}
       </main>
     </div>
   );

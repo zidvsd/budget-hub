@@ -52,9 +52,18 @@ export default function ProfileTab() {
     (acc, order) => acc + order.total_price,
     0,
   );
-  const [showForm, setShowForm] = useState(false);
-  if (userLoading) {
-    return <div className="p-10 text-center">Loading your profile...</div>;
+  if (userLoading || ordersLoading) {
+    return (
+      <div className="flex flex-col gap-6 w-full">
+        <Skeleton className="w-full h-32" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Skeleton className="w-full h-24" />
+          <Skeleton className="w-full h-24" />
+          <Skeleton className="w-full h-24" />
+        </div>
+        <Skeleton className="w-full h-48" />
+      </div>
+    );
   }
   return (
     <div>
@@ -70,7 +79,6 @@ export default function ProfileTab() {
                   alt="avatar"
                   fill
                   className="object-cover rounded-full"
-                  style={{ borderRadius: "9999px" }}
                 />
               ) : (
                 <span className="uppercase text-accent text-4xl font-bold">

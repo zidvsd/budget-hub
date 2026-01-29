@@ -20,6 +20,7 @@ import Image from "next/image";
 import React, { useState, useRef } from "react";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
+import { Skeleton } from "@/components/ui/skeleton";
 export function EditProfileForm() {
   const { users, fetchUsers } = useUsers();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -124,13 +125,14 @@ export function EditProfileForm() {
       setLoading(false);
     }
   };
+
   return (
     <Dialog>
       {/* 🔹 THIS replaces your old button */}
       <DialogTrigger asChild>
         <Button
           variant="secondary"
-          className="w-fit mt-2 transition-transform duration-300 hover:scale-105"
+          className="w-fit  transition-transform duration-300 hover:scale-105"
         >
           <Settings className="w-4 h-4 mr-2" />
           Edit Profile

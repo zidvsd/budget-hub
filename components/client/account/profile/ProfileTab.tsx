@@ -26,11 +26,13 @@ import { getFirstChar, formatPrice, formatDateFull } from "@/lib/utils";
 import { StatCard } from "@/components/ui/stat-card";
 import { cn } from "@/lib/utils";
 import { EditProfileForm } from "../../forms/EditProfileForm";
+import { truncateId } from "@/lib/utils";
 export default function ProfileTab() {
   const { users, fetchUsers, loading: userLoading } = useUsers();
   const { orders, fetchOrders, loading: ordersLoading } = useOrders();
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
+  const [toggleTruncate, setToggleTruncate] = useState(true);
 
   useEffect(() => {
     const loadSession = async () => {
@@ -71,7 +73,7 @@ export default function ProfileTab() {
         <CardContent className="flex flex-row items-start gap-6 p-6">
           {/* Avatar */}
           <div className="relative w-28 h-28 shrink-0">
-            <div className="relative w-full h-full rounded-full border-4 border-accent/20 bg-muted overflow-hidden">
+            <div className="relative w-full h-full rounded-full border-4 border-accent/20 bg-muted overflow-hidden items-center justify-center flex">
               {currentUser.avatar_url ? (
                 <Image
                   key={currentUser.avatar_url}
@@ -187,9 +189,25 @@ export default function ProfileTab() {
                     <p className="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-1">
                       Account ID
                     </p>
-                    <p className="text-xs text-zinc-500 italic">
-                      {currentUser?.id?.slice(0, 8)}...
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p
+                        className="text-xs text-zinc-500 italic cursor-pointer hover:text-accent transition-colors"
+                        onClick={() => setToggleTruncate(!toggleTruncate)}
+                      >
+                        {/* Toggle between truncated and full ID */}
+                        {toggleTruncate
+                          ? `${truncateId(currentUser?.id)}...`
+                          : currentUser?.id}
+                      </p>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 px-2 text-[10px]"
+                        onClick={() => setToggleTruncate(!toggleTruncate)}
+                      >
+                        {toggleTruncate ? "Show" : "Hide"}
+                      </Button>
+                    </div>
                   </div>
                 </div>
                 <Button variant={"ghost"}>Copy</Button>

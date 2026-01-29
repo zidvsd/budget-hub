@@ -24,9 +24,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 export function EditProfileForm() {
   const { users, fetchUsers } = useUsers();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [firstName, setFirstName] = useState(users[0]?.first_name || "");
-  const [lastName, setLastName] = useState(users[0]?.first_name || "");
-  const [phoneNumber, setPhoneNumber] = useState(users[0]?.phone || "");
+  const [firstName, setFirstName] = useState(users[0]?.first_name ?? "");
+  const [lastName, setLastName] = useState(users[0]?.last_name ?? "");
+  const [phoneNumber, setPhoneNumber] = useState(users[0]?.phone ?? "");
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
 
@@ -150,18 +150,18 @@ export function EditProfileForm() {
           {/* avatar */}
           <div className="flex self-center w-full items-center justify-center mt-4">
             <div className="w-28 h-28 relative rounded-full border-4 border-accent/20 bg-muted flex items-center justify-center text-accent text-4xl font-bold">
-              {users[0].avatar_url ? (
+              {users[0]?.avatar_url ? (
                 <Image
                   src={users[0].avatar_url}
-                  alt={`${users[0].first_name} ${users[0].last_name}`}
+                  alt={`${users[0]?.first_name ?? ""} ${users[0]?.last_name ?? ""}`}
                   width={112}
                   height={112}
                   className="object-cover rounded-full w-full h-full"
                 />
               ) : (
                 <span className="uppercase">
-                  {getFirstChar(users[0]?.first_name)}
-                  {getFirstChar(users[0]?.last_name)}
+                  {getFirstChar(users[0]?.first_name ?? "")}
+                  {getFirstChar(users[0]?.last_name ?? "")}
                 </span>
               )}
 
@@ -196,7 +196,7 @@ export function EditProfileForm() {
                 autoComplete="off"
                 id="input-disabled"
                 type="email"
-                placeholder={users[0]?.email}
+                placeholder={users[0]?.email ?? "Enter your email"}
                 disabled
               />
               <FieldDescription>Email cannot be changed.</FieldDescription>
@@ -207,11 +207,7 @@ export function EditProfileForm() {
                 onChange={(e) => setFirstName(e.target.value)}
                 autoComplete="off"
                 id="firstName"
-                placeholder={
-                  users[0].first_name
-                    ? users[0].first_name
-                    : "Enter your first name"
-                }
+                placeholder={users[0]?.first_name ?? "Enter your first name"}
               />
             </div>
 
@@ -221,11 +217,7 @@ export function EditProfileForm() {
                 onChange={(e) => setLastName(e.target.value)}
                 autoComplete="off"
                 id="lastName"
-                placeholder={
-                  users[0].last_name
-                    ? users[0].last_name
-                    : "Enter your last name"
-                }
+                placeholder={users[0]?.last_name ?? "Enter your last name"}
               />
             </div>
             <div className="grid gap-3">
@@ -234,9 +226,7 @@ export function EditProfileForm() {
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 autoComplete="off"
                 id="phone-number"
-                placeholder={
-                  users[0].phone ? users[0].phone : "Enter your phone number"
-                }
+                placeholder={users[0]?.phone ?? "Enter your phone number"}
               />
             </div>
           </div>

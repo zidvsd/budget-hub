@@ -6,7 +6,7 @@ interface UsersState {
   users: User[];
   loading: boolean;
   error: string | null;
-  fetchUsers: () => Promise<void>;
+  fetchUsers: (force?: boolean) => Promise<void>;
   clearUsers: () => void;
 }
 
@@ -15,10 +15,10 @@ export const useUsers = create<UsersState>((set, get) => ({
   loading: false,
   error: null,
 
-  fetchUsers: async () => {
+  fetchUsers: async (force = false) => {
     const { users, loading } = get();
 
-    if (loading || users.length > 0) return;
+    if (!force && (loading || users.length > 0)) return;
 
     set({ loading: true, error: null });
 

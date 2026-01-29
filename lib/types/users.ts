@@ -7,4 +7,5 @@ export interface User {
   address: string | null;
   phone: string;
   created_at: string;
+  avatar_url: string | null;
 }

@@ -23,6 +23,7 @@ export default function AddProductForm() {
     stock: "",
     image_path: "",
     is_active: true,
+    is_featured: false,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   });
@@ -91,6 +92,7 @@ export default function AddProductForm() {
         stock: "",
         image_path: "",
         is_active: true,
+        is_featured: false,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       });

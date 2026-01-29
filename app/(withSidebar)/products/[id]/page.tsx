@@ -10,9 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { QuantityInput } from "@/components/client/QuantityInput";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
-import Link from "next/link";
 import RelatedProducts from "@/components/client/RelatedProducts";
-import Categories from "@/components/client/home/Categories";
 import { formatPrice } from "@/lib/utils";
 export default function ProductPage() {
   const params = useParams();
@@ -26,7 +24,6 @@ export default function ProductPage() {
     isAdding,
   } = useCart();
   const product = products.find((p) => p.id === productId);
-  const cartItem = items.find((i) => i.product_id === productId);
   const productCategory = product?.category;
   const [quantity, setQuantity] = useState(1);
   const isInitialLoading = productsLoading || cartLoading;

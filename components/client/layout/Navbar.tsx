@@ -70,15 +70,15 @@ export default function Navbar() {
               className="w-full "
             />
           </div>
-          <div className="w-fit">
-            <ModeToggle variant="nav" />
-          </div>
         </div>
 
         {/* Icons */}
         <div className="flex items-center space-x-4 md:space-x-8">
           {role && (
             <>
+              <div className="w-fit">
+                <ModeToggle variant="nav" />
+              </div>
               <Link
                 href="/notifications"
                 className="group hover:bg-muted rounded-lg p-2 hover-utility"

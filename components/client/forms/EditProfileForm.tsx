@@ -152,7 +152,7 @@ export function EditProfileForm({
       {!open && (
         <DialogTrigger asChild>
           <Button
-            variant="secondary"
+            variant="outline"
             className="w-fit  transition-transform duration-300 hover:scale-105"
           >
             <Settings className="w-4 h-4 mr-2" />

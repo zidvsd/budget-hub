@@ -160,22 +160,22 @@ export default function CheckoutPage() {
             </div>
 
             <Button
-              className="w-full h-10 text-lg font-bold"
+              className="w-full h-10 text-md font-bold"
               variant="accent"
               onClick={handlePlaceOrder}
               disabled={isProcessing}
             >
-              <CreditCard className="size-6" />
+              <CreditCard className="size-5" />
               {isProcessing ? "Processing..." : "Place Order"}
             </Button>
 
             <Button
-              className="w-full h-10 text-lg font-bold"
+              className="w-full h-10 text-md font-bold"
               variant="secondary"
               onClick={handlePlaceOrder}
               disabled={isProcessing}
             >
-              <ShoppingCart className="size-6" />
+              <ShoppingCart className="size-5" />
               Back to Cart
             </Button>
 

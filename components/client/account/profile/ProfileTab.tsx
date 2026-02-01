@@ -16,7 +16,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getFirstChar, formatPrice, formatDateFull } from "@/lib/utils";
 import { StatCard } from "@/components/ui/stat-card";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 import { EditProfileForm } from "../../forms/EditProfileForm";
 import { truncateId } from "@/lib/utils";
 export default function ProfileTab() {

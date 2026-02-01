@@ -80,7 +80,7 @@ export default function Navbar() {
                 <ModeToggle variant="nav" />
               </div>
               <Link
-                href="/notifications"
+                href="/account?tab=notifications"
                 className="group hover:bg-muted rounded-lg p-2 hover-utility"
               >
                 <Bell className="size-4 cursor-pointer transition group-hover:text-accent" />
@@ -120,7 +120,7 @@ export default function Navbar() {
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem>
                     <Link
-                      href="/account"
+                      href="/account?tab=profile"
                       className="group flex items-center py-1.5 gap-2 w-full justify-center text-center hover:text-white transition"
                     >
                       <UserIcon className="w-4 h-4 shrink-0 text-black dark:text-white group-hover:text-white transition" />

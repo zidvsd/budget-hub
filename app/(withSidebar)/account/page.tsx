@@ -5,20 +5,25 @@ import { useOrders } from "@/store/useOrders";
 import { useUsers } from "@/store/useUsers";
 import { Package, Bell, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import OrdersCard from "@/components/client/account/orders/OrdersCard";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Empty } from "@/components/ui/empty";
+import { useSearchParams } from "next/navigation";
 import OrdersTab from "@/components/client/account/orders/OrdersTab";
 import ProfileTab from "@/components/client/account/profile/ProfileTab";
 export default function Page() {
   const { orders, fetchOrders, loading: ordersLoading } = useOrders();
   const { fetchUsers, loading: usersLoading } = useUsers();
   const [currentTab, setCurrentTab] = useState("profile");
-
+  const searchParams = useSearchParams();
   useEffect(() => {
     fetchOrders();
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab) {
+      setCurrentTab(tab);
+    }
+  }, [searchParams]);
 
   const tabVariant = (tab: string) => (currentTab === tab ? "accent" : "ghost");
 

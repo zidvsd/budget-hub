@@ -28,7 +28,7 @@ export default function OrdersCard({ order }: OrdersCardProps) {
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <h3 className="font-semibold leading-none tracking-tight">
-                Order#{truncateId(order.id)}
+                Order #{truncateId(order.id)}
               </h3>
               <div className={`flex items-center gap-1.5  ${statusStyle}`}>
                 <Clock className="size-4" />
@@ -37,12 +37,13 @@ export default function OrdersCard({ order }: OrdersCardProps) {
                 </span>
               </div>
             </div>
-            <div className="flex items-center gap-8 text-muted-foreground">
+            <div className="flex items-center gap-2 text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Calendar className="size-4" />
                 <span>{formatDate(order.created_at)}</span>
               </div>
-              ·<span>{formatRelativeTime(order.created_at)}</span>
+              <span>-</span>
+              <span>{formatRelativeTime(order.created_at)}</span>
             </div>
           </div>
         </div>

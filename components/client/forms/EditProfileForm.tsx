@@ -65,8 +65,6 @@ export function EditProfileForm({
       // After successful upload, refresh the user store to show the new image
       await fetchUsers(true);
       toast.success("Avatar updated!");
-
-      onOpenChange?.(false);
     } catch (err: any) {
       console.error(err);
       toast.error(err.message || "Failed to upload avatar");
@@ -262,7 +260,7 @@ export function EditProfileForm({
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 autoComplete="off"
-                id="phone-number"
+                id="address"
                 placeholder={users[0]?.address ?? "Enter your address"}
               />
             </div>

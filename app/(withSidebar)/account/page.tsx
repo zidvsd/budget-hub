@@ -5,14 +5,20 @@ import { useOrders } from "@/store/useOrders";
 import { useUsers } from "@/store/useUsers";
 import { Package, Bell, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import OrdersTab from "@/components/client/account/orders/OrdersTab";
 import ProfileTab from "@/components/client/account/profile/ProfileTab";
 export default function Page() {
   const { orders, fetchOrders, loading: ordersLoading } = useOrders();
   const { fetchUsers, loading: usersLoading } = useUsers();
-  const [currentTab, setCurrentTab] = useState("profile");
+
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const [currentTab, setCurrentTab] = useState(
+    searchParams.get("tab") || "profile",
+  );
   useEffect(() => {
     fetchOrders();
     fetchUsers();
@@ -20,10 +26,16 @@ export default function Page() {
 
   useEffect(() => {
     const tab = searchParams.get("tab");
-    if (tab) {
-      setCurrentTab(tab);
-    }
+    if (tab) setCurrentTab(tab);
   }, [searchParams]);
+
+  const handleTabChange = (tabName: string) => {
+    setCurrentTab(tabName);
+
+    const params = new URLSearchParams(searchParams);
+    params.set("tab", tabName);
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
 
   const tabVariant = (tab: string) => (currentTab === tab ? "accent" : "ghost");
 
@@ -37,7 +49,7 @@ export default function Page() {
       {/* tab selection */}
       <div className="flex items-center justify-around gap-2 bg-sidebar-accent dark:bg-muted w-full sm:w-fit p-2 rounded-md mt-4">
         <Button
-          onClick={() => setCurrentTab("orders")}
+          onClick={() => handleTabChange("orders")}
           variant={tabVariant("orders")}
           className=" flex-1 flex items-center gap-2"
         >
@@ -50,7 +62,7 @@ export default function Page() {
         </Button>
 
         <Button
-          onClick={() => setCurrentTab("notifications")}
+          onClick={() => handleTabChange("notifications")}
           variant={tabVariant("notifications")}
           className=" flex-1 flex items-center gap-2 "
         >
@@ -61,7 +73,7 @@ export default function Page() {
         </Button>
 
         <Button
-          onClick={() => setCurrentTab("profile")}
+          onClick={() => handleTabChange("profile")}
           variant={tabVariant("profile")}
           className=" flex-1 flex items-center gap-2 "
         >
@@ -70,12 +82,16 @@ export default function Page() {
         </Button>
       </div>
 
-      {/* orders tab */}
       <main className="mt-8">
         {currentTab === "orders" && (
           <OrdersTab orders={orders} loading={ordersLoading} />
         )}
         {currentTab === "profile" && <ProfileTab />}
+        {currentTab === "notifications" && (
+          <div className="p-4 border rounded-md text-muted-foreground">
+            No new notifications.
+          </div>
+        )}
       </main>
     </div>
   );

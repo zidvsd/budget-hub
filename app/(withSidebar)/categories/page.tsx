@@ -31,14 +31,14 @@ export default function CategoriesPage() {
 
   const [category, setCategory] = useState(categoryParam);
   const [stockFilter, setStockFilter] = useState<"all" | "in" | "low" | "out">(
-    "all"
+    "all",
   );
   const [sortOption, setSortOption] = useState<
     "a-z" | "price-asc" | "price-desc" | "stock-desc"
   >("a-z");
   const [filters, setFilters] = useState(false);
   const selectedCategory = categories.find(
-    (c) => c.slug.toLowerCase() === categoryParam
+    (c) => c.slug.toLowerCase() === categoryParam,
   );
 
   const breadcrumbLinks: BreadCrumbLink[] = [
@@ -67,7 +67,7 @@ export default function CategoriesPage() {
   };
 
   const handleSortChange = (
-    option: "a-z" | "price-asc" | "price-desc" | "stock-desc"
+    option: "a-z" | "price-asc" | "price-desc" | "stock-desc",
   ) => {
     setSortOption(option);
   };
@@ -88,7 +88,7 @@ export default function CategoriesPage() {
   let filteredProducts = products.filter(
     (p) =>
       normalizedCategory === "all products" ||
-      p.category.toLowerCase() === category
+      p.category.toLowerCase() === category,
   );
 
   // Filter by stock
@@ -199,10 +199,10 @@ export default function CategoriesPage() {
                     {stockFilter === "all"
                       ? "All Stock"
                       : stockFilter === "in"
-                      ? "In Stock"
-                      : stockFilter === "low"
-                      ? "Low Stock"
-                      : "Out of Stock"}
+                        ? "In Stock"
+                        : stockFilter === "low"
+                          ? "Low Stock"
+                          : "Out of Stock"}
                   </span>
                   <ChevronDown className="ml-2 h-4 w-4" />
                 </DropdownMenuTrigger>
@@ -241,10 +241,10 @@ export default function CategoriesPage() {
                     {sortOption === "a-z"
                       ? "A-Z"
                       : sortOption === "price-asc"
-                      ? "Price: Low → High"
-                      : sortOption === "price-desc"
-                      ? "Price: High → Low"
-                      : "Stock: High → Low"}
+                        ? "Price: Low → High"
+                        : sortOption === "price-desc"
+                          ? "Price: High → Low"
+                          : "Stock: High → Low"}
                   </span>
                   <ChevronDown className="ml-2 h-4 w-4" />
                 </DropdownMenuTrigger>
@@ -317,10 +317,10 @@ export default function CategoriesPage() {
                   {stockFilter === "all"
                     ? "All Stock"
                     : stockFilter === "in"
-                    ? "In Stock"
-                    : stockFilter === "low"
-                    ? "Low Stock"
-                    : "Out of Stock"}
+                      ? "In Stock"
+                      : stockFilter === "low"
+                        ? "Low Stock"
+                        : "Out of Stock"}
                 </span>
                 <ChevronDown className="ml-2 h-4 w-4" />
               </DropdownMenuTrigger>
@@ -354,15 +354,15 @@ export default function CategoriesPage() {
 
             {/* Sort Dropdown */}
             <DropdownMenu>
-              <DropdownMenuTrigger className="px-4 nowrap cursor-pointer py-2 border rounded-md flex items-center justify-between whitespace-nowrap cursor-pointer">
+              <DropdownMenuTrigger className="px-4 nowrap py-2 border rounded-md flex items-center justify-between whitespace-nowrap cursor-pointer">
                 <span>
                   {sortOption === "a-z"
                     ? "A-Z"
                     : sortOption === "price-asc"
-                    ? "Price: Low → High"
-                    : sortOption === "price-desc"
-                    ? "Price: High → Low"
-                    : "Stock: High → Low"}
+                      ? "Price: Low → High"
+                      : sortOption === "price-desc"
+                        ? "Price: High → Low"
+                        : "Stock: High → Low"}
                 </span>
                 <ChevronDown className="ml-2 h-4 w-4" />
               </DropdownMenuTrigger>
@@ -422,8 +422,8 @@ export default function CategoriesPage() {
               {stockFilter === "in"
                 ? "In Stock"
                 : stockFilter === "low"
-                ? "Low Stock"
-                : "Out of Stock"}
+                  ? "Low Stock"
+                  : "Out of Stock"}
               <X className="size-4" />
             </button>
           )}
@@ -436,8 +436,8 @@ export default function CategoriesPage() {
               {sortOption === "price-asc"
                 ? "Price: Low → High"
                 : sortOption === "price-desc"
-                ? "Price: High → Low"
-                : "Stock: High → Low"}
+                  ? "Price: High → Low"
+                  : "Stock: High → Low"}
               <X className="size-4" />
             </button>
           )}

@@ -182,7 +182,7 @@ footer a {
 /* globals.css or your tailwind.css */
 /* globals.css */
 .product-card {
-  @apply relative block rounded-xl bg-white dark:bg-card shadow-md overflow-hidden transition-shadow duration-300;
+  @apply relative block rounded-xl bg-white dark:bg-card shadow-md overflow-hidden transition-shadow duration-300 border border-neutral-100 dark:border-none;
 }
 
 .product-card-image {

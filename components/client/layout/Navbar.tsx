@@ -36,13 +36,18 @@ export default function Navbar() {
       return;
     }
     const handler = setTimeout(() => {
-      if (searchTerm.trim()) {
-        router.push(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
+      const currentQuery = searchParams.get("q") || "";
+      const trimmed = searchTerm.trim();
+
+      if (trimmed && trimmed !== currentQuery) {
+        router.push(`/search?q=${encodeURIComponent(trimmed)}`);
+      } else if (!trimmed && currentQuery) {
+        router.push("/search");
       }
     }, 500);
 
     return () => clearTimeout(handler);
-  }, [searchTerm, router]);
+  }, [searchTerm, router, searchParams]);
 
   useEffect(() => {
     setSearchTerm(searchParams.get("q") ?? "");

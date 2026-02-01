@@ -6,8 +6,8 @@ export const clientMenu: {
 }[] = [
   { title: "Home", url: "/", icon: "Home" },
   { title: "Categories", url: "/categories", icon: "LayoutGrid" },
-  { title: "Notifications", url: "/notifications", icon: "Bell" },
-  { title: "Account", url: "/account", icon: "User" },
+  { title: "Notifications", url: "/account?tab=notifications", icon: "Bell" },
+  { title: "Account", url: "/account?tab=profile", icon: "User" },
 ];
 export const adminMenu: {
   title: string;

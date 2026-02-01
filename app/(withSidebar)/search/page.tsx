@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useProducts } from "@/store/useProducts";
 import { BreadCrumb } from "@/components/client/BreadCrumb";
@@ -11,13 +11,14 @@ import Link from "next/link";
 import { EmptyState } from "@/components/Empty";
 import { Button } from "@/components/ui/button";
 import { Product } from "@/lib/types/products";
-export default function ProductsPage() {
+export default function page() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const queryParam = searchParams.get("q") ?? "";
 
   const [searchTerm, setSearchTerm] = useState(queryParam);
-
   const { products, fetchProducts, loading } = useProducts();
+  const isFirstRender = useRef(true);
 
   const filteredProducts: Product[] = queryParam
     ? products.filter((product) =>
@@ -32,6 +33,20 @@ export default function ProductsPage() {
     setSearchTerm(queryParam);
   }, [queryParam]);
 
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    const handler = setTimeout(() => {
+      if (searchTerm.trim() !== queryParam) {
+        router.push(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
+      }
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [searchTerm, router, queryParam]);
   return (
     <div className="custom-container mt-8">
       {/* Breadcrumb */}

@@ -7,7 +7,17 @@ import {
 } from "@/components/ui/card";
 import { useUsers } from "@/store/useUsers";
 import { useEffect, useState } from "react";
-import { Phone, Calendar, ShoppingBag, TrendingUp, Mail } from "lucide-react";
+import {
+  Phone,
+  Calendar,
+  Pencil,
+  ShoppingBag,
+  TrendingUp,
+  Mail,
+  MapPin,
+  Copy,
+  KeyRound,
+} from "lucide-react";
 import Image from "next/image";
 import { getUserSession } from "@/lib/supabase/session";
 import { useOrders } from "@/store/useOrders";
@@ -18,6 +28,7 @@ import { StatCard } from "@/components/ui/stat-card";
 import { cn } from "@/lib/utils";
 import { EditProfileForm } from "../../forms/EditProfileForm";
 import { truncateId } from "@/lib/utils";
+import { toast } from "sonner";
 export default function ProfileTab() {
   const { users, fetchUsers, loading: userLoading } = useUsers();
   const { orders, fetchOrders, loading: ordersLoading } = useOrders();
@@ -36,8 +47,14 @@ export default function ProfileTab() {
     fetchUsers();
     fetchOrders();
   }, [fetchUsers, fetchOrders]);
-
   const currentUser = users[0] ?? null;
+
+  const handleCopyId = () => {
+    if (currentUser?.id) {
+      navigator.clipboard.writeText(currentUser.id);
+      toast.success("Copied ID to clipboard!");
+    }
+  };
 
   const completedOrders = orders.filter(
     (order) => order.status === "completed",
@@ -180,6 +197,21 @@ export default function ProfileTab() {
                 </p>
               </div>
 
+              <div>
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-medium text-foreground-accent uppercase tracking-wider mb-1">
+                    Address
+                  </p>
+                  <Button variant={"ghost"}>
+                    <MapPin />
+                    Edit Address
+                  </Button>
+                </div>
+                <p className="text-lg text-neutral-400">
+                  {currentUser?.email ?? "Not provided"}
+                </p>
+              </div>
+
               <div className="flex items-center justify-between">
                 <div className="flex gap-12">
                   <div>
@@ -207,7 +239,10 @@ export default function ProfileTab() {
                     </div>
                   </div>
                 </div>
-                <Button variant={"ghost"}>Copy</Button>
+                <Button variant={"ghost"} onClick={() => handleCopyId()}>
+                  <Copy />
+                  Copy
+                </Button>
               </div>
               <div>
                 <div className="flex items-center justify-between">
@@ -217,7 +252,10 @@ export default function ProfileTab() {
                     </p>
                     <p className="text-lg text-neutral-400">********</p>
                   </div>
-                  <Button variant={"ghost"}>Change</Button>
+                  <Button variant={"ghost"}>
+                    <KeyRound />
+                    Update
+                  </Button>
                 </div>
               </div>
             </div>

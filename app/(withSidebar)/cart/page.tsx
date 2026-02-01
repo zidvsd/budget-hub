@@ -11,12 +11,32 @@ import { QuantityInput } from "@/components/client/QuantityInput";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { formatPrice } from "@/lib/utils";
+import { useUsers } from "@/store/useUsers";
+import { EditProfileForm } from "@/components/client/forms/EditProfileForm";
+import { useState } from "react";
 import Link from "next/link";
 export default function Page() {
   const { items, fetchCart, loading, updateQuantity, removeFromCart } =
     useCart();
   const router = useRouter();
-
+  const { users } = useUsers();
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const handleCheckOut = () => {
+    const currentUser = users[0];
+    const missingInfo =
+      !currentUser?.address ||
+      !currentUser?.phone ||
+      !currentUser?.first_name ||
+      !currentUser.last_name;
+    if (missingInfo) {
+      toast.error("Please complete your profile details before checking out", {
+        description: "We need your and phone number for delivery",
+      });
+      setShowProfileModal(true);
+      return;
+    }
+    router.push("/checkout");
+  };
   useEffect(() => {
     fetchCart();
   }, [fetchCart]);
@@ -48,6 +68,13 @@ export default function Page() {
         />
       )}
 
+      {/* Show profile form modal if there is missing info */}
+      {showProfileModal && (
+        <EditProfileForm
+          open={showProfileModal}
+          onOpenChange={setShowProfileModal}
+        />
+      )}
       {/* Content */}
       {items.length > 0 && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -157,7 +184,11 @@ export default function Page() {
             </div>
 
             <div className="space-y-2">
-              <Button variant="accent" className="w-full">
+              <Button
+                onClick={() => handleCheckOut()}
+                variant="accent"
+                className="w-full"
+              >
                 Proceed to Checkout
               </Button>
               <Button

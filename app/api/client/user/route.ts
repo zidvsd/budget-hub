@@ -95,7 +95,7 @@ export async function PATCH(req: NextRequest) {
         { status: 400 },
       );
     }
-    return NextResponse.json({ success: true, data: profile }, { status: 200 });
+    return NextResponse.json({ success: true, data: data }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json(
       { success: false, error: error.message || "Server Error" },

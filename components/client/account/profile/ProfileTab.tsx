@@ -29,6 +29,7 @@ import { cn } from "@/lib/utils";
 import { EditProfileForm } from "../../forms/EditProfileForm";
 import { truncateId } from "@/lib/utils";
 import { toast } from "sonner";
+import EditAddressForm from "../../forms/EditAddressForm";
 export default function ProfileTab() {
   const { users, fetchUsers, loading: userLoading } = useUsers();
   const { orders, fetchOrders, loading: ordersLoading } = useOrders();
@@ -104,23 +105,25 @@ export default function ProfileTab() {
           {/* User Info */}
           <div className="flex flex-col justify-between flex-1 space-y-4">
             <div className="space-y-2">
-              {/* Name */}
               <CardTitle className="text-2xl font-semibold text-foreground">
                 {currentUser?.first_name ?? "N/A"}{" "}
                 {currentUser?.last_name ?? ""}
               </CardTitle>
 
-              {/* Email */}
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Mail className="w-4 h-4" />
                 {currentUser?.email ?? "Not provided"}
               </div>
-              {/* Phone */}
+
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Phone className="w-4 h-4" />
                 {currentUser?.phone ?? "Not set"}
               </div>
-              {/* Member since */}
+
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <MapPin className="w-4 h-4" />
+                {currentUser?.address ?? "Not set"}
+              </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Calendar className="w-4 h-4" />
                 Member since {formatDateFull(currentUser?.created_at ?? "")}
@@ -197,21 +200,6 @@ export default function ProfileTab() {
                 </p>
               </div>
 
-              <div>
-                <div className="flex items-center justify-between">
-                  <p className="text-xs font-medium text-foreground-accent uppercase tracking-wider mb-1">
-                    Address
-                  </p>
-                  <Button variant={"ghost"}>
-                    <MapPin />
-                    Edit Address
-                  </Button>
-                </div>
-                <p className="text-lg text-neutral-400">
-                  {currentUser?.email ?? "Not provided"}
-                </p>
-              </div>
-
               <div className="flex items-center justify-between">
                 <div className="flex gap-12">
                   <div>
@@ -239,8 +227,13 @@ export default function ProfileTab() {
                     </div>
                   </div>
                 </div>
-                <Button variant={"ghost"} onClick={() => handleCopyId()}>
-                  <Copy />
+                <Button
+                  variant={"ghost"}
+                  size={"sm"}
+                  className="text-xs"
+                  onClick={() => handleCopyId()}
+                >
+                  <Copy className="size-3.5" />
                   Copy
                 </Button>
               </div>
@@ -252,8 +245,8 @@ export default function ProfileTab() {
                     </p>
                     <p className="text-lg text-neutral-400">********</p>
                   </div>
-                  <Button variant={"ghost"}>
-                    <KeyRound />
+                  <Button className="text-xs" variant={"ghost"} size={"sm"}>
+                    <KeyRound className="size-3.5" />
                     Update
                   </Button>
                 </div>

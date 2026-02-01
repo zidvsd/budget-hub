@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
+import { Field, FieldDescription } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Settings } from "lucide-react";
@@ -17,16 +17,22 @@ import { Camera } from "lucide-react";
 import { useUsers } from "@/store/useUsers";
 import { getFirstChar } from "@/lib/utils";
 import Image from "next/image";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
-import { Skeleton } from "@/components/ui/skeleton";
-export function EditProfileForm() {
+export function EditProfileForm({
+  open,
+  onOpenChange,
+}: {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}) {
   const { users, fetchUsers } = useUsers();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [firstName, setFirstName] = useState(users[0]?.first_name ?? "");
   const [lastName, setLastName] = useState(users[0]?.last_name ?? "");
   const [phoneNumber, setPhoneNumber] = useState(users[0]?.phone ?? "");
+  const [address, setAddress] = useState(users[0]?.address ?? "");
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
 
@@ -59,6 +65,8 @@ export function EditProfileForm() {
       // After successful upload, refresh the user store to show the new image
       await fetchUsers(true);
       toast.success("Avatar updated!");
+
+      onOpenChange?.(false);
     } catch (err: any) {
       console.error(err);
       toast.error(err.message || "Failed to upload avatar");
@@ -75,6 +83,7 @@ export function EditProfileForm() {
     const fName = firstName.trim();
     const lName = lastName.trim();
     const phone = phoneNumber.trim();
+    const addr = address.trim();
 
     // Validation
     if (!fName || !/^[a-zA-Z]{2,30}$/.test(fName)) {
@@ -97,6 +106,11 @@ export function EditProfileForm() {
       return;
     }
 
+    if (!/^[a-zA-Z0-9\s,.'#-]{10,}$/.test(addr)) {
+      toast.error("Address contains invalid characters.");
+      setLoading(false);
+      return;
+    }
     try {
       const res = await fetch("/api/client/user", {
         method: "PATCH",
@@ -107,6 +121,7 @@ export function EditProfileForm() {
           first_name: firstName,
           last_name: lastName,
           phone: phoneNumber,
+          address: address,
         }),
       });
 
@@ -118,6 +133,7 @@ export function EditProfileForm() {
       await fetchUsers(true);
 
       toast.success("Profile updated successfully!");
+      onOpenChange?.(false);
     } catch (err: any) {
       console.error("Profile update error:", err);
       toast.error("Failed to update profile");
@@ -125,19 +141,27 @@ export function EditProfileForm() {
       setLoading(false);
     }
   };
-
+  useEffect(() => {
+    if (users[0]) {
+      setFirstName(users[0].first_name ?? "");
+      setLastName(users[0].last_name ?? "");
+      setPhoneNumber(users[0].phone ?? "");
+      setAddress(users[0].address ?? "");
+    }
+  }, [users]);
   return (
-    <Dialog>
-      {/* 🔹 THIS replaces your old button */}
-      <DialogTrigger asChild>
-        <Button
-          variant="secondary"
-          className="w-fit  transition-transform duration-300 hover:scale-105"
-        >
-          <Settings className="w-4 h-4 mr-2" />
-          Edit Profile
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      {!open && (
+        <DialogTrigger asChild>
+          <Button
+            variant="secondary"
+            className="w-fit  transition-transform duration-300 hover:scale-105"
+          >
+            <Settings className="w-4 h-4 mr-2" />
+            Edit Profile
+          </Button>
+        </DialogTrigger>
+      )}
 
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
@@ -204,6 +228,7 @@ export function EditProfileForm() {
             <div className="grid gap-3">
               <Label htmlFor="firstName">First Name</Label>
               <Input
+                value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 autoComplete="off"
                 id="firstName"
@@ -214,6 +239,7 @@ export function EditProfileForm() {
             <div className="grid gap-3">
               <Label htmlFor="lastName">Last Name</Label>
               <Input
+                value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 autoComplete="off"
                 id="lastName"
@@ -223,10 +249,21 @@ export function EditProfileForm() {
             <div className="grid gap-3">
               <Label htmlFor="phone-number">Phone Number</Label>
               <Input
+                value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 autoComplete="off"
                 id="phone-number"
                 placeholder={users[0]?.phone ?? "Enter your phone number"}
+              />
+            </div>
+            <div className="grid gap-3">
+              <Label htmlFor="address">Address</Label>
+              <Input
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                autoComplete="off"
+                id="phone-number"
+                placeholder={users[0]?.address ?? "Enter your address"}
               />
             </div>
           </div>

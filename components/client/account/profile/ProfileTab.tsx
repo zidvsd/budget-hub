@@ -29,7 +29,6 @@ import { cn } from "@/lib/utils";
 import { EditProfileForm } from "../../forms/EditProfileForm";
 import { truncateId } from "@/lib/utils";
 import { toast } from "sonner";
-import EditAddressForm from "../../forms/EditAddressForm";
 export default function ProfileTab() {
   const { users, fetchUsers, loading: userLoading } = useUsers();
   const { orders, fetchOrders, loading: ordersLoading } = useOrders();
@@ -66,14 +65,65 @@ export default function ProfileTab() {
   );
   if (userLoading || ordersLoading) {
     return (
-      <div className="flex flex-col gap-6 w-full">
-        <Skeleton className="w-full h-48" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Skeleton className="w-full h-32" />
-          <Skeleton className="w-full h-32" />
-          <Skeleton className="w-full h-32" />
+      <div className="flex flex-col gap-6 w-full animate-in fade-in duration-500">
+        {/* Profile Header Skeleton */}
+        <Card className="overflow-hidden">
+          <CardContent className="flex flex-row items-start gap-6 p-6">
+            {/* Avatar Skeleton */}
+            <Skeleton className="w-28 h-28 rounded-full shrink-0" />
+
+            {/* User Info Skeleton */}
+            <div className="flex flex-col justify-between flex-1 space-y-4">
+              <div className="space-y-3">
+                <Skeleton className="h-8 w-1/3" /> {/* Name */}
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-1/4" /> {/* Email */}
+                  <Skeleton className="h-4 w-1/5" /> {/* Phone */}
+                  <Skeleton className="h-4 w-1/3" /> {/* Address */}
+                  <Skeleton className="h-4 w-1/2" /> {/* Date */}
+                </div>
+              </div>
+              <Skeleton className="h-10 w-32 rounded-md" /> {/* Edit Button */}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Stat Cards Skeleton */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[1, 2, 3].map((i) => (
+            <Card key={i} className="p-6 space-y-3">
+              <div className="flex justify-between items-center">
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-8 w-8 rounded-full" />
+              </div>
+              <Skeleton className="h-8 w-16" />
+              <Skeleton className="h-3 w-32" />
+            </Card>
+          ))}
         </div>
-        <Skeleton className="w-full h-72" />
+
+        {/* Account Details Skeleton */}
+        <Card className="mt-6">
+          <CardContent className="py-6 px-6 space-y-8">
+            <div className="space-y-2">
+              <Skeleton className="h-6 w-40" />
+              <Skeleton className="h-4 w-60" />
+            </div>
+
+            <div className="space-y-8">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="flex justify-between items-end">
+                  <div className="space-y-2 flex-1">
+                    <Skeleton className="h-3 w-20" />
+                    <Skeleton className="h-6 w-1/2" />
+                  </div>
+                  {i > 2 && <Skeleton className="h-8 w-20" />}{" "}
+                  {/* Copy/Update Buttons */}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }

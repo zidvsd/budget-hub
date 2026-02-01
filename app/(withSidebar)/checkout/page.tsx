@@ -20,11 +20,12 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { useState } from "react";
 import { OrderItemsCarousel } from "@/components/client/OrderItemsCarousel";
-
+import { Skeleton } from "@/components/ui/skeleton";
+import { EmptyState } from "@/components/Empty";
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, clearCart } = useCart();
-  const { users } = useUsers();
+  const { items, clearCart, loading: cartLoading } = useCart();
+  const { users, loading: userLoading } = useUsers();
   const [isProcessing, setIsProcessing] = useState(false);
 
   const currentUser = users[0];
@@ -33,30 +34,15 @@ export default function CheckoutPage() {
     0,
   );
 
-  const handlePlaceOrder = async () => {
-    setIsProcessing(true);
-    try {
-      // Logic for creating order in DB goes here
-      toast.success("Order placed successfully!", {
-        description: "Thank you for your purchase.",
-      });
-      clearCart();
-      router.push("/account?tab=orders");
-    } catch (error) {
-      toast.error("Failed to place order. Please try again.");
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  if (items.length === 0) {
+  // 1. Handle Redirect (Only after loading is complete)
+  if (!cartLoading && items.length === 0) {
     router.push("/cart");
     return null;
   }
 
   return (
     <div className="custom-container my-8">
-      {/* Header */}
+      {/* Header - NOW ALWAYS VISIBLE */}
       <div className="flex items-center gap-8 mb-8">
         <ArrowLeft className="cursor-pointer" onClick={() => router.back()} />
         <div>
@@ -67,124 +53,155 @@ export default function CheckoutPage() {
         </div>
       </div>
 
-      {/* Grid: 1 column on mobile, 60/40 split on desktop */}
+      {/* Conditional Grid Content */}
       <div className="grid grid-cols-1 lg:grid-cols-[6fr_4fr] gap-8">
-        {/* Left Side: Shipping & Payment Info */}
-        <div className="space-y-6 min-w-0">
-          {/* Shipping Details Card */}
-          <div className="bg-card rounded-lg border p-6 shadow-md space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 font-semibold text-lg">
-                <MapPin className="text-accent" size={20} />
-                <h2>Shipping Information</h2>
+        {cartLoading || userLoading ? (
+          /* SKELETON STATE*/
+          <>
+            <div className="space-y-6">
+              <div className="bg-card rounded-lg border p-6 space-y-6">
+                <div className="flex justify-between items-center">
+                  <Skeleton className="h-6 w-40" />
+                  <Skeleton className="h-9 w-24" />
+                </div>
+                <Separator />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="space-y-2">
+                      <Skeleton className="h-3 w-20" />
+                      <Skeleton className="h-5 w-full" />
+                    </div>
+                  ))}
+                </div>
               </div>
-              <EditProfileForm />
-            </div>
-            <Separator />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-1">
-                <span className="text-xs uppercase text-muted-foreground font-bold">
-                  Recipient
-                </span>
-                <p className="flex items-center gap-2 font-medium">
-                  <User size={14} /> {currentUser?.first_name}{" "}
-                  {currentUser?.last_name}
-                </p>
-              </div>
-              <div className="space-y-1">
-                <span className="text-xs uppercase text-muted-foreground font-bold">
-                  Phone Number
-                </span>
-                <p className="flex items-center gap-2 font-medium">
-                  <Phone size={14} /> {currentUser?.phone}
-                </p>
-              </div>
-              <div className="space-y-1 md:col-span-2">
-                <span className="text-xs uppercase text-muted-foreground font-bold">
-                  Delivery Address
-                </span>
-                <p className="font-medium">{currentUser?.address}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Payment Method Card */}
-          <div className="bg-card rounded-lg border p-6 shadow-md space-y-4">
-            <div className="flex items-center gap-2 font-semibold text-lg">
-              <CreditCard className="text-accent" size={20} />
-              <h2>Payment Method</h2>
-            </div>
-            <Separator />
-            <div className="p-4 rounded-md border-2 border-accent bg-accent/5 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="h-4 w-4 rounded-full border-4 border-accent" />
-                <span className="font-medium">Cash on Delivery</span>
-              </div>
-              <span className="text-xs text-muted-foreground">Default</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Side: Order Summary */}
-        <div className="space-y-6 min-w-0">
-          <div className="bg-card rounded-lg border p-6 shadow-md space-y-4 h-fit sticky top-8">
-            <div className="flex items-center gap-2 font-semibold text-lg">
-              <ShoppingBag className="text-accent" size={20} />
-              <h2>Order Summary</h2>
-            </div>
-            <Separator />
-
-            {/* Vertical Items Carousel */}
-            <div className="py-2">
-              <OrderItemsCarousel items={items} />
-            </div>
-
-            <Separator />
-
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">
-                  Subtotal {items.length} items
-                </span>
-                <span>₱{formatPrice(subtotal)}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Shipping</span>
-                <span className="text-green-500 font-bold">Free</span>
-              </div>
-              <Separator />
-              <div className="flex justify-between font-bold text-lg pt-2">
-                <span>Total</span>
-                <span className="text-accent">₱{formatPrice(subtotal)}</span>
+              <div className="bg-card rounded-lg border p-6 space-y-4">
+                <Skeleton className="h-6 w-40" />
+                <Separator />
+                <Skeleton className="h-16 w-full rounded-md" />
               </div>
             </div>
 
-            <Button
-              className="w-full h-10 text-md font-bold"
-              variant="accent"
-              onClick={handlePlaceOrder}
-              disabled={isProcessing}
-            >
-              <CreditCard className="size-5" />
-              {isProcessing ? "Processing..." : "Place Order"}
-            </Button>
-
-            <Button
-              className="w-full h-10 text-md font-bold"
-              variant="secondary"
-              onClick={handlePlaceOrder}
-              disabled={isProcessing}
-            >
-              <ShoppingCart className="size-5" />
-              Back to Cart
-            </Button>
-
-            <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground pt-2">
-              <ShieldCheck size={14} className="text-green-500" />
-              Your transaction is encrypted and secure
+            <div className="space-y-6">
+              <div className="bg-card rounded-lg border p-6 space-y-4">
+                <Skeleton className="h-6 w-32" />
+                <Separator />
+                <div className="flex gap-4">
+                  <Skeleton className="h-20 w-20 rounded-md" />
+                  <Skeleton className="h-20 w-20 rounded-md" />
+                </div>
+                <Separator />
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-4 w-16" />
+                  </div>
+                  <Skeleton className="h-10 w-full" />
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </>
+        ) : (
+          /* Main Content */
+          <>
+            {/* Left Side: Shipping & Payment Info */}
+            <div className="space-y-6 min-w-0">
+              <div className="bg-card rounded-lg border p-6 shadow-md space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 font-semibold text-lg">
+                    <MapPin className="text-accent" size={20} />
+                    <h2>Shipping Information</h2>
+                  </div>
+                  <EditProfileForm />
+                </div>
+                <Separator />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-1">
+                    <span className="text-xs uppercase text-muted-foreground font-bold">
+                      Recipient
+                    </span>
+                    <p className="flex items-center gap-2 font-medium">
+                      <User size={14} /> {currentUser?.first_name}{" "}
+                      {currentUser?.last_name}
+                    </p>
+                  </div>
+                  <div className="space-y-1">
+                    <span className="text-xs uppercase text-muted-foreground font-bold">
+                      Phone Number
+                    </span>
+                    <p className="flex items-center gap-2 font-medium">
+                      <Phone size={14} /> {currentUser?.phone}
+                    </p>
+                  </div>
+                  <div className="space-y-1 md:col-span-2">
+                    <span className="text-xs uppercase text-muted-foreground font-bold">
+                      Delivery Address
+                    </span>
+                    <p className="font-medium">{currentUser?.address}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-card rounded-lg border p-6 shadow-md space-y-4">
+                <div className="flex items-center gap-2 font-semibold text-lg">
+                  <CreditCard className="text-accent" size={20} />
+                  <h2>Payment Method</h2>
+                </div>
+                <Separator />
+                <div className="p-4 rounded-md border-2 border-accent bg-accent/5 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="h-4 w-4 rounded-full border-4 border-accent" />
+                    <span className="font-medium">Cash on Delivery</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Side: Order Summary */}
+            <div className="space-y-6 min-w-0">
+              <div className="bg-card rounded-lg border p-6 shadow-md space-y-4 h-fit sticky top-8">
+                <div className="flex items-center gap-2 font-semibold text-lg">
+                  <ShoppingBag className="text-accent" size={20} />
+                  <h2>Order Summary</h2>
+                </div>
+                <Separator />
+                <div className="py-2">
+                  <OrderItemsCarousel items={items} />
+                </div>
+                <Separator />
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">
+                      Subtotal {items.length} items
+                    </span>
+                    <span>₱{formatPrice(subtotal)}</span>
+                  </div>
+                  <div className="flex justify-between font-bold text-lg pt-2">
+                    <span>Total</span>
+                    <span className="text-accent">
+                      ₱{formatPrice(subtotal)}
+                    </span>
+                  </div>
+                </div>
+
+                <Button
+                  className="w-full h-10 font-bold"
+                  variant="accent"
+                  disabled={isProcessing}
+                >
+                  {isProcessing ? "Processing..." : "Place Order"}
+                </Button>
+
+                <Button
+                  className="w-full h-10 font-bold"
+                  variant="secondary"
+                  onClick={() => router.push("/cart")}
+                >
+                  Back to Cart
+                </Button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

@@ -114,7 +114,7 @@ export default function Page() {
                         </h3>
                       </Link>
                       <span className="text-sm text-muted-foreground">
-                        ₱{formatPrice(formatPrice(item.price))} each
+                        ₱{formatPrice(item.price)} each
                       </span>
 
                       <div className="flex items-center gap-4 mt-2">

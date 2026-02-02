@@ -136,6 +136,7 @@ export default function ProfileTab() {
             <div className="relative w-full h-full rounded-full border-4 border-accent/20 bg-muted overflow-hidden items-center justify-center flex">
               {currentUser?.avatar_url ? (
                 <Image
+                unoptimized
                   key={currentUser?.avatar_url}
                   src={currentUser?.avatar_url}
                   alt="avatar"

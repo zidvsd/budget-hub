@@ -1,9 +1,7 @@
 "use client";
 
-import * as React from "react";
 import Image from "next/image";
 import { formatPrice } from "@/lib/utils";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -37,6 +35,7 @@ export function OrderItemsCarousel({ items }: { items: CartItem[] }) {
                 <div className="relative h-12 w-12 shrink-0">
                   <Link href={`/products/${item.product_id}`}>
                     <Image
+                      unoptimized
                       src={item.product.image_path ?? "/placeholder.png"}
                       alt={item.product.name}
                       fill

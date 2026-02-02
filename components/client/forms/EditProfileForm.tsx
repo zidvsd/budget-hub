@@ -174,6 +174,7 @@ export function EditProfileForm({
             <div className="w-28 h-28 relative rounded-full border-4 border-accent/20 bg-muted flex items-center justify-center text-accent text-4xl font-bold">
               {users[0]?.avatar_url ? (
                 <Image
+                unoptimized
                   src={users[0].avatar_url}
                   alt={`${users[0]?.first_name ?? ""} ${users[0]?.last_name ?? ""}`}
                   width={112}

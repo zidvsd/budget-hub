@@ -116,6 +116,7 @@ export default function Page() {
                     >
                       <div className="relative h-[72px] w-[72px] overflow-hidden rounded-md border bg-muted">
                         <Image
+                        unoptimized
                           src={item.product.image_path ?? "/placeholder.png"}
                           alt={item.product.name}
                           fill

@@ -22,7 +22,7 @@ export function getFirstChar(name: string) {
   return name.split("")[0];
 }
 export function formatDate(date: string) {
-  return new Date(date).toLocaleDateString("en-US", {
+  return new Date(date).toLocaleDateString("en-PH", {
     month: "2-digit",
     day: "2-digit",
     year: "numeric",
@@ -34,7 +34,7 @@ export function formatDateFull(dateString: string) {
 
   const date = new Date(dateString);
 
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat("en-PH", {
     month: "long", // "November"
     day: "numeric", // "26"
     year: "numeric", // "2025"
@@ -56,7 +56,12 @@ export function upperCaseFirstLetter(text: string) {
 }
 export function formatRelativeTime(date: string | Date): string {
   const now = new Date();
-  const past = new Date(date);
+  let past = new Date(date);
+
+  if (typeof date === "string" && !date.includes("Z") && !date.includes("+")) {
+    past = new Date(`${date.replace(" ", "T")}Z`);
+  }
+
   const diffInSeconds = Math.floor((now.getTime() - past.getTime()) / 1000);
 
   // Time units in seconds

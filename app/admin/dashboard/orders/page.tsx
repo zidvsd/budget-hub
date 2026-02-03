@@ -48,19 +48,19 @@ export default function OrdersPage() {
     }
   }
   useEffect(() => {
-    fetchOrders();
+    fetchOrders(undefined, true);
     fetchUsers();
   }, [fetchOrders, fetchUsers]);
 
   const totalOrders = orders.length;
   const pendingOrders = orders.filter(
-    (order) => order.status === "pending"
+    (order) => order.status === "pending",
   ).length;
   const cancelledOrders = orders.filter(
-    (order) => order.status === "cancelled"
+    (order) => order.status === "cancelled",
   ).length;
   const completedOrders = orders.filter(
-    (order) => order.status === "completed"
+    (order) => order.status === "completed",
   ).length;
 
   return (

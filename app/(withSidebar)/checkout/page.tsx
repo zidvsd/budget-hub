@@ -39,7 +39,58 @@ export default function CheckoutPage() {
     router.push("/cart");
     return null;
   }
+  const handlePlaceOrder = async () => {
+    setIsProcessing(true);
+    try {
+      const orderItemsPayload = items.map((item) => {
+        // Look for the UUID in 'item.product.id' FIRST, then 'item.product_id'
+        const actualProductId = item.product?.id || item.product_id;
 
+        return {
+          product_id: actualProductId,
+          quantity: item.quantity,
+          price: item.price,
+        };
+      });
+
+      console.log("Payload being sent:", orderItemsPayload);
+
+      // 2. Client-side check: Don't even hit the API if a UUID is missing
+      if (
+        orderItemsPayload.some(
+          (i) => !i.product_id || i.product_id === "undefined",
+        )
+      ) {
+        throw new Error(
+          "Some items are missing valid product IDs. Please refresh your cart.",
+        );
+      }
+
+      const res = await fetch("/api/client/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          total_price: subtotal,
+          order_items: orderItemsPayload,
+        }),
+      });
+
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || "Failed to place order");
+      toast.success("Order placed successfully!", {
+        description: "You will receive an email confirmation shortly.",
+      });
+      clearCart();
+      router.push(`/orders/${result.data.id}`);
+    } catch (err: any) {
+      console.error("CHECKOUT_ERROR:", err);
+      toast.error("Checkout Failed", {
+        description: err.message || "Please try again later.",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
   return (
     <div className="custom-container my-8">
       {/* Header - NOW ALWAYS VISIBLE */}
@@ -187,6 +238,7 @@ export default function CheckoutPage() {
                   className="w-full h-10 font-bold"
                   variant="accent"
                   disabled={isProcessing}
+                  onClick={() => handlePlaceOrder()}
                 >
                   {isProcessing ? "Processing..." : "Place Order"}
                 </Button>

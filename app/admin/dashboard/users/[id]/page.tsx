@@ -33,7 +33,8 @@ export default function Page() {
 
   // Get the user by ID from users array
   const user = users?.find((u) => u.id === userId);
-
+  console.log(orders);
+  console.log(user);
   // Redirect admin users after user is loaded
   useEffect(() => {
     if (!usersLoading && user?.role === "admin" && !toastShownRef.current) {
@@ -49,7 +50,7 @@ export default function Page() {
   useEffect(() => {
     fetchUsers();
     fetchProducts();
-    if (userId) fetchOrders(userId);
+    if (userId) fetchOrders(userId, true);
   }, [userId, fetchUsers, fetchOrders, fetchProducts]);
 
   // Compute stats
@@ -114,11 +115,6 @@ export default function Page() {
     );
   }
 
-  // If no user found, show message
-  if (!user) {
-    return <p>User not found.</p>;
-  }
-
   return (
     <div className="space-y-6">
       {/* User Header */}
@@ -126,11 +122,11 @@ export default function Page() {
         <div className="flex items-center gap-2">
           <User className="size-8" />
           <h1 className="page-heading">
-            {user.first_name} {user.last_name}
+            {user?.first_name} {user?.last_name}
           </h1>
         </div>
         <p className="page-subheading">
-          Displaying purchase history of {user.id}
+          Displaying purchase history of {user?.id}
         </p>
       </div>
 

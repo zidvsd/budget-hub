@@ -75,9 +75,13 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { total_price, order_items } = body;
 
-    if (!total_price || !order_items?.length) {
+    if (
+      typeof total_price !== "number" ||
+      total_price <= 0 ||
+      !order_items?.length
+    ) {
       return NextResponse.json(
-        { success: false, error: "Missing total_price or order_items" },
+        { success: false, error: "Invalid price or empty order items" },
         { status: 400 },
       );
     }
@@ -93,8 +97,13 @@ export async function POST(req: NextRequest) {
       },
     );
 
-    if (rpcError) throw rpcError;
-
+    if (rpcError) {
+      console.error("Database Error:", rpcError.message);
+      return NextResponse.json(
+        { success: false, error: "Failed to create order" },
+        { status: 400 },
+      );
+    }
     // Handle potential array or single object return from RPC
     const newOrderId = Array.isArray(orderResult)
       ? orderResult[0].id
@@ -105,21 +114,15 @@ export async function POST(req: NextRequest) {
       .from("orders")
       .select(
         `
-        id, 
-        user_id, 
-        total_price, 
-        status, 
-        created_at, 
-        updated_at,
+        *
         order_items(
           quantity, 
           price, 
-          product_id,
-          product:products(name)
+          product:products(name, image_url)
         )
       `,
       )
-      .eq("id", newOrderId)
+      .eq("id", newOrderId.id)
       .single();
 
     if (fetchError) throw fetchError;

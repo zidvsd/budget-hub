@@ -12,15 +12,17 @@ export default function Cta() {
           and excellent customer service.
         </span>
       </div>
-      <div className="flex flex-col sm:flex-row mx-auto w-fit gap-4">
-        <Link href={"/categories"}>
-          <Button variant={"accent"}>
+      <div className="flex flex-col sm:flex-row mx-auto px-4 gap-4 w-full sm:w-auto ">
+        <Link href={"/categories"} className="w-full">
+          <Button size={"icon-lg"} variant={"accent"} className="w-full ">
             Browse All Product
             <ArrowRight />
           </Button>
         </Link>
-        <Link href={"/search"}>
-          <Button variant={"secondary"}>Search Products</Button>
+        <Link href={"/search"} className="w-full">
+          <Button size={"icon-lg"} variant={"secondary"} className="w-full">
+            Search Products
+          </Button>
         </Link>
       </div>
     </div>

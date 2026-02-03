@@ -13,7 +13,7 @@ const iconMap: Record<string, any> = {
 
 export default function FeatureBar() {
   return (
-    <div className="w-full bg-sidebar py-12 border-b">
+    <div className="w-full bg-sidebar py-12 border-b px-2">
       <div className="grid grid-cols-2  md:grid-cols-2 lg:grid-cols-4 place-items-center gap-8 max-w-[1440px] mx-auto">
         {featuresData.map((feature, idx) => {
           const Icon = iconMap[feature.icon];

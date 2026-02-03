@@ -58,9 +58,9 @@ export default function OrdersCard({ order }: OrdersCardProps) {
       </div>
 
       {/* Optional: Make the whole card clickable */}
-      <a href={`/account/orders/${order.id}`} className="absolute inset-0">
+      <Link href={`/orders/${order.id}`} className="absolute inset-0">
         <span className="sr-only">View order {order.id}</span>
-      </a>
+      </Link>
     </div>
   );
 }

@@ -21,7 +21,11 @@ export function getFirstName(name: string) {
 export function getFirstChar(name: string) {
   return name.split("")[0];
 }
-export function formatDate(date: string) {
+export function formatDate(dateString: string) {
+  if (!dateString) return "";
+  const utcDate = dateString.endsWith("Z");
+  const date = new Date(dateString);
+
   return new Date(date).toLocaleDateString("en-PH", {
     month: "2-digit",
     day: "2-digit",
@@ -31,13 +35,28 @@ export function formatDate(date: string) {
 
 export function formatDateFull(dateString: string) {
   if (!dateString) return "";
-
+  const utcDate = dateString.endsWith("Z");
   const date = new Date(dateString);
 
   return new Intl.DateTimeFormat("en-PH", {
     month: "long", // "November"
     day: "numeric", // "26"
-    year: "numeric", // "2025"
+    year: "numeric",
+  }).format(date);
+}
+
+export function formatTime(dateString: string) {
+  if (!dateString) return "";
+  const utcDate = dateString.endsWith("Z")
+    ? dateString
+    : `${dateString.replace(" ", "T")}Z`;
+  const date = new Date(utcDate);
+
+  return new Intl.DateTimeFormat("en-PH", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+    timeZone: "Asia/Manila",
   }).format(date);
 }
 

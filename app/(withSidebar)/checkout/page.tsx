@@ -22,6 +22,7 @@ import { useState } from "react";
 import { OrderItemsCarousel } from "@/components/client/OrderItemsCarousel";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/Empty";
+import { Spinner } from "@/components/ui/spinner";
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, clearCart, loading: cartLoading } = useCart();
@@ -34,9 +35,8 @@ export default function CheckoutPage() {
     0,
   );
 
-  // 1. Handle Redirect (Only after loading is complete)
-  if (!cartLoading && items.length === 0) {
-    router.push("/cart");
+  if (!cartLoading && items.length === 0 && !isProcessing) {
+    router.push("/");
     return null;
   }
   const handlePlaceOrder = async () => {
@@ -76,12 +76,15 @@ export default function CheckoutPage() {
       });
 
       const result = await res.json();
+      console.log("Full Result from Server:", result);
       if (!res.ok) throw new Error(result.error || "Failed to place order");
       toast.success("Order placed successfully!", {
         description: "You will receive an email confirmation shortly.",
       });
-      clearCart();
       router.push(`/orders/${result.data.id}`);
+      setTimeout(() => {
+        clearCart();
+      }, 100);
     } catch (err: any) {
       console.error("CHECKOUT_ERROR:", err);
       toast.error("Checkout Failed", {
@@ -255,6 +258,19 @@ export default function CheckoutPage() {
           </>
         )}
       </div>
+      {isProcessing && (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="bg-card p-8 rounded-xl border shadow-2xl flex flex-col items-center gap-4">
+            <Spinner className="h-10 w-10 text-accent" />
+            <div className="text-center">
+              <h3 className="text-lg font-bold">Processing Order</h3>
+              <p className="text-sm text-muted-foreground">
+                Please do not refresh the page...
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

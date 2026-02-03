@@ -122,7 +122,7 @@ export async function POST(req: NextRequest) {
         )
       `,
       )
-      .eq("id", newOrderId.id)
+      .eq("id", newOrderId)
       .single();
 
     if (fetchError) throw fetchError;

@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
 import RelatedProducts from "@/components/client/RelatedProducts";
 import { formatPrice } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
 export default function ProductPage() {
   const params = useParams();
   const productId = params.id;
@@ -132,10 +133,15 @@ export default function ProductPage() {
           )}
         </div>
       </div>
-      <RelatedProducts
-        category={productCategory ?? ""}
-        currentProductId={product.id}
-      />
+      <div className="custom-container pt-8">
+        <Separator />
+      </div>
+      <div className="py-8 custom-container">
+        <RelatedProducts
+          category={productCategory ?? ""}
+          currentProductId={product.id}
+        />
+      </div>
     </>
   );
 }

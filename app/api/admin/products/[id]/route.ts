@@ -20,7 +20,7 @@ export async function PATCH(req: NextRequest) {
     if (!id)
       return NextResponse.json(
         { success: false, error: "Missing product id" },
-        { status: 400 }
+        { status: 400 },
       );
     const { data, error } = await supabaseAdmin
       .from("products")
@@ -40,7 +40,7 @@ export async function PATCH(req: NextRequest) {
     if (error) {
       return NextResponse.json(
         { success: false, error: "Unable to update product" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -48,7 +48,7 @@ export async function PATCH(req: NextRequest) {
   } catch (error) {
     return NextResponse.json(
       { success: false, error: "Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -56,18 +56,18 @@ export async function PATCH(req: NextRequest) {
 // delete single product
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const adminCheck = await requireAdmin(req);
     if (adminCheck) return adminCheck;
 
-    const id = params.id;
-
+    const resolvedParams = await params;
+    const { id } = resolvedParams;
     if (!id)
       return NextResponse.json(
         { success: false, error: "Missing product id" },
-        { status: 400 }
+        { status: 400 },
       );
 
     const { data, error } = await supabaseAdmin
@@ -79,7 +79,7 @@ export async function DELETE(
       console.error("Supabase Deletion Error:", error);
       return NextResponse.json(
         { success: false, error: "Failed to delete product" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -87,7 +87,7 @@ export async function DELETE(
   } catch (error) {
     return NextResponse.json(
       { success: false, error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

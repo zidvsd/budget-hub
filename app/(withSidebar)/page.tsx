@@ -1,7 +1,3 @@
-"use client";
-
-import { supabase } from "@/lib/supabase/client";
-import { Session } from "@supabase/supabase-js";
 import { Suspense } from "react";
 import Hero from "@/components/client/home/Hero";
 import Cta from "@/components/client/Cta";
@@ -10,17 +6,19 @@ import FeatureBar from "@/components/client/home/FeatureBar";
 import FeaturedProducts from "@/components/client/home/FeaturedProducts";
 export default function page() {
   return (
-    <div>
+    <main>
       <Hero />
       <FeatureBar />
 
       <div className="custom-container">
         <Categories />
       </div>
-      <Suspense>
+
+      <Suspense fallback={<div>Loading featured products...</div>}>
         <FeaturedProducts />
       </Suspense>
+
       <Cta />
-    </div>
+    </main>
   );
 }

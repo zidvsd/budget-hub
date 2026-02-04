@@ -3,7 +3,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { requireAdmin } from "@/lib/utils/admin/utils";
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     // Check if user is admin
@@ -16,7 +16,7 @@ export async function GET(
     if (!id) {
       return NextResponse.json(
         { success: false || "Id not found" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -30,7 +30,7 @@ export async function GET(
       console.error("Supabase Error:", error);
       return NextResponse.json(
         { success: false, error: error.message || "Failed to fetch user" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -39,7 +39,7 @@ export async function GET(
     console.error("Error fetching users", error);
     return NextResponse.json(
       { success: false, error: error.message || "Failed to fetch user" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

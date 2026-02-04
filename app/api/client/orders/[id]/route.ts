@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 // get single order
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const supabase = await createClient();
@@ -14,7 +14,7 @@ export async function GET(
     if (!orderId)
       return NextResponse.json(
         { success: false, error: "Order ID not found" },
-        { status: 400 }
+        { status: 400 },
       );
 
     // authenticate user
@@ -26,7 +26,7 @@ export async function GET(
     if (userError || !user) {
       return NextResponse.json(
         { success: false, error: "User not authenticated" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -48,7 +48,7 @@ export async function GET(
         product_id,
         product:products(name)
       )
-    `
+    `,
       )
       .eq("id", orderId)
       .eq("user_id", userId)
@@ -57,14 +57,14 @@ export async function GET(
     if (error)
       return NextResponse.json(
         { success: false, error: error.message },
-        { status: 400 }
+        { status: 400 },
       );
 
     return NextResponse.json({ success: true, data }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json(
       { success: false, error: error.message || "Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -5,7 +5,7 @@ import { requireAdmin } from "@/lib/utils/admin/utils";
 // get single order
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const adminCheck = await requireAdmin(req);
@@ -17,7 +17,7 @@ export async function GET(
     if (!orderId)
       return NextResponse.json(
         { success: false, error: "Order ID not found" },
-        { status: 400 }
+        { status: 400 },
       );
 
     const { data, error } = await supabaseAdmin
@@ -31,7 +31,7 @@ export async function GET(
         product_id,
         product:products(name)
       )
-    `
+    `,
       )
       .eq("id", orderId)
       .single();
@@ -39,7 +39,7 @@ export async function GET(
     if (error) {
       return NextResponse.json(
         { success: false, error: error.message },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -47,14 +47,14 @@ export async function GET(
   } catch (error: any) {
     return NextResponse.json(
       { success: false, error: error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 // update order
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     // ------------------------------
@@ -68,7 +68,7 @@ export async function PATCH(
     if (!orderId) {
       return NextResponse.json(
         { success: false, error: "Order ID not provided" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -84,13 +84,13 @@ export async function PATCH(
     if (status && !allowedStatuses.includes(status)) {
       return NextResponse.json(
         { success: false, error: "Invalid order status" },
-        { status: 400 }
+        { status: 400 },
       );
     }
     if (status === undefined && total_price === undefined) {
       return NextResponse.json(
         { success: false, error: "No fields provided to update" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -109,7 +109,7 @@ export async function PATCH(
     if (orderError) {
       return NextResponse.json(
         { success: false, error: orderError.message },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -130,7 +130,7 @@ export async function PATCH(
           product_id,
           product:products(name)
         )
-      `
+      `,
       )
       .eq("id", orderId)
       .single();
@@ -138,7 +138,7 @@ export async function PATCH(
     if (fetchError) {
       return NextResponse.json(
         { success: false, error: fetchError.message },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -146,7 +146,7 @@ export async function PATCH(
   } catch (error: any) {
     return NextResponse.json(
       { success: false, error: error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

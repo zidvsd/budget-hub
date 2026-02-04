@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase/client";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
@@ -11,7 +11,7 @@ export async function GET(
     if (!id) {
       return NextResponse.json(
         { success: false, error: "Id not found" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -24,7 +24,7 @@ export async function GET(
     if (error) {
       return NextResponse.json(
         { success: false, error: error.message },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -32,7 +32,7 @@ export async function GET(
   } catch (err: any) {
     return NextResponse.json(
       { success: false, error: err.message || "Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

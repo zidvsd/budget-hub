@@ -69,10 +69,13 @@ export function ChartBarActive({ data }: ChartBarActiveProps) {
     fill: `var(--chart-${index + 1})`, // assign different colors dynamically
   }));
 
-  const chartConfig = data.reduce((acc, item, index) => {
-    acc[item.name] = { label: item.name, color: `var(--chart-${index + 1})` };
-    return acc;
-  }, {} as Record<string, { label: string; color: string }>);
+  const chartConfig = data.reduce(
+    (acc, item, index) => {
+      acc[item.name] = { label: item.name, color: `var(--chart-${index + 1})` };
+      return acc;
+    },
+    {} as Record<string, { label: string; color: string }>,
+  );
 
   return (
     <Card>
@@ -101,7 +104,6 @@ export function ChartBarActive({ data }: ChartBarActiveProps) {
               dataKey="sales"
               strokeWidth={2}
               radius={8}
-              activeIndex={2}
               activeBar={({ ...props }) => (
                 <Rectangle
                   {...props}

@@ -3,18 +3,17 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } } // Must be string here
+  { params }: { params: Promise<{ id: string }> }, // Must be string here
 ) {
   const supabase = await createClient();
-
+  const { id } = await params;
   // Convert inside the handler
-  const resolvedParams = await params;
-  const cart_item_id = Number(resolvedParams.id);
+  const cart_item_id = Number(id);
 
   if (isNaN(cart_item_id)) {
     return NextResponse.json(
       { success: false, error: "Invalid cart_item_id format" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -25,7 +24,7 @@ export async function GET(
     if (!user)
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
-        { status: 401 }
+        { status: 401 },
       );
 
     // USE THE STREAMLINED QUERY (Verify ownership and get item in one go)
@@ -36,7 +35,7 @@ export async function GET(
         *,
         product:products(id, name, price, image_path),
         carts!inner(user_id) 
-      `
+      `,
       )
       .eq("id", cart_item_id)
       .eq("carts.user_id", user.id) // This checks if the user owns the cart
@@ -47,7 +46,7 @@ export async function GET(
     if (!cartItem) {
       return NextResponse.json(
         { success: false, error: "Cart item not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -55,16 +54,16 @@ export async function GET(
   } catch (error: any) {
     return NextResponse.json(
       { success: false, error: error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const supabase = await createClient();
-
+  const { id } = await params;
   try {
     const {
       data: { user },
@@ -74,7 +73,7 @@ export async function PATCH(
     if (userError || !user) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -85,7 +84,7 @@ export async function PATCH(
     if (!quantity || isNaN(Number(quantity)) || Number(quantity) < 1) {
       return NextResponse.json(
         { success: false, error: "Quantity must be >= 1" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -99,7 +98,7 @@ export async function PATCH(
     if (!cart) {
       return NextResponse.json(
         { success: false, error: "Cart not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -114,7 +113,7 @@ export async function PATCH(
     if (!cartItem) {
       return NextResponse.json(
         { success: false, error: "Cart item not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -135,16 +134,17 @@ export async function PATCH(
     console.error("Cart PATCH Error:", error.message);
     return NextResponse.json(
       { success: false, error: error.message || "Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const supabase = await createClient();
+  const { id } = await params;
 
   try {
     const {
@@ -155,7 +155,7 @@ export async function DELETE(
     if (userError || !user) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
-        { status: 401 }
+        { status: 401 },
       );
     }
     const resolvedParams = await params;
@@ -164,7 +164,7 @@ export async function DELETE(
     if (!cart_item_id) {
       return NextResponse.json(
         { success: false, error: "cart_item_id is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -178,7 +178,7 @@ export async function DELETE(
     if (cartError || !cart) {
       return NextResponse.json(
         { success: false, error: "Cart not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -193,7 +193,7 @@ export async function DELETE(
     if (cartItemError || !cartItem) {
       return NextResponse.json(
         { success: false, error: "Cart item not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -213,7 +213,7 @@ export async function DELETE(
     console.error("Cart DELETE Error:", error.message);
     return NextResponse.json(
       { success: false, error: error.message || "Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

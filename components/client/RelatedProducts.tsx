@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Eye, ShoppingCart } from "lucide-react";
-import { useEffect } from "react";
+import { ArrowRight, Eye } from "lucide-react";
 import { useProducts } from "@/store/useProducts";
 import { useRouter } from "next/navigation";
 import ProductCard from "./ProductCard";
@@ -43,7 +42,7 @@ export default function RelatedProducts({
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 mt-8">
           {loading
             ? Array.from({ length: 6 }).map((_, i) => (
                 <ProductCard key={i} loading />

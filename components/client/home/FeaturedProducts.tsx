@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Eye, ShoppingCart } from "lucide-react";
 import { useEffect } from "react";
 import { useProducts } from "@/store/useProducts";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import ProductCard from "../ProductCard";

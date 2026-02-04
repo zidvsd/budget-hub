@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { getRoleFromCookie } from "@/lib/utils";
 import { useCart } from "@/store/useCart";
+import { MotionProvider } from "@/lib/providers/MotionProvider";
 export default function ClientLayout({
   children,
 }: {

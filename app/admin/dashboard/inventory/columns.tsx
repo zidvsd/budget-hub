@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Product } from "@/lib/types/products";
 import { formatPrice } from "@/lib/utils";
-import { Eye } from "lucide-react";
+import { Eye, SquarePen, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   availabilityClasses,
@@ -81,6 +81,7 @@ export const columns: ColumnDef<Product>[] = [
       );
     },
   },
+
   {
     accessorKey: "status",
     header: "Status",
@@ -102,6 +103,35 @@ export const columns: ColumnDef<Product>[] = [
       }
 
       return <span className={statusClass}>{statusText}</span>;
+    },
+  },
+  {
+    accessorKey: "is_featured",
+    header: "Featured",
+    cell: ({ row, table }) => {
+      const isFeatured = row.original.is_featured;
+      const meta = table.options.meta as any;
+
+      return (
+        <div className="text-center">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="hover:bg-transparent"
+            onClick={() =>
+              meta?.onToggleFeatured?.(row.original.id, isFeatured)
+            }
+          >
+            <Star
+              className={`size-5 transition-colors ${
+                isFeatured
+                  ? "fill-accent text-accent "
+                  : "text-muted-foreground"
+              }`}
+            />
+          </Button>
+        </div>
+      );
     },
   },
   {

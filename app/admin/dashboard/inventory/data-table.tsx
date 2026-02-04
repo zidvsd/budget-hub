@@ -2,6 +2,8 @@
 type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  onDelete?: (id: string) => void;
+  onToggleFeatured?: (id: string, currentStatus: boolean) => void;
 };
 import * as React from "react";
 import { DataTablePagination } from "./data-table-pagination";
@@ -39,6 +41,7 @@ import {
 import { EmptyState } from "@/components/Empty";
 type TableMeta = {
   onDelete?: (id: string) => void;
+  onToggleFeatured?: (id: string, currentStatus: boolean) => void;
 };
 import { ShoppingCart } from "lucide-react";
 
@@ -46,10 +49,11 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   onDelete,
-}: DataTableProps<TData, TValue> & { onDelete?: (id: string) => void }) {
+  onToggleFeatured,
+}: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -76,6 +80,7 @@ export function DataTable<TData, TValue>({
     },
     meta: {
       onDelete,
+      onToggleFeatured,
     },
   });
 
@@ -136,7 +141,7 @@ export function DataTable<TData, TValue>({
                   <TableHead key={header.id}>
                     {flexRender(
                       header.column.columnDef.header,
-                      header.getContext()
+                      header.getContext(),
                     )}
                   </TableHead>
                 ))}
@@ -152,7 +157,7 @@ export function DataTable<TData, TValue>({
                     <TableCell className="py-4" key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

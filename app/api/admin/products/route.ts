@@ -2,6 +2,43 @@ import { supabaseAdmin } from "@/lib/supabase/server-client";
 import { NextResponse, NextRequest } from "next/server";
 import { requireAdmin } from "@/lib/utils/admin/utils";
 
+export async function PATCH(req: NextRequest) {
+  try {
+    const adminCheck = await requireAdmin(req);
+    if (adminCheck) return adminCheck;
+
+    const body = await req.json();
+
+    const { id, ...updateFields } = body;
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: "Missing product id" },
+        { status: 400 },
+      );
+    }
+
+    const { data, error } = await supabaseAdmin
+      .from("products")
+      .update({ ...updateFields, updated_at: new Date().toISOString() })
+      .eq("id", id)
+      .select();
+    if (error) {
+      console.error("Supabase update error:", error);
+      return NextResponse.json(
+        { success: false, error: error.message },
+        { status: 400 },
+      );
+    }
+    return NextResponse.json({ success: true, data });
+  } catch (err: any) {
+    return NextResponse.json(
+      { success: false, error: "Internal server error" },
+      { status: 500 },
+    );
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const adminCheck = await requireAdmin(req);
@@ -28,7 +65,7 @@ export async function POST(req: NextRequest) {
       console.error("Supabase insert error:", error); // log exact Supabase error
       return NextResponse.json(
         { success: false, error: error.message },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -40,7 +77,7 @@ export async function POST(req: NextRequest) {
         success: false,
         error: err.message || "Internal server error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

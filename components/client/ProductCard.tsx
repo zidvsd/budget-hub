@@ -71,7 +71,7 @@ export default function ProductCard({
         </span>
       )}
       {/* Image */}
-      <div className="product-card-image relative cursor-pointer">
+      <div className="product-card-image relative cursor-pointer  aspect-3/4 h-48 w-full">
         <Link
           href={`/products/${product.id}`}
           className="w-10 h-10 rounded-full flex items-center justify-center"
@@ -122,7 +122,9 @@ export default function ProductCard({
           >
             {product.name}
           </h2>
-          <span className="product-card-stock">{product.stock} in stock</span>
+          <span className="product-card-stock text-right">
+            {product.stock} in stock
+          </span>
         </div>
         <span className="product-card-price">
           $

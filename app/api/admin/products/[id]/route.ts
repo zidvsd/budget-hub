@@ -15,6 +15,7 @@ export async function PATCH(req: NextRequest) {
       price,
       stock,
       image_path,
+      is_featured,
       is_active,
     } = await req.json();
     if (!id)
@@ -30,6 +31,7 @@ export async function PATCH(req: NextRequest) {
         price,
         stock,
         image_path,
+        is_featured,
         category,
         is_active,
         updated_at: new Date().toISOString(),

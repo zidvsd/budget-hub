@@ -28,8 +28,11 @@ export function OrderItemsCarousel({ items }: { items: CartItem[] }) {
     >
       {/* Set a fixed height for the viewable area (e.g., 200px) */}
       <CarouselContent className="-mt-1 ">
-        {items.map((item) => (
-          <CarouselItem key={item.id} className="select-none pt-1 basis-1/3">
+        {items.map((item, index) => (
+          <CarouselItem
+            key={`${item.id}-${index}`}
+            className="select-none pt-1 basis-1/3"
+          >
             <div className="p-1">
               <div className="flex items-center gap-3 p-2 rounded-md border bg-muted/30">
                 <div className="relative h-12 w-12 shrink-0">

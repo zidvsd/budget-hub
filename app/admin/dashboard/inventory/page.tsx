@@ -9,12 +9,36 @@ import { toast } from "sonner";
 import { StatCard } from "@/components/ui/stat-card";
 import { Package, CheckCircle, AlertTriangle, XCircle } from "lucide-react";
 export default function page() {
-  const { fetchProducts, products, loading } = useProducts();
+  const { fetchProducts, products, loading, updateProductState } =
+    useProducts();
   const totalProducts = products.length;
   const lowStocks = products.filter((product) => product.stock <= 5).length;
   const inStocks = products.filter((product) => product.stock > 5).length;
   const noStocks = products.filter((product) => product.stock === 0).length;
+  async function toggleFeatured(id: string, currentStatus: boolean) {
+    const newStatus = !currentStatus;
 
+    updateProductState(id, { is_featured: newStatus });
+    try {
+      const res = await fetch(`/api/admin/products`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id,
+          is_featured: !newStatus,
+        }),
+      });
+      if (!res.ok) {
+        throw new Error("Failed to update product featured status");
+      }
+      toast.success(`Product ${!currentStatus ? "featured" : "unfeatured"}`);
+    } catch (error) {
+      updateProductState(id, { is_featured: !currentStatus });
+      toast.error("Failed to update featured status");
+    }
+  }
   async function handleDelete(id: string) {
     try {
       const res = await fetch(`/api/admin/products/${id}`, {
@@ -94,6 +118,7 @@ export default function page() {
           <Skeleton className=" w-full h-42 rounded-md animate-pulse" />
         ) : (
           <DataTable
+            onToggleFeatured={toggleFeatured}
             data={products}
             columns={columns}
             onDelete={handleDelete}

@@ -35,8 +35,7 @@ export default function ProductEditPage() {
   if (loading || !product) {
     return (
       <div className="space-y-4 max-w-2xl">
-        <Skeleton className="h-10 w-1/2" />
-        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-48 w-full" />
       </div>
     );
   }

@@ -17,32 +17,12 @@ export default function EditProductPage() {
 
   useEffect(() => {
     fetchProducts();
-  }, [fetchProducts]);
+  }, []);
 
   const product = useMemo(
     () => products.find((p) => p.id === productId),
-    [products, productId]
+    [products, productId],
   );
-
-  if (loading) {
-    return (
-      <div className=" space-y-4">
-        <Skeleton className="h-8 w-48" />
-        <Skeleton className="h-96 w-full" />
-      </div>
-    );
-  }
-
-  if (!product) {
-    return (
-      <div className=" text-center">
-        <h1 className="text-xl font-semibold">Product not found</h1>
-        <Button className="mt-4" onClick={() => router.back()}>
-          Go back
-        </Button>
-      </div>
-    );
-  }
 
   return (
     <div className=" space-y-6">

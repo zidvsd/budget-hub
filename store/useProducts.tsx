@@ -6,6 +6,7 @@ interface ProductsState {
   loading: boolean;
   error: string | null;
   fetchProducts: (query?: string) => Promise<void>;
+  updateProductState: (id: string, updates: Partial<Product>) => void;
   clearProducts: () => void;
 }
 
@@ -27,15 +28,23 @@ export const useProducts = create<ProductsState>((set, get) => ({
       if (!res.ok) throw new Error("Unable to fetch products");
 
       const json = await res.json();
-
-      if ("success" in json && json.success === true) {
-        set({ error: json.error, loading: false, products: [] });
-      }
+      const data = json.data ?? json;
+      set({
+        products: Array.isArray(data) ? data : [],
+        loading: false,
+        error: json.success === false ? json.error : null,
+      });
       set({ products: json.data ?? json, loading: false });
     } catch (err: any) {
       set({ error: err.message, loading: false, products: [] });
     }
   },
-
+  updateProductState: (id: string, updates: Partial<Product>) => {
+    set((state) => ({
+      products: state.products.map((p) =>
+        p.id === id ? { ...p, ...updates } : p,
+      ),
+    }));
+  },
   clearProducts: () => set({ products: [], error: null, loading: false }),
 }));

@@ -17,6 +17,7 @@ export default function Hero() {
       {/* Background */}
       <div className="absolute inset-0">
         <Image
+          quality={70}
           src="/hero-bg.jpg"
           alt="Hero"
           fill

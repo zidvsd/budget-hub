@@ -17,6 +17,10 @@ import {
 import ProductCard from "@/components/client/ProductCard";
 import { ChevronDown, X, Funnel } from "lucide-react";
 import { EmptyState } from "@/components/Empty";
+import {
+  StaggerContainer,
+  StaggerItem,
+} from "@/components/animations/StaggerContainer";
 export default function CategoriesPage() {
   const { products, loading, fetchProducts } = useProducts();
 
@@ -452,13 +456,25 @@ export default function CategoriesPage() {
       )}
 
       {/* Products Section */}
-      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 border-t pt-6">
+      <div className="mt-6 border-t pt-6">
         {loading ? (
-          Array.from({ length: 6 }).map((_, i) => (
-            <ProductCard key={i} loading />
-          ))
+          /* Skeletons appear in a static grid (no stagger) */
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <ProductCard key={i} loading />
+            ))}
+          </div>
         ) : filteredProducts.length > 0 ? (
-          filteredProducts.map((p) => <ProductCard key={p.id} product={p} />)
+          /* StaggerContainer handles the waterfall entrance */
+          <StaggerContainer key={`${category}-${stockFilter}-${sortOption}`}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredProducts.map((p) => (
+                <StaggerItem key={p.id}>
+                  <ProductCard product={p} />
+                </StaggerItem>
+              ))}
+            </div>
+          </StaggerContainer>
         ) : (
           <div className="col-span-full">
             <EmptyState

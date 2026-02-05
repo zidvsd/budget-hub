@@ -7,6 +7,10 @@ import { useEffect } from "react";
 import { useProducts } from "@/store/useProducts";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  StaggerContainer,
+  StaggerItem,
+} from "@/components/animations/StaggerContainer";
 import ProductCard from "../ProductCard";
 export default function FeaturedProducts() {
   const { products, fetchProducts, loading } = useProducts();
@@ -38,16 +42,27 @@ export default function FeaturedProducts() {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-          {loading
-            ? // Show 6 skeleton cards while loading
-              Array.from({ length: 6 }).map((_, i) => (
+        <div className="mt-8">
+          {" "}
+          {/* Removed grid classes from here */}
+          {loading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Array.from({ length: 6 }).map((_, i) => (
                 <ProductCard key={i} loading />
-              ))
-            : // Render actual products
-              featuredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
               ))}
+            </div>
+          ) : (
+            <StaggerContainer inView={true}>
+              {/* This is now the ONLY grid definition for the products */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {featuredProducts.map((product) => (
+                  <StaggerItem key={product.id}>
+                    <ProductCard product={product} />
+                  </StaggerItem>
+                ))}
+              </div>
+            </StaggerContainer>
+          )}
         </div>
       </div>
     </section>

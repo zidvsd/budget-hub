@@ -23,7 +23,10 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-
+import {
+  StaggerContainer,
+  StaggerItem,
+} from "@/components/animations/StaggerContainer";
 // Map icon string to actual Lucide icon component
 const iconMap: Record<string, any> = {
   Cpu,
@@ -58,47 +61,41 @@ export default function Categories() {
       {/* Carousel */}
       <div className="mt-8">
         <Carousel opts={{ align: "start", loop: true }} className="w-full">
-          <CarouselContent>
-            {categories.map((category) => {
-              const Icon = iconMap[category.icon] ?? Package;
+          <StaggerContainer inView={true}>
+            {/* 1. Wrap CarouselContent in the Container */}
+            <CarouselContent>
+              {categories.map((category) => {
+                const Icon = iconMap[category.icon] ?? Package;
 
-              return (
-                <CarouselItem
-                  key={category.slug}
-                  className="
-        basis-1/2
-        sm:basis-1/3
-        md:basis-1/4
-        lg:basis-1/5
-      "
-                >
-                  <Link
-                    // Updated href with query param instead of slug path
-                    href={`/categories?category=${category.slug}`}
-                    className="group hover-utility relative flex flex-col items-center justify-center gap-2 p-4 rounded-xl
-          bg-linear-to-br from-muted/80 to-muted/50
-          shadow-md hover:shadow-xl hover:scale-105
-          transition-transform duration-300 cursor-pointer"
+                return (
+                  <CarouselItem
+                    key={category.slug}
+                    className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 pt-2 pb-6 px-2"
                   >
-                    {/* Icon */}
-                    <div className="p-3 rounded-full bg-accent/10 group-hover:bg-accent/20 transition-colors">
-                      <Icon className="size-8 text-accent group-hover:text-accent-dark transition-colors" />
-                    </div>
+                    {/* 1. Put the StaggerItem INSIDE the CarouselItem */}
 
-                    {/* Name */}
-                    <span className="font-semibold text-center text-lg">
-                      {category.name}
-                    </span>
-
-                    {/* Overlay */}
-                    <div className="absolute inset-0 rounded-xl bg-linear-to-t from-transparent to-white/10 opacity-0 group-hover:opacity-30 transition-opacity pointer-events-none" />
-                  </Link>
-                </CarouselItem>
-              );
-            })}
-          </CarouselContent>
-
-          {/* Arrows (hidden on mobile if you want) */}
+                    <StaggerItem>
+                      <Link
+                        href={`/categories?category=${category.slug}`}
+                        className="group hover-utility relative flex flex-col items-center justify-center gap-2 p-4 rounded-xl
+              bg-linear-to-br from-muted/80 to-muted/50
+              shadow-md hover:shadow-xl hover:scale-105
+              transition-transform duration-300 cursor-pointer"
+                      >
+                        <div className="p-3 rounded-full bg-accent/10 group-hover:bg-accent/20 transition-colors">
+                          <Icon className="size-8 text-accent group-hover:text-accent-dark transition-colors" />
+                        </div>
+                        <span className="font-semibold text-center text-lg">
+                          {category.name}
+                        </span>
+                        <div className="absolute inset-0 rounded-xl bg-linear-to-t from-transparent to-white/10 opacity-0 group-hover:opacity-30 transition-opacity pointer-events-none" />
+                      </Link>
+                    </StaggerItem>
+                  </CarouselItem>
+                );
+              })}
+            </CarouselContent>
+          </StaggerContainer>
           <CarouselPrevious className="hidden xl:flex" />
           <CarouselNext className="hidden xl:flex" />
         </Carousel>

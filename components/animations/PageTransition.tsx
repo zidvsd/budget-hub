@@ -13,7 +13,6 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
         key={pathname}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
         transition={{
           duration: isAdmin ? 0.15 : 0.4, // Admin is 2.5x faster
           ease: "linear",

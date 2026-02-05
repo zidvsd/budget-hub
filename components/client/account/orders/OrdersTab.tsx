@@ -2,7 +2,10 @@ import OrdersCard from "./OrdersCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/Empty";
 import { Order } from "@/lib/types/orders";
-
+import {
+  StaggerContainer,
+  StaggerItem,
+} from "@/components/animations/StaggerContainer";
 interface OrdersTabProp {
   orders: Order[];
   loading: boolean;
@@ -55,10 +58,12 @@ export default function OrdersTab({ orders, loading }: OrdersTabProp) {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <StaggerContainer inView={false} className="flex flex-col gap-4">
       {orders.map((order) => (
-        <OrdersCard key={order.id} order={order} />
+        <StaggerItem key={order.id}>
+          <OrdersCard key={order.id} order={order} />
+        </StaggerItem>
       ))}
-    </div>
+    </StaggerContainer>
   );
 }

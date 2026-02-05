@@ -9,6 +9,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { useCart } from "@/store/useCart";
 import { formatPrice } from "@/lib/utils";
+import { useState } from "react";
+import { Spinner } from "../ui/spinner";
 
 interface ProductCardProps {
   product?: {
@@ -29,6 +31,7 @@ export default function ProductCard({
   loading = false,
 }: ProductCardProps) {
   const { addToCart } = useCart();
+  const [isAdding, setIsAdding] = useState(false);
   const router = useRouter();
   if (loading || !product) {
     // Skeleton version
@@ -40,7 +43,7 @@ export default function ProductCard({
   }
   const handleAddToCart = async () => {
     if (!product) return;
-
+    setIsAdding(true);
     try {
       const success = await addToCart(product.id, 1);
 
@@ -60,10 +63,12 @@ export default function ProductCard({
       toast.error("An unexpected error occurred", {
         description: err.message,
       });
+    } finally {
+      setIsAdding(false);
     }
   };
   return (
-    <div className="product-card group relative">
+    <div className="product-card group relative h-full">
       {/* <-- add relative here */}
       {product.is_featured && (
         <span className="absolute top-4 left-4 rounded-full px-2 py-1 text-xs font-bold bg-accent text-white shadow-md z-5">
@@ -98,8 +103,12 @@ export default function ProductCard({
               handleAddToCart();
             }}
           >
-            <ShoppingCart className="size-4" />
-            Add to Cart
+            {isAdding ? (
+              <Spinner className="size-4 animate-spin" /> // Spinner during delay
+            ) : (
+              <ShoppingCart className="size-4" />
+            )}
+            {isAdding ? "Adding..." : "Add to Cart"}
           </Button>
 
           <Link

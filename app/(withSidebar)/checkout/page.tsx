@@ -6,8 +6,6 @@ import {
   Phone,
   User,
   CreditCard,
-  ShieldCheck,
-  ShoppingCart,
   ShoppingBag,
 } from "lucide-react";
 import { EditProfileForm } from "@/components/client/forms/EditProfileForm";
@@ -21,7 +19,6 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { OrderItemsCarousel } from "@/components/client/OrderItemsCarousel";
 import { Skeleton } from "@/components/ui/skeleton";
-import { EmptyState } from "@/components/Empty";
 import { Spinner } from "@/components/ui/spinner";
 import { useOrders } from "@/store/useOrders";
 export default function CheckoutPage() {

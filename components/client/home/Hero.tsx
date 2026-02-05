@@ -46,13 +46,13 @@ export default function Hero() {
 
           <div className="flex flex-col sm:flex-row gap-3">
             <Link href="/categories">
-              <Button variant="accent" className="w-full">
+              <Button variant="accent" className="w-full" size={"lg"}>
                 Shop Now
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
 
-            <Button onClick={handleScroll} variant="secondary" size="lg">
+            <Button onClick={handleScroll} variant="secondary" size={"lg"}>
               Learn More
             </Button>
           </div>

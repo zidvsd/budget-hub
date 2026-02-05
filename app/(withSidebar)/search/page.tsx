@@ -11,6 +11,10 @@ import Link from "next/link";
 import { EmptyState } from "@/components/Empty";
 import { Button } from "@/components/ui/button";
 import { Product } from "@/lib/types/products";
+import {
+  StaggerContainer,
+  StaggerItem,
+} from "@/components/animations/StaggerContainer";
 export default function page() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -90,15 +94,20 @@ export default function page() {
         </div>
       )}
       {/* Products Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
+      <StaggerContainer
+        // The key ensures the animation restarts when results change
+        key={`${queryParam}-${products.length}`}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 my-8"
+        inView={false}
+      >
         {loading
-          ? Array.from({ length: 6 }).map((_, i) => (
-              <ProductCard key={i} loading />
-            ))
+          ? Array.from({ length: 6 }).map((_, i) => <ProductCard loading />)
           : filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <StaggerItem key={product.id}>
+                <ProductCard product={product} />
+              </StaggerItem>
             ))}
-      </div>
+      </StaggerContainer>
     </div>
   );
 }

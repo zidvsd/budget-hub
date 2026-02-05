@@ -1,6 +1,6 @@
 "use client";
 
-import { ShoppingCart, Bell, User } from "lucide-react";
+import { ShoppingCart, Bell, User, Package } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useAuthFromCookies } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -133,7 +133,16 @@ export default function Navbar() {
                         ? "Loading..."
                         : users && users.length > 0 && users[0].first_name
                           ? getFirstName(users[0].first_name)
-                          : "Account"}
+                          : "Me"}
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link
+                      href="/account?tab=orders"
+                      className="group flex items-center py-1.5 gap-2 w-full justify-center text-center hover:text-white transition"
+                    >
+                      <Package className="w-4 h-4 shrink-0 text-black dark:text-white group-hover:text-white transition" />
+                      Orders
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>

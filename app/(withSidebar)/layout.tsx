@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { getRoleFromCookie } from "@/lib/utils";
 import { useCart } from "@/store/useCart";
-import { MotionProvider } from "@/lib/providers/MotionProvider";
+import { PageTransition } from "@/components/animations/PageTransition";
 export default function ClientLayout({
   children,
 }: {
@@ -33,7 +33,9 @@ export default function ClientLayout({
         {/* Desktop: Navbar + Content */}
         <div className="hidden md:block">
           <Navbar />
-          <main>{children}</main>
+          <PageTransition>
+            <main>{children}</main>
+          </PageTransition>
         </div>
 
         {/* Mobile/Tablet: Sidebar + Content */}
@@ -85,8 +87,10 @@ export default function ClientLayout({
                 <h1 className="logo">GadyetHub</h1>
               </Link>
             </nav>
-
-            <main className="w-full">{children}</main>
+            <PageTransition>
+              {" "}
+              <main className="w-full">{children}</main>
+            </PageTransition>
           </div>
         </SidebarProvider>
         <Footer />

@@ -45,13 +45,14 @@ export default function OrderStatusBadge({ status }: OrderStatusBadgeProps) {
 
   return (
     <div
-      className={`border rounded-xl p-6 flex items-start gap-4 transition-all duration-300 ${config.bg}`}
+      className={`border w-full rounded-xl p-6 flex items-start gap-4 transition-all duration-300 ${config.bg}`}
     >
       {/* Dynamic Icon */}
-      <Icon className={`shrink-0 ${config.color}`} size={24} />
 
       <div className="flex flex-col gap-2">
         <div className="flex items-start gap-3">
+          <Icon className={`shrink-0 ${config.color}`} size={24} />
+
           <span className="font-bold text-foreground">Order Status</span>
 
           {/* Your specific badge class */}

@@ -126,7 +126,7 @@ export default function ProductCard({
           </span>
         </div>
         <span className="product-card-price">
-          $
+          ₱
           {typeof product.price === "number"
             ? formatPrice(product.price)
             : "0.00"}

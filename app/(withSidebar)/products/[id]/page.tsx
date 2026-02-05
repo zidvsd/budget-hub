@@ -91,7 +91,7 @@ export default function ProductPage() {
           <p className="text-muted-foreground">{product.category}</p>
           <p className="text-lg text-gray-600">{product.description}</p>
           <p className="text-2xl font-semibold text-accent">
-            ${formatPrice(product.price)}
+            ₱{formatPrice(product.price)}
           </p>
           <p
             className={`${

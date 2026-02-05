@@ -23,9 +23,11 @@ import { OrderItemsCarousel } from "@/components/client/OrderItemsCarousel";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/Empty";
 import { Spinner } from "@/components/ui/spinner";
+import { useOrders } from "@/store/useOrders";
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, clearCart, loading: cartLoading } = useCart();
+  const { fetchOrders } = useOrders();
   const { users, loading: userLoading } = useUsers();
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -78,6 +80,7 @@ export default function CheckoutPage() {
       toast.success("Order placed successfully!", {
         description: "You will receive an email confirmation shortly.",
       });
+      await fetchOrders(undefined, true);
       router.push(`/orders/${result.data.id}`);
       setTimeout(() => {
         clearCart();

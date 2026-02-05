@@ -27,7 +27,7 @@ export function OrderItemsCarousel({ items }: { items: CartItem[] }) {
       ]}
     >
       {/* Set a fixed height for the viewable area (e.g., 200px) */}
-      <CarouselContent className="-mt-1 ">
+      <CarouselContent className="-mt-1 h-[220px] ">
         {items.map((item, index) => (
           <CarouselItem
             key={`${item.id}-${index}`}

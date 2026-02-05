@@ -44,9 +44,7 @@ export default function OrderDetailsPage() {
   const orderId = params.id as string;
   const order = orders.find((o) => o.id === orderId);
 
-  // Find the specific user associated with this order
   const customer = users.find((u) => u.id === order?.user_id) || users[0];
-
   const loading = usersLoading || ordersLoading || productsLoading;
 
   useEffect(() => {
@@ -59,13 +57,71 @@ export default function OrderDetailsPage() {
     navigator.clipboard.writeText(id);
     toast.success("Order ID copied to clipboard!");
   };
-
   if (loading) {
     return (
-      <div className="mx-auto max-w-5xl my-8 px-4 space-y-6">
-        <Skeleton className="h-6 w-48" />
-        <Skeleton className="h-12 w-full" />
-        <Skeleton className="h-[400px] w-full" />
+      <div className="mx-auto max-w-5xl mt-8 pb-20 px-4 space-y-8 animate-pulse">
+        {/* Breadcrumb Skeleton */}
+        <Skeleton className="h-4 w-32" />
+
+        {/* Header Skeleton */}
+        <div className="flex items-start gap-4 mt-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between w-full gap-4">
+            <div className="space-y-2">
+              <Skeleton className="h-8 w-64" />
+              <Skeleton className="h-4 w-48" />
+            </div>
+            <Skeleton className="h-9 w-28 rounded-full" />
+          </div>
+        </div>
+
+        {/* Track Status Skeleton */}
+        <Skeleton className="h-28 w-full rounded-xl" />
+
+        {/* Main Content Grid Skeleton */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column: Items */}
+          <div className="lg:col-span-2 space-y-6">
+            <div className="bg-card rounded-xl border p-6 space-y-6">
+              <Skeleton className="h-6 w-32" />
+              <div className="space-y-4">
+                <Skeleton className="h-16 w-full rounded-lg" />
+                <Skeleton className="h-16 w-full rounded-lg" />
+                <Skeleton className="h-16 w-full rounded-lg" />
+              </div>
+              <Skeleton className="h-px w-full" />
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-4 w-16" />
+                </div>
+                <div className="flex justify-between">
+                  <Skeleton className="h-6 w-28" />
+                  <Skeleton className="h-6 w-24" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Details & Status Card */}
+          <div className="flex flex-col md:flex-row lg:flex-col gap-6">
+            <div className="bg-card rounded-xl border p-6 space-y-6 flex-1">
+              <Skeleton className="h-6 w-40" />
+              <div className="space-y-5">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="flex gap-3">
+                    <Skeleton className="h-5 w-5 rounded" />
+                    <div className="space-y-2">
+                      <Skeleton className="h-3 w-20" />
+                      <Skeleton className="h-4 w-32" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* Status Badge Placeholder */}
+            <Skeleton className="h-32 w-full rounded-xl flex-1 lg:flex-none" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -73,16 +129,13 @@ export default function OrderDetailsPage() {
   if (!order) return <NotFound />;
 
   const enrichedItems = order?.order_items?.map((item: any) => {
-    // Ensure we match IDs regardless of type (string vs number)
     const productData = products.find(
       (p) => String(p.id) === String(item.product_id),
     );
-
     return {
       ...item,
-      // We nest the data inside a 'product' object to satisfy the carousel's requirements
       product: {
-        ...item.product, // Keep existing data if any
+        ...item.product,
         name: productData?.name || item.product?.name || "Unknown Product",
         image_path:
           productData?.image_path ||
@@ -101,64 +154,56 @@ export default function OrderDetailsPage() {
     <div className="mx-auto max-w-5xl mt-8 pb-20 px-4">
       <BreadCrumb links={breadcrumbLinks} />
 
-      {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 mt-6 w-full">
-        <div className="flex items-center gap-4 w-full">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="rounded-full"
-            onClick={() => router.back()}
-          >
-            <ArrowLeft size={24} />
-          </Button>
-          <div className="space-y-1 w-full">
-            <div className="flex items-center justify-between w-full gap-4">
-              {/* Left Side: ID and Copy Button */}
-              <div className="flex items-center gap-3">
-                <h1
-                  className="text-2xl font-bold cursor-pointer hover:text-accent transition-colors flex items-center gap-2"
-                  onClick={() => setIsTruncated(!isTruncated)}
-                >
-                  Order #{isTruncated ? truncateId(orderId) : orderId}
-                  <span className="text-muted-foreground font-normal text-xs">
-                    (click to toggle)
-                  </span>
-                </h1>
+      {/* Main Header */}
+      <div className="flex items-start gap-4 mb-8 mt-6 w-full">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="rounded-full shrink-0"
+          onClick={() => router.back()}
+        >
+          <ArrowLeft size={24} />
+        </Button>
 
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={() => handleCopyId(orderId)}
-                >
-                  <Copy size={14} />
-                </Button>
-              </div>
-
-              {/* Right Side: Status Badge */}
-              <span
-                className={`${
-                  orderStatusClasses[order.status.toLowerCase()] ||
-                  orderStatusClasses.pending
-                } whitespace-nowrap`}
+        <div className="flex flex-col md:flex-row md:items-center justify-between w-full gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-3">
+              <h1
+                className="text-2xl font-bold cursor-pointer hover:text-accent transition-colors flex items-center gap-2"
+                onClick={() => setIsTruncated(!isTruncated)}
               >
-                {order.status}
-              </span>
+                Order #{isTruncated ? truncateId(orderId) : orderId}
+              </h1>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => handleCopyId(orderId)}
+              >
+                <Copy size={14} />
+              </Button>
             </div>
             <p className="text-muted-foreground text-sm">
               Placed on {formatDateFull(order.created_at)} at{" "}
               {formatTime(order.created_at)}
             </p>
           </div>
+          <span
+            className={`${
+              orderStatusClasses[order.status.toLowerCase()] ||
+              orderStatusClasses.pending
+            } whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider shadow-sm w-fit`}
+          >
+            {order.status}
+          </span>
         </div>
       </div>
 
-      {/* Progress Tracker */}
       <TrackStatusOrder status={order.status} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Column: Items and Totals */}
+      {/* MAIN CONTENT GRID */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+        {/* Left: Items and Totals */}
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-card rounded-xl border p-6 shadow-sm">
             <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
@@ -187,14 +232,16 @@ export default function OrderDetailsPage() {
           </div>
         </div>
 
-        {/* Right Column: Information & Status Card */}
-        <div className="space-y-6">
-          {/* Customer & Shipping Info */}
-          <div className="bg-card rounded-xl border p-6 shadow-sm space-y-4">
-            <h2 className="text-lg font-bold flex items-center gap-2">
-              <MapPin size={20} className="text-accent" />
-              Delivery Details
-            </h2>
+        {/* Right: Info & Status - FLEX on md, GRID on lg */}
+        <div className="flex flex-col md:flex-row lg:flex-col gap-6 lg:col-span-1">
+          {/* Delivery Details Card */}
+          <div className="bg-card rounded-xl border p-6 shadow-sm space-y-4 flex-1">
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="text-lg font-bold flex items-center gap-2">
+                <MapPin size={20} className="text-accent" />
+                Delivery Details
+              </h2>
+            </div>
             <Separator />
             <div className="space-y-4">
               <div className="flex gap-3">
@@ -246,8 +293,10 @@ export default function OrderDetailsPage() {
             </div>
           </div>
 
-          {/* Dynamic Status Message Card */}
-          <OrderStatusBadge status={order.status} />
+          {/* Status Message Card */}
+          <div className="flex-1 lg:flex-none">
+            <OrderStatusBadge status={order.status} />
+          </div>
         </div>
       </div>
     </div>

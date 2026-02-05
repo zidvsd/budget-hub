@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/theme-providers";
 import NextTopLoader from "nextjs-toploader";
+import { MotionProvider } from "@/lib/providers/MotionProvider";
 const roboto = Roboto({
   subsets: ["latin"],
   variable: "--font-roboto",
@@ -43,25 +44,27 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body className={` ${inter.variable} antialiased `}>
-        <NextTopLoader
-          color="var(--accent)"
-          showSpinner={false}
-          height={3}
-          shadow="none"
-        />
-        <ThemeProvider attribute="class" enableSystem>
-          <main>{children}</main>
-          <Toaster
-            toastOptions={{
-              classNames: {
-                actionButton: "!bg-accent !text-white",
-              },
-            }}
-            richColors={true}
-            expand={true}
-            position="top-right"
+        <MotionProvider>
+          <NextTopLoader
+            color="var(--accent)"
+            showSpinner={false}
+            height={3}
+            shadow="none"
           />
-        </ThemeProvider>
+          <ThemeProvider attribute="class" enableSystem>
+            <main>{children}</main>
+            <Toaster
+              toastOptions={{
+                classNames: {
+                  actionButton: "!bg-accent !text-white",
+                },
+              }}
+              richColors={true}
+              expand={true}
+              position="top-right"
+            />
+          </ThemeProvider>
+        </MotionProvider>
       </body>
     </html>
   );

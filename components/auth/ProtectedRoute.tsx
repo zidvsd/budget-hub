@@ -28,7 +28,14 @@ export default function ProtectedRoute({
       const role = user?.app_metadata?.role || "guest";
 
       if (!user) {
-        toast.error("Access Denied", { description: "Please login." });
+        toast.error(
+          "Access Denied",
+
+          {
+            id: "auth-denied",
+            description: "Please login.",
+          },
+        );
         router.replace("/login");
         return;
       }
@@ -36,6 +43,7 @@ export default function ProtectedRoute({
       // Role Logic
       if (pathname.startsWith("/admin") && role !== "admin") {
         toast.warning("Unauthorized", {
+          id: "admin-denied",
           description: "Admin access required.",
         });
         router.replace("/");

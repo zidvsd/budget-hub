@@ -6,12 +6,18 @@ export async function proxy(request: NextRequest) {
   const { user, response } = await updateSession(request);
   const url = request.nextUrl.pathname;
 
-  const isUserPage = ["/account", "/cart", "/orders", "/notifications"];
+  const protectedUserPages = ["/account", "/cart", "/orders", "/notifications"];
   const isAdminPage = url.startsWith("/admin");
 
-  if ((isUserPage || isAdminPage) && !user) {
+  const isProtectedUserPage = protectedUserPages.some((page) =>
+    url.startsWith(page),
+  );
+
+  if ((isProtectedUserPage || isAdminPage) && !user) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
+
+  if (!user) return response;
 
   const role = user?.app_metadata?.role || "user";
 

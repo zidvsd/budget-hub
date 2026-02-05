@@ -35,7 +35,7 @@ export default function page() {
       }
       toast.success(`Product ${!currentStatus ? "featured" : "unfeatured"}`);
     } catch (error) {
-      updateProductState(id, { is_featured: !currentStatus });
+      updateProductState(id, { is_featured: currentStatus });
       toast.error("Failed to update featured status");
     }
   }

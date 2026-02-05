@@ -28,6 +28,8 @@ export default function LogoutButton({ showText = true }: LogoutButtonProps) {
         toast.error("Failed to logout");
         return;
       }
+      document.cookie =
+        "role=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax";
 
       useUsers.getState().clearUsers();
       useOrders.getState().clearOrders();

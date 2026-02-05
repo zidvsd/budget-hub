@@ -19,7 +19,7 @@ export default function ClientLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { users, fetchUsers } = useUsers();
+  const { fetchUsers } = useUsers();
   const { fetchCart, items } = useCart();
   const role = getRoleFromCookie();
   useEffect(() => {

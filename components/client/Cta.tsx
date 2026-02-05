@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 export default function Cta() {
   return (
-    <div className="bg-muted dark:bg-sidebar text-center  space-y-4 py-16">
+    <div className="custom-container  text-center  space-y-4 py-16">
       <div className="max-w-5xl mx-auto space-y-4">
         <h1 className="text-3xl font-bold ">Ready to Upgrade Your Tech?</h1>
         <span className="text-xl text-neutral-500 dark:text-neutral-400">

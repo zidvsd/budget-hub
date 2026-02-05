@@ -1,6 +1,5 @@
 // middleware.ts
 import { NextResponse, type NextRequest } from "next/server";
-import { createClient } from "./lib/supabase/server";
 import { updateSession } from "./lib/supabase/middleware";
 export async function proxy(request: NextRequest) {
   const { user, response } = await updateSession(request);
@@ -8,6 +7,8 @@ export async function proxy(request: NextRequest) {
 
   const protectedUserPages = ["/account", "/cart", "/orders", "/notifications"];
   const isAdminPage = url.startsWith("/admin");
+
+  const role = user?.app_metadata?.role || request.cookies.get("role")?.value;
 
   const isProtectedUserPage = protectedUserPages.some((page) =>
     url.startsWith(page),
@@ -18,8 +19,6 @@ export async function proxy(request: NextRequest) {
   }
 
   if (!user) return response;
-
-  const role = user?.app_metadata?.role || "user";
 
   if (isAdminPage && role !== "admin") {
     return NextResponse.redirect(new URL("/", request.url));

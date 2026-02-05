@@ -41,10 +41,13 @@ export async function POST(req: NextRequest) {
     };
 
     const response = NextResponse.json({ success: true, data: payload });
+
     response.cookies.set("role", userData.role, {
       path: "/",
       httpOnly: false,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7,
     });
     return response;
   } catch (error: any) {

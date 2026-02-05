@@ -51,6 +51,16 @@ export default function LoginCard() {
       }
 
       toast.success("Logged in successfully!");
+
+      router.refresh();
+
+      setTimeout(() => {
+        if (json.data.role === "admin") {
+          router.push("/admin/dashboard");
+        } else {
+          router.push("/");
+        }
+      }, 100);
     } catch (err: any) {
       console.error(err);
       toast.error(err.message || "Something went wrong. Please try again.");

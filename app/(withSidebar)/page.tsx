@@ -18,7 +18,9 @@ export default function page() {
         <FeaturedProducts />
       </Suspense>
 
-      <Cta />
+      <div className="bg-muted dark:bg-sidebar w-full">
+        <Cta />
+      </div>
     </main>
   );
 }

@@ -33,10 +33,10 @@ export default function LogoutButton({ showText = true }: LogoutButtonProps) {
       useOrders.getState().clearOrders();
       useProducts.getState().clearProducts();
       useCart.getState().clearCart();
-      document.cookie = "role=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+
       toast.success("Logged out successfully!");
-      router.push("/login");
-      router.refresh();
+
+      window.location.href = "/login";
     } catch (err: any) {
       console.error("Logout failed:", err.message);
       toast.error("Logout failed: " + err.message);

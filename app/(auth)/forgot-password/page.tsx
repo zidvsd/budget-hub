@@ -20,7 +20,6 @@ export default function ForgotPasswordPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: Add logic to send password reset email
-    console.log("Reset link sent to:", email);
   };
 
   return (

@@ -22,7 +22,6 @@ export default function OrdersPage() {
   const loading = ordersLoading || usersLoading;
   async function updateOrderStatus(id: string, newStatus: OrderStatus) {
     try {
-      console.log("Updating order:", id, newStatus);
       const res = await fetch(`/api/admin/orders/${id}`, {
         method: "PATCH",
         headers: {

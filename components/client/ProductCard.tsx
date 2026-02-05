@@ -96,7 +96,6 @@ export default function ProductCard({
             onClick={(e) => {
               e.stopPropagation();
               handleAddToCart();
-              console.log("hi");
             }}
           >
             <ShoppingCart className="size-4" />

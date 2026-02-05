@@ -68,8 +68,6 @@ export async function POST(req: NextRequest) {
         if (fileName && userIdFolder === user.id) {
           const fullPathToDelete = `${userIdFolder}/${fileName}`;
 
-          console.log("Deleting old file:", fullPathToDelete);
-
           const { error: removeError } = await supabase.storage
             .from("avatars")
             .remove([fullPathToDelete]);

@@ -52,8 +52,6 @@ export default function page() {
       await fetchProducts();
     } catch (error) {
       toast.error("Failed to delete item");
-
-      console.log(error);
     }
   }
   useEffect(() => {

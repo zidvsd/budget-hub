@@ -53,8 +53,6 @@ export default function CheckoutPage() {
         };
       });
 
-      console.log("Payload being sent:", orderItemsPayload);
-
       // 2. Client-side check: Don't even hit the API if a UUID is missing
       if (
         orderItemsPayload.some(
@@ -76,7 +74,6 @@ export default function CheckoutPage() {
       });
 
       const result = await res.json();
-      console.log("Full Result from Server:", result);
       if (!res.ok) throw new Error(result.error || "Failed to place order");
       toast.success("Order placed successfully!", {
         description: "You will receive an email confirmation shortly.",

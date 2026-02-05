@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     if (!email || !password) {
       return NextResponse.json(
         { error: "Email and password are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     if (error)
       return NextResponse.json(
         { success: false, error: error.message },
-        { status: 401 }
+        { status: 401 },
       );
 
     const { data: userData, error: roleError } = await supabase
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     if (roleError) {
       return NextResponse.json(
         { success: false, error: roleError.message },
-        { status: 500 }
+        { status: 500 },
       );
     }
     const payload = {
@@ -46,12 +46,11 @@ export async function POST(req: NextRequest) {
       httpOnly: false,
       sameSite: "lax",
     });
-    console.log("setting role cookie", userData.role);
     return response;
   } catch (error: any) {
     return NextResponse.json(
       { success: false, error: error.message || "Failed to login" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -33,8 +33,6 @@ export default function Page() {
 
   // Get the user by ID from users array
   const user = users?.find((u) => u.id === userId);
-  console.log(orders);
-  console.log(user);
   // Redirect admin users after user is loaded
   useEffect(() => {
     if (!usersLoading && user?.role === "admin" && !toastShownRef.current) {

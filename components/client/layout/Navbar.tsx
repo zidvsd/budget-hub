@@ -1,6 +1,12 @@
 "use client";
 
-import { ShoppingCart, Bell, User, Package } from "lucide-react";
+import {
+  ShoppingCart,
+  Bell,
+  User,
+  Package,
+  User as UserIcon,
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -13,23 +19,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useUsers } from "@/store/useUsers";
-import { User as UserIcon } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { getFirstName } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCart } from "@/store/useCart";
-import { useSearchParams } from "next/navigation";
+
 export default function Navbar() {
   const { role, loading: AuthLoading } = useAuth();
   const { users, loading: userLoading, fetchUsers } = useUsers();
   const [searchTerm, setSearchTerm] = useState("");
   const { items, fetchCart } = useCart();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const loading = AuthLoading || userLoading;
   const isFirstRender = useRef(true);
-  const searchParams = useSearchParams();
 
+  // --- Search Logic ---
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
@@ -53,6 +59,7 @@ export default function Navbar() {
     setSearchTerm(searchParams.get("q") ?? "");
   }, [searchParams]);
 
+  // --- Initial Data Fetch ---
   useEffect(() => {
     fetchUsers();
     fetchCart();
@@ -67,46 +74,38 @@ export default function Navbar() {
         </Link>
 
         {/* Search */}
-        <div className="self-center flex justify-center items-center w-full">
-          <div className="mx-4 md:w-1/2 lg:w-1/2">
+        <div className="flex flex-1 justify-center px-4">
+          <div className="w-full max-w-md">
             <Input
+              value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search..."
-              className="w-full "
+              className="w-full"
             />
           </div>
         </div>
 
-        {/* Icons */}
-        <div className="flex items-center space-x-4 md:space-x-8">
+        {/* Icons & Actions */}
+        <div className="flex items-center space-x-2 md:space-x-4">
           {role && (
             <>
-              <div className="w-fit">
-                <ModeToggle variant="nav" />
-              </div>
+              <Button variant={"nav"} className="p-2">
+                <ModeToggle />
+              </Button>
               <Link
                 href="/account?tab=notifications"
                 className="group hover:bg-muted rounded-lg p-2 hover-utility"
               >
-                <Bell className="size-4 cursor-pointer transition group-hover:text-accent" />
+                <Bell className="size-4 group-hover:text-accent " />
               </Link>
               <Link
                 href="/cart"
-                className="relative group inline-flex items-center justify-center rounded-lg p-2 transition-colors hover:bg-muted hover-utility"
+                className="relative group rounded-lg p-2 hover:bg-muted hover-utility"
                 aria-label={`Shopping cart, ${items.length} items`}
               >
-                <ShoppingCart className="size-4 group-hover:text-accent hover-utility" />
-
+                <ShoppingCart className="size-4 group-hover:text-accent" />
                 {items.length > 0 && (
-                  <div
-                    className="
-        absolute top-[-1] right-[-1]
-        flex h-4 w-4 items-center justify-center 
-        rounded-full border border-transparent 
-        bg-accent p-0 text-xs font-semibold text-white
-        transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2
-      "
-                  >
+                  <div className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-white">
                     {items.length}
                   </div>
                 )}
@@ -118,38 +117,42 @@ export default function Navbar() {
             {role ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="group hover:bg-muted  cursor-pointer rounded-lg p-2 hover-utility">
-                    <User className="size-4 cursor-pointer hover-utility group-hover:text-accent" />
+                  <button className="group hover:bg-muted rounded-lg p-2 outline-hidden">
+                    <User className="size-4 group-hover:text-accent group-hover:cursor-pointer hover-utility" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem>
+                <DropdownMenuContent align="end" className="w-48">
+                  {/* Profile Item */}
+                  <DropdownMenuItem asChild>
                     <Link
                       href="/account?tab=profile"
-                      className="group flex items-center py-1.5 gap-2 w-full justify-center text-center hover:text-white transition"
+                      className="flex items-center gap-3 px-3 py-2 cursor-pointer"
                     >
-                      <UserIcon className="w-4 h-4 shrink-0 text-black dark:text-white group-hover:text-white transition" />
-                      {loading
-                        ? "Loading..."
-                        : users && users.length > 0 && users[0].first_name
-                          ? getFirstName(users[0].first_name)
-                          : "Me"}
+                      <UserIcon className="size-4 shrink-0 text-foreground" />
+                      <span className="truncate">
+                        {loading
+                          ? "Loading..."
+                          : users?.[0]?.first_name
+                            ? getFirstName(users[0].first_name)
+                            : "My Profile"}
+                      </span>
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+
+                  {/* Orders Item */}
+                  <DropdownMenuItem asChild>
                     <Link
                       href="/account?tab=orders"
-                      className="group flex items-center py-1.5 gap-2 w-full justify-center text-center hover:text-white transition"
+                      className="flex items-center gap-3 px-3 py-2 cursor-pointer"
                     >
-                      <Package className="w-4 h-4 shrink-0 text-black dark:text-white group-hover:text-white transition" />
-                      Orders
+                      <Package className="size-4 shrink-0 text-foreground" />
+                      <span>Orders</span>
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <div className="w-fit ">
-                      <LogoutButton showText={true} />
-                    </div>
-                  </DropdownMenuItem>
+
+                  {/* Logout Button */}
+                  <div className="border-t border-muted my-1" />
+                  <LogoutButton showText={true} />
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (

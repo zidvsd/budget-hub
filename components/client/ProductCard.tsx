@@ -76,16 +76,17 @@ export default function ProductCard({
         </span>
       )}
       {/* Image */}
-      <div className="product-card-image relative cursor-pointer  aspect-3/4 h-48 w-full">
+      <div className="product-card-image relative cursor-pointer  aspect-3/4 h-48 w-full overflow-hidden">
         <Link
           href={`/products/${product.id}`}
-          className="w-10 h-10 rounded-full flex items-center justify-center"
+          className="block relative h-full w-full items-center justify-center transition-transform duration-300 group-hover:scale-105"
         >
           <Image
             quality={60}
             src={product.image_path || "/placeholder.png"}
             alt={product.name}
             fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
             className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
         </Link>

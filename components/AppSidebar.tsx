@@ -1,5 +1,20 @@
 "use client";
 
+import React from "react";
+import {
+  Home,
+  LayoutGrid,
+  Bell,
+  Package,
+  User,
+  LayoutDashboard,
+  ShoppingCart,
+  PackageSearch,
+  Users,
+  ChartColumnIncreasing,
+  LogIn,
+} from "lucide-react";
+import { MenuItem, IconName, clientMenu } from "@/lib/layoutMenus";
 import {
   Sidebar,
   SidebarContent,
@@ -9,46 +24,55 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuAction,
 } from "@/components/ui/sidebar";
 import LogoutButton from "./ui/logout";
-import { clientMenu } from "@/lib/layoutMenus";
-import * as LucideIcons from "lucide-react";
 import Link from "next/link";
-import { LucideIcon } from "lucide-react";
 import { useSidebar } from "@/components/ui/sidebar";
 import { ModeToggle } from "./ModeToggle";
 import { useAuth } from "@/hooks/useAuth";
-// Menu items.
+
+// 1. Map the string names to the actual components for Tree Shaking
+const iconMap: Record<IconName, React.ElementType> = {
+  Home,
+  LayoutGrid,
+  Bell,
+  Package,
+  User,
+  LayoutDashboard,
+  ShoppingCart,
+  PackageSearch,
+  Users,
+  ChartColumnIncreasing,
+};
 
 interface AppSidebarProps {
   hide?: boolean;
-  items: {
-    title: string;
-    url: string;
-    icon: keyof typeof LucideIcons;
-  }[];
+  items?: MenuItem[];
 }
+
 export function AppSidebar({ hide, items = clientMenu }: AppSidebarProps) {
-  const { toggleSidebar, state } = useSidebar();
+  const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
-  const { role, loading } = useAuth();
+  const { role } = useAuth();
+
+  // If hide is true, we return null so the sidebar doesn't render at all
+  if (hide) return null;
+
   return (
     <Sidebar collapsible="icon" className="flex flex-col h-full">
       <SidebarContent className="flex flex-col h-full">
-        {/* TOP MENU ITEMS */}
         <SidebarGroup>
-          <SidebarGroupLabel>Sidebar</SidebarGroupLabel>
+          <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {
-                const IconComponent = LucideIcons[item.icon] as LucideIcon;
+                const IconComponent = iconMap[item.icon];
 
                 return (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <Link href={item.url} className="flex items-center gap-2">
-                        <IconComponent className="h-4 w-4" />
+                    <SidebarMenuButton asChild tooltip={item.title}>
+                      <Link href={item.url}>
+                        {IconComponent && <IconComponent className="size-4" />}
                         <span>{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
@@ -60,26 +84,28 @@ export function AppSidebar({ hide, items = clientMenu }: AppSidebarProps) {
         </SidebarGroup>
 
         {/* BOTTOM SECTION */}
-        <div className="mt-auto flex flex-col items-center  ">
+        <div className="mt-auto">
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu>
-                {/* MODE TOGGLE */}
-                <SidebarMenuButton asChild>
-                  <ModeToggle variant="ghost" showText={!isCollapsed} />
-                </SidebarMenuButton>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild tooltip="Toggle Theme">
+                    <ModeToggle showText={!isCollapsed} />
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
 
-                {/* LOGOUT / LOGIN */}
-                <SidebarMenuButton asChild>
-                  {role ? (
-                    <LogoutButton showText={!isCollapsed} />
-                  ) : (
-                    <Link href="/login" className="flex items-center gap-3 ">
-                      <LucideIcons.LogIn className="size-4" />
-                      {!isCollapsed && <span>Sign In</span>}
-                    </Link>
-                  )}
-                </SidebarMenuButton>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    {role ? (
+                      <LogoutButton showText={!isCollapsed} />
+                    ) : (
+                      <Link href="/login">
+                        <LogIn className="size-4" />
+                        {!isCollapsed && <span>Sign In</span>}
+                      </Link>
+                    )}
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>

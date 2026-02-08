@@ -57,11 +57,11 @@ export default function ClientLayout({
                 {role && (
                   <Link
                     href="/cart"
-                    className="relative group inline-flex items-center justify-center rounded-lg p-2 transition-colors hover:bg-muted hover-utility"
+                    className="relative group inline-flex items-center justify-center rounded-lg "
                     aria-label={`Shopping cart, ${items.length} items`}
                   >
                     <Button variant={"nav"}>
-                      <ShoppingCart className="size-4 group-hover:text-accent hover-utility" />
+                      <ShoppingCart className="size-4" />
 
                       {items.length > 0 && (
                         <div

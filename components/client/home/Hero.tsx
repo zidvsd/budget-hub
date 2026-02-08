@@ -7,7 +7,7 @@ import { useScrollTo } from "@/hooks/use-scroll-to";
 export default function Hero() {
   const scrollTo = useScrollTo();
   return (
-    <section className="relative h-[480px] md:h-[520px] flex items-center overflow-hidden ">
+    <section className="relative h-[480px] md:h-[520px] flex items-center overflow-hidden  ">
       {/* Background */}
       <div className="absolute inset-0">
         <Image
@@ -15,6 +15,7 @@ export default function Hero() {
           src="/hero-bg.jpg"
           alt="Hero"
           fill
+          sizes="(max-width: 1024px) 100vw, calc(100vw - 280px)"
           fetchPriority="high"
           priority
           className="object-cover"
@@ -47,7 +48,7 @@ export default function Hero() {
             </Link>
 
             <Button
-              onClick={() => scrollTo("featured-products", 80)}
+              onClick={() => scrollTo("categories", 80)}
               variant="secondary"
               size={"lg"}
             >

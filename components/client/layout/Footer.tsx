@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { Linkedin, Instagram, Mail, Github } from "lucide-react";
-
+import { Separator } from "@radix-ui/react-separator";
 export default function Footer() {
   return (
     <footer className="bg-primary-foreground dark:bg-muted w-full ">
@@ -93,10 +93,15 @@ export default function Footer() {
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="border-t border-neutral-300 dark:border-neutral-600 mt-8 pt-6 text-center text-xs text-neutral-400">
+      <div className="w-full border-t border-neutral-300 dark:border-neutral-800" />
+
+      {/* Bottom Copyright Area */}
+      <div className="custom-container py-6">
+        <p className="text-center text-xs text-neutral-400">
           © 2025 GadyetHub. All rights reserved.
-        </div>
+        </p>
       </div>
     </footer>
   );

@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { EyeOff, Eye } from "lucide-react";
+import { EyeOff, Eye, Mail } from "lucide-react";
 
 export default function page() {
   const [email, setEmail] = useState("");
@@ -45,7 +45,11 @@ export default function page() {
         toast.error("Failed to sign in", data.error);
       }
 
-      toast.success("Account created successfully!");
+      toast.success("Account created successfully!", {
+        icon: <Mail className="h-5 w-5 text-accent" />,
+        description: "Check your inbox (and spam) for a confirmation link.",
+        duration: 6000,
+      });
       setEmail("");
       setPassword("");
       router.push("/login");

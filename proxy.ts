@@ -3,12 +3,19 @@ import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "./lib/supabase/middleware";
 export async function proxy(request: NextRequest) {
   const { user, response } = await updateSession(request);
+  console.log(user, response);
   const url = request.nextUrl.pathname;
 
-  const protectedUserPages = ["/account", "/cart", "/orders", "/notifications"];
+  const protectedUserPages = [
+    "/account",
+    "/cart",
+    "/orders",
+    "/notifications",
+    "/search",
+  ];
   const isAdminPage = url.startsWith("/admin");
 
-  const role = user?.app_metadata?.role || request.cookies.get("role")?.value;
+  const role = user?.app_metadata?.role;
 
   const isProtectedUserPage = protectedUserPages.some((page) =>
     url.startsWith(page),

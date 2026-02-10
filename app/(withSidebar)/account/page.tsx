@@ -10,7 +10,7 @@ import OrdersTab from "@/components/client/account/orders/OrdersTab";
 import ProfileTab from "@/components/client/account/profile/ProfileTab";
 export default function Page() {
   const { orders, fetchOrders, loading: ordersLoading } = useOrders();
-  const { fetchUsers, loading: usersLoading } = useUsers();
+  const { users, loading: usersLoading } = useUsers();
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -19,10 +19,6 @@ export default function Page() {
   const [currentTab, setCurrentTab] = useState(
     searchParams.get("tab") || "profile",
   );
-  useEffect(() => {
-    fetchOrders();
-    fetchUsers();
-  }, []);
 
   useEffect(() => {
     const tab = searchParams.get("tab");
@@ -86,7 +82,13 @@ export default function Page() {
         {currentTab === "orders" && (
           <OrdersTab orders={orders} loading={ordersLoading} />
         )}
-        {currentTab === "profile" && <ProfileTab />}
+        {currentTab === "profile" && (
+          <ProfileTab
+            user={users[0]}
+            orders={orders}
+            isLoading={usersLoading || ordersLoading}
+          />
+        )}
         {currentTab === "notifications" && (
           <div className="p-4 border rounded-md text-muted-foreground">
             No new notifications.

@@ -42,8 +42,10 @@ export default function page() {
       toast.error("Failed to update featured status");
     }
   }
+
   async function handleDelete(id: string) {
     if (!confirm("Are you sure you want to delete this item?")) return;
+
     try {
       const res = await fetch(`/api/admin/products/${id}`, {
         method: "DELETE",

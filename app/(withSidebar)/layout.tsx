@@ -16,6 +16,7 @@ import { PageTransition } from "@/components/animations/PageTransition";
 import { useUsers } from "@/store/useUsers";
 import { useCart } from "@/store/useCart";
 import { useAuth } from "@/hooks/useAuth";
+import { useOrders } from "@/store/useOrders";
 
 import { clientMenu } from "@/lib/layoutMenus";
 export default function ClientLayout({
@@ -25,14 +26,14 @@ export default function ClientLayout({
 }) {
   const { fetchUsers } = useUsers();
   const { fetchCart, items } = useCart();
-
+  const { fetchOrders } = useOrders();
   const { user, role, loading } = useAuth();
 
   useEffect(() => {
     if (!loading && role) {
-      Promise.all([fetchUsers(), fetchCart()]);
+      Promise.all([fetchUsers(), fetchCart(), fetchOrders()]);
     }
-  }, [role, loading, fetchUsers, fetchCart]);
+  }, [role, loading, fetchUsers, fetchCart, fetchOrders]);
 
   const publicPages = ["/"];
 

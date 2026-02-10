@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import Hero from "@/components/client/home/Hero";
 import FeatureBar from "@/components/client/home/FeatureBar";
 import { Suspense } from "react";
-import ProductsCardSkeleton from "@/components/client/ProductsCardSkeleton";
+import ProductsCardSkeleton from "@/components/client/skeleton/ProductsCardSkeleton";
 const Categories = dynamic(() => import("@/components/client/home/Categories"));
 const FeaturedProducts = dynamic(
   () => import("@/components/client/home/FeaturedProducts"),

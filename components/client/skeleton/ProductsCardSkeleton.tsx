@@ -1,5 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import ProductCard from "./ProductCard";
+import ProductCard from "../ProductCard";
 import { cn } from "@/lib/utils";
 
 interface ProductsCardSkeletonProps {

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useEffect } from "react";
 import { useProducts } from "@/store/useProducts";
-import ProductsCardSkeleton from "../ProductsCardSkeleton";
+import ProductsCardSkeleton from "../skeleton/ProductsCardSkeleton";
 import {
   StaggerContainer,
   StaggerItem,

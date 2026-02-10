@@ -37,7 +37,6 @@ export default function Page() {
     };
 
     fetchMetrics();
-    // No dependencies here because the stores are managed by the Layout
   }, []);
 
   const loading =

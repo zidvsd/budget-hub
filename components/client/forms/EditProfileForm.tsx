@@ -20,21 +20,34 @@ import Image from "next/image";
 import React, { useState, useRef, useEffect } from "react";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
+import { User } from "@/lib/types/users";
 export function EditProfileForm({
+  user,
   open,
   onOpenChange,
 }: {
+  user: User;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }) {
-  const { users, fetchUsers } = useUsers();
+  const { fetchUsers } = useUsers();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [firstName, setFirstName] = useState(users[0]?.first_name ?? "");
-  const [lastName, setLastName] = useState(users[0]?.last_name ?? "");
-  const [phoneNumber, setPhoneNumber] = useState(users[0]?.phone ?? "");
-  const [address, setAddress] = useState(users[0]?.address ?? "");
+
+  const [firstName, setFirstName] = useState(user?.first_name ?? "");
+  const [lastName, setLastName] = useState(user?.last_name ?? "");
+  const [phoneNumber, setPhoneNumber] = useState(user?.phone ?? "");
+  const [address, setAddress] = useState(user?.address ?? "");
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setFirstName(user.first_name ?? "");
+      setLastName(user.last_name ?? "");
+      setPhoneNumber(user.phone ?? "");
+      setAddress(user.address ?? "");
+    }
+  }, [user]);
 
   // avatar uploads
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +76,7 @@ export function EditProfileForm({
         throw new Error(data.error || "Upload failed");
 
       // After successful upload, refresh the user store to show the new image
-      await fetchUsers(true);
+      await fetchUsers("user", true);
       toast.success("Avatar updated!");
     } catch (err: any) {
       console.error(err);
@@ -128,7 +141,7 @@ export function EditProfileForm({
         throw new Error("Failed to update profile");
       }
 
-      await fetchUsers(true);
+      await fetchUsers("user", true);
 
       toast.success("Profile updated successfully!");
       onOpenChange?.(false);
@@ -139,14 +152,7 @@ export function EditProfileForm({
       setLoading(false);
     }
   };
-  useEffect(() => {
-    if (users[0]) {
-      setFirstName(users[0].first_name ?? "");
-      setLastName(users[0].last_name ?? "");
-      setPhoneNumber(users[0].phone ?? "");
-      setAddress(users[0].address ?? "");
-    }
-  }, [users]);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {!open && (
@@ -172,19 +178,19 @@ export function EditProfileForm({
           {/* avatar */}
           <div className="flex self-center w-full items-center justify-center mt-4">
             <div className="w-28 h-28 relative rounded-full border-4 border-accent/20 bg-muted flex items-center justify-center text-accent text-4xl font-bold">
-              {users[0]?.avatar_url ? (
+              {user?.avatar_url ? (
                 <Image
-                unoptimized
-                  src={users[0].avatar_url}
-                  alt={`${users[0]?.first_name ?? ""} ${users[0]?.last_name ?? ""}`}
+                  unoptimized
+                  src={user.avatar_url}
+                  alt={`${user.first_name ?? ""} ${user.last_name ?? ""}`}
                   width={112}
                   height={112}
                   className="object-cover rounded-full w-full h-full"
                 />
               ) : (
                 <span className="uppercase">
-                  {getFirstChar(users[0]?.first_name ?? "")}
-                  {getFirstChar(users[0]?.last_name ?? "")}
+                  {getFirstChar(user.first_name ?? "")}
+                  {getFirstChar(user.last_name ?? "")}
                 </span>
               )}
 
@@ -219,7 +225,7 @@ export function EditProfileForm({
                 autoComplete="off"
                 id="input-disabled"
                 type="email"
-                placeholder={users[0]?.email ?? "Enter your email"}
+                placeholder={user.email ?? "Enter your email"}
                 disabled
               />
               <FieldDescription>Email cannot be changed.</FieldDescription>
@@ -231,7 +237,7 @@ export function EditProfileForm({
                 onChange={(e) => setFirstName(e.target.value)}
                 autoComplete="off"
                 id="firstName"
-                placeholder={users[0]?.first_name ?? "Enter your first name"}
+                placeholder={user.first_name ?? "Enter your first name"}
               />
             </div>
 
@@ -242,7 +248,7 @@ export function EditProfileForm({
                 onChange={(e) => setLastName(e.target.value)}
                 autoComplete="off"
                 id="lastName"
-                placeholder={users[0]?.last_name ?? "Enter your last name"}
+                placeholder={user.last_name ?? "Enter your last name"}
               />
             </div>
             <div className="grid gap-3">
@@ -252,7 +258,7 @@ export function EditProfileForm({
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 autoComplete="off"
                 id="phone-number"
-                placeholder={users[0]?.phone ?? "Enter your phone number"}
+                placeholder={user.phone ?? "Enter your phone number"}
               />
             </div>
             <div className="grid gap-3">
@@ -262,7 +268,7 @@ export function EditProfileForm({
                 onChange={(e) => setAddress(e.target.value)}
                 autoComplete="off"
                 id="address"
-                placeholder={users[0]?.address ?? "Enter your address"}
+                placeholder={user.address ?? "Enter your address"}
               />
             </div>
           </div>

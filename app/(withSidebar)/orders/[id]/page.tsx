@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import {
   ArrowLeft,
   Package,
@@ -20,6 +20,7 @@ import {
   formatTime,
   truncateId,
 } from "@/lib/utils";
+import { OrderDetailsSkeleton } from "@/components/client/skeleton/OrderDetailsSkeleton";
 import { OrderItemsCarousel } from "@/components/client/OrderItemsCarousel";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -34,6 +35,7 @@ import NotFound from "@/app/not-found";
 export default function OrderDetailsPage() {
   const router = useRouter();
   const params = useParams();
+  const orderId = params.id as string;
 
   const { users, fetchUsers, loading: usersLoading } = useUsers();
   const { orders, fetchOrders, loading: ordersLoading } = useOrders();
@@ -41,89 +43,30 @@ export default function OrderDetailsPage() {
 
   const [isTruncated, setIsTruncated] = useState(true);
 
-  const orderId = params.id as string;
-  const order = orders.find((o) => o.id === orderId);
-
-  const customer = users.find((u) => u.id === order?.user_id) || users[0];
-  const loading = usersLoading || ordersLoading || productsLoading;
-
   useEffect(() => {
-    fetchUsers();
-    fetchOrders(orderId, true);
+    fetchOrders("user", orderId, true);
+    fetchUsers("user", true);
     fetchProducts();
   }, [orderId, fetchOrders, fetchUsers, fetchProducts]);
+
+  const order = useMemo(
+    () => orders.find((o) => o.id === orderId),
+    [orders, orderId],
+  );
+
+  const customer = useMemo(() => {
+    if (!order) return null;
+    return users.find((u) => u.id === order.user_id) || users[0];
+  }, [users, order]);
+
+  const loading = usersLoading || ordersLoading || productsLoading;
 
   const handleCopyId = (id: string) => {
     navigator.clipboard.writeText(id);
     toast.success("Order ID copied to clipboard!");
   };
   if (loading) {
-    return (
-      <div className="mx-auto max-w-5xl mt-8 pb-20 px-4 space-y-8 animate-pulse">
-        {/* Breadcrumb Skeleton */}
-        <Skeleton className="h-4 w-32" />
-
-        {/* Header Skeleton */}
-        <div className="flex items-start gap-4 mt-6">
-          <div className="flex flex-col md:flex-row md:items-center justify-between w-full gap-4">
-            <div className="space-y-2">
-              <Skeleton className="h-8 w-64" />
-              <Skeleton className="h-4 w-48" />
-            </div>
-            <Skeleton className="h-9 w-28 rounded-full" />
-          </div>
-        </div>
-
-        {/* Track Status Skeleton */}
-        <Skeleton className="h-28 w-full rounded-xl" />
-
-        {/* Main Content Grid Skeleton */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column: Items */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className="bg-card rounded-xl border p-6 space-y-6">
-              <Skeleton className="h-6 w-32" />
-              <div className="space-y-4">
-                <Skeleton className="h-16 w-full rounded-lg" />
-                <Skeleton className="h-16 w-full rounded-lg" />
-                <Skeleton className="h-16 w-full rounded-lg" />
-              </div>
-              <Skeleton className="h-px w-full" />
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <Skeleton className="h-4 w-20" />
-                  <Skeleton className="h-4 w-16" />
-                </div>
-                <div className="flex justify-between">
-                  <Skeleton className="h-6 w-28" />
-                  <Skeleton className="h-6 w-24" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column: Details & Status Card */}
-          <div className="flex flex-col md:flex-row lg:flex-col gap-6">
-            <div className="bg-card rounded-xl border p-6 space-y-6 flex-1">
-              <Skeleton className="h-6 w-40" />
-              <div className="space-y-5">
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="flex gap-3">
-                    <Skeleton className="h-5 w-5 rounded" />
-                    <div className="space-y-2">
-                      <Skeleton className="h-3 w-20" />
-                      <Skeleton className="h-4 w-32" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            {/* Status Badge Placeholder */}
-            <Skeleton className="h-32 w-full rounded-xl flex-1 lg:flex-none" />
-          </div>
-        </div>
-      </div>
-    );
+    return <OrderDetailsSkeleton />;
   }
 
   if (!order) return <NotFound />;

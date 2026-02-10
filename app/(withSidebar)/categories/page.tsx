@@ -26,7 +26,7 @@ export default function CategoriesPage() {
 
   useEffect(() => {
     fetchProducts();
-  }, [fetchProducts]);
+  }, []);
 
   const searchParams = useSearchParams();
   const router = useRouter();

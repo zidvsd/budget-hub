@@ -24,12 +24,15 @@ import Link from "next/link";
 import { getFirstName } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCart } from "@/store/useCart";
+import { useNotifications } from "@/store/useNotifications";
 
 export default function Navbar() {
   const { role, loading: AuthLoading } = useAuth();
-  const { users, loading: userLoading, fetchUsers } = useUsers();
+  const { users, loading: userLoading } = useUsers();
+  const { notifications } = useNotifications();
+  const unreadCount = notifications.filter((n) => !n.is_read).length;
   const [searchTerm, setSearchTerm] = useState("");
-  const { items, fetchCart } = useCart();
+  const { items } = useCart();
   const router = useRouter();
   const searchParams = useSearchParams();
   const loading = AuthLoading || userLoading;
@@ -88,9 +91,16 @@ export default function Navbar() {
               </Button>
               <Link
                 href="/account?tab=notifications"
-                className="group hover:bg-muted rounded-lg p-2 hover-utility"
+                className="relative group hover:bg-muted rounded-lg p-2 hover-utility"
               >
-                <Bell className="size-4 group-hover:text-accent " />
+                <Bell className="size-4 group-hover:text-accent" />
+
+                {/* Notification Badge */}
+                {unreadCount > 0 && (
+                  <div className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white border-2 border-background">
+                    {unreadCount > 9 ? "9+" : unreadCount}
+                  </div>
+                )}
               </Link>
               <Link
                 href="/cart"

@@ -20,7 +20,7 @@ export async function GET(
     }
 
     const { data: profile, error: roleError } = await supabase
-      .from("profiles")
+      .from("users")
       .select("role")
       .eq("id", requester.id)
       .single();

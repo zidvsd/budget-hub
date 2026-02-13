@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Search } from "lucide-react";
+import { ShoppingCart, Search, Bell } from "lucide-react";
 import Link from "next/link";
 
 // Custom imports
@@ -11,13 +11,12 @@ import Navbar from "@/components/client/layout/Navbar";
 import Footer from "@/components/client/layout/Footer";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { PageTransition } from "@/components/animations/PageTransition";
-import { supabase } from "@/lib/supabase/client";
-import { toast } from "sonner";
 // Stores & Utils
 import { useUsers } from "@/store/useUsers";
 import { useCart } from "@/store/useCart";
-import { useAuth } from "@/hooks/useAuth";
+import { useNotifications } from "@/store/useNotifications";
 import { useOrders } from "@/store/useOrders";
+import { useAuth } from "@/hooks/useAuth";
 
 import { clientMenu } from "@/lib/layoutMenus";
 export default function ClientLayout({
@@ -28,43 +27,20 @@ export default function ClientLayout({
   const { fetchUsers } = useUsers();
   const { fetchCart, items } = useCart();
   const { fetchOrders } = useOrders();
+  const { fetchNotifications, notifications } = useNotifications();
+  const unreadCount = notifications.filter((n) => !n.is_read).length;
   const { user: currentUser, role, loading } = useAuth();
   useEffect(() => {
     if (!loading && role) {
-      Promise.all([fetchUsers(), fetchCart(), fetchOrders()]);
+      Promise.all([
+        fetchUsers(),
+        fetchCart(),
+        fetchOrders(),
+        fetchNotifications(currentUser?.id),
+      ]);
     }
   }, [role, loading, fetchUsers, fetchCart, fetchOrders]);
-
-  useEffect(() => {
-    if (!currentUser?.id) return;
-
-    const channel = supabase
-      .channel(`user-notifications-${currentUser.id}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "notifications",
-          filter: `user_id=eq.${currentUser.id}`,
-        },
-        (payload) => {
-          // 1. Show the Toast
-          toast.success(payload.new.title, {
-            description: payload.new.message,
-          });
-
-          // 2. Refresh notification data in your global state (Zustand/Context)
-          // refreshNotificationCount();
-        },
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [currentUser?.id]);
-
+  console.log(currentUser?.id);
   const publicPages = ["/"];
 
   return (
@@ -116,6 +92,21 @@ export default function ClientLayout({
                         </div>
                       )}
                     </Button>
+                  </Link>
+                )}
+                {role && (
+                  <Link
+                    href="/account?tab=notifications"
+                    className="relative group hover:bg-muted rounded-lg p-2 hover-utility"
+                  >
+                    <Bell className="size-4 group-hover:text-accent" />
+
+                    {/* Notification Badge */}
+                    {unreadCount > 0 && (
+                      <div className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white border-2 border-background">
+                        {unreadCount > 9 ? "9+" : unreadCount}
+                      </div>
+                    )}
                   </Link>
                 )}
 

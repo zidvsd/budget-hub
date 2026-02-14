@@ -1,9 +1,10 @@
 "use client";
 
-import { Bell, Info, Package, Tag, CheckCircle2 } from "lucide-react";
+import { Bell, Package, Tag, CheckCircle2 } from "lucide-react";
 import { Notification } from "@/lib/types/notifications";
 import { formatRelativeTime } from "@/lib/utils";
 import { useNotifications } from "@/store/useNotifications";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 interface NotificationsCardProps {
@@ -13,6 +14,7 @@ interface NotificationsCardProps {
 export default function NotificationsCard({
   notification,
 }: NotificationsCardProps) {
+  const router = useRouter();
   const { markAsRead } = useNotifications();
 
   // Dynamic icon based on title content
@@ -29,7 +31,12 @@ export default function NotificationsCard({
 
   return (
     <div
-      onClick={() => !notification.is_read && markAsRead(notification.id)}
+      onClick={() => {
+        if (notification.order_id) {
+          router.push(`/orders/${notification.order_id}`);
+        }
+        !notification.is_read && markAsRead(notification.id);
+      }}
       className={cn(
         "group relative flex items-start gap-4 rounded-xl border p-4 transition-all cursor-pointer hover:bg-muted/50",
         !notification.is_read
@@ -59,21 +66,21 @@ export default function NotificationsCard({
         <div className="flex items-center justify-between gap-2">
           <h3
             className={cn(
-              "text-sm font-semibold leading-none",
+              "text-sm font-semibold",
               !notification.is_read
                 ? "text-foreground"
                 : "text-muted-foreground",
             )}
           >
-            {notification.title}
+            {notification.title || "New Notification"}
           </h3>
           <span className="text-[10px] text-muted-foreground whitespace-nowrap">
             {formatRelativeTime(notification.created_at)}
           </span>
         </div>
 
-        <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
-          {notification.message}
+        <p className="text-sm text-muted-foreground">
+          {notification.message || "No content available"}
         </p>
       </div>
     </div>

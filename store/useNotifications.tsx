@@ -28,7 +28,7 @@ export const useNotifications = create<NotificationsState>((set, get) => ({
       !force &&
       notifications.length > 0 &&
       lastUpdated &&
-      now - lastUpdated < 120000
+      now - lastUpdated < 10000
     ) {
       return;
     }
@@ -54,9 +54,13 @@ export const useNotifications = create<NotificationsState>((set, get) => ({
   },
 
   addNotification: (newNotif) => {
-    set((state) => ({
-      notifications: [newNotif, ...state.notifications],
-    }));
+    set((state) => {
+      if (state.notifications.some((n) => n.id === newNotif.id)) return state;
+
+      return {
+        notifications: [newNotif, ...state.notifications],
+      };
+    });
   },
   markAsRead: async (notificationId) => {
     try {

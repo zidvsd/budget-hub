@@ -3,16 +3,12 @@
 import { useEffect } from "react";
 import { useNotifications } from "@/store/useNotifications";
 import { useAuth } from "@/hooks/useAuth";
-
+import { AnimatePresence, m } from "motion/react";
 import NotificationsCard from "./NotificationsCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/Empty";
 import { Button } from "@/components/ui/button";
 import { CheckCheck } from "lucide-react";
-import {
-  StaggerContainer,
-  StaggerItem,
-} from "@/components/animations/StaggerContainer";
 
 export default function NotificationsTab() {
   const { user: currentUser } = useAuth();
@@ -59,13 +55,27 @@ export default function NotificationsTab() {
         )}
       </div>
 
-      <StaggerContainer inView={false} className="flex flex-col gap-3">
-        {notifications.map((notification) => (
-          <StaggerItem key={notification.id}>
-            <NotificationsCard notification={notification} />
-          </StaggerItem>
-        ))}
-      </StaggerContainer>
+      <div className="flex flex-col gap-3">
+        <AnimatePresence mode="popLayout" initial={false}>
+          {notifications.map((notification) => (
+            <m.div
+              key={notification.id}
+              initial={{ opacity: 0, x: -20, scale: 0.95 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{
+                duration: 0.2,
+                type: "spring",
+                stiffness: 260,
+                damping: 20,
+              }}
+              layout
+            >
+              <NotificationsCard notification={notification} />
+            </m.div>
+          ))}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }

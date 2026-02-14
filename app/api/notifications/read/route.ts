@@ -10,7 +10,7 @@ export const PATCH = withAuth(async (user, req) => {
       .from("notifications")
       .update({ is_read: true })
       .eq("id", id)
-      .eq("user_id", id)
+      .eq("user_id", user.id)
       .select();
     if (error) throw error;
     if (!data || data.length === 0) {

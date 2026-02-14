@@ -23,7 +23,6 @@ import {
 import { OrderDetailsSkeleton } from "@/components/client/skeleton/OrderDetailsSkeleton";
 import { OrderItemsCarousel } from "@/components/client/OrderItemsCarousel";
 import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
 import { BreadCrumb } from "@/components/client/BreadCrumb";
 import { Button } from "@/components/ui/button";
 import { orderStatusClasses } from "@/lib/styles/badgeClasses";
@@ -37,23 +36,46 @@ export default function OrderDetailsPage() {
   const params = useParams();
   const orderId = params.id as string;
 
-  const { users, fetchUsers, loading: usersLoading } = useUsers();
-  const { orders, fetchOrders, loading: ordersLoading } = useOrders();
+  const { users, loading: usersLoading } = useUsers();
+  const { orders, loading: ordersLoading } = useOrders();
   const { products, fetchProducts, loading: productsLoading } = useProducts();
 
   const [isTruncated, setIsTruncated] = useState(true);
 
   useEffect(() => {
-    fetchOrders("user", orderId, true);
-    fetchUsers("user", true);
     fetchProducts();
-  }, [orderId, fetchOrders, fetchUsers, fetchProducts]);
+  }, [fetchProducts]);
 
   const order = useMemo(
     () => orders.find((o) => o.id === orderId),
     [orders, orderId],
   );
+  const enrichedItems = useMemo(() => {
+    if (!order?.order_items || products.length === 0)
+      return order?.order_items || [];
 
+    return order.order_items.map((item: any) => {
+      // 1. Log this once to see the actual IDs in your console
+      // console.log("Comparing:", item.product_id, "to products...");
+
+      const productData = products.find(
+        (p) => String(p.id) === String(item.product_id),
+      );
+
+      return {
+        ...item,
+        product: {
+          ...item.product,
+          name: productData?.name || item.product?.name || "Product",
+          // Ensure the path starts with a / or is a full URL
+          image_path:
+            productData?.image_path ||
+            item.product?.image_path ||
+            "/placeholder.png",
+        },
+      };
+    });
+  }, [order?.order_items, products]);
   const customer = useMemo(() => {
     if (!order) return null;
     return users.find((u) => u.id === order.user_id) || users[0];
@@ -70,23 +92,6 @@ export default function OrderDetailsPage() {
   }
 
   if (!order) return <NotFound />;
-
-  const enrichedItems = order?.order_items?.map((item: any) => {
-    const productData = products.find(
-      (p) => String(p.id) === String(item.product_id),
-    );
-    return {
-      ...item,
-      product: {
-        ...item.product,
-        name: productData?.name || item.product?.name || "Unknown Product",
-        image_path:
-          productData?.image_path ||
-          item.product?.image_path ||
-          "/placeholder.png",
-      },
-    };
-  });
 
   const breadcrumbLinks = [
     { label: "Orders", href: "/account?tab=orders" },

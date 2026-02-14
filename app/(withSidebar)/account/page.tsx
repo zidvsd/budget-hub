@@ -24,7 +24,7 @@ export default function Page() {
 
   const { orders } = useOrders();
   const { notifications } = useNotifications();
-
+  const unreadNotifs = notifications.filter((n) => !n.is_read);
   const [currentTab, setCurrentTab] = useState(
     searchParams.get("tab") || "profile",
   );
@@ -73,9 +73,9 @@ export default function Page() {
           <Bell className="size-4" />
           <span className="hidden sm:block">Notifications</span>
           <span className="sm:hidden">Alerts</span>
-          {notifications.length > 0 && (
+          {unreadNotifs.length > 0 && (
             <span className="ml-1 shadow-sm flex h-5 min-w-5 items-center justify-center rounded-full text-white bg-destructive px-1 text-[10px] font-bold">
-              {notifications.length}
+              {unreadNotifs.length}
             </span>
           )}
         </Button>

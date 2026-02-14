@@ -29,41 +29,43 @@ export default function OrdersCard({ order }: OrdersCardProps) {
         <ShoppingBag className="size-5" />
       </div>
 
-      {/* Center Section: Details */}
-      <div className="flex flex-col gap-1 flex-1">
-        <div className="flex items-center justify-between gap-2">
+      <div className="flex flex-1 items-center justify-between gap-4 px-2">
+        {/* LEFT COLUMN: ID & Date */}
+        <div className="flex flex-col gap-1.5 flex-1">
           <div className="flex items-center gap-2 flex-wrap">
             <h3 className="text-sm font-semibold leading-none text-foreground">
               Order #{truncateId(order.id)}
             </h3>
 
-            {/* Status Badge - Keeping your existing badge logic but refining the look */}
             <div
               className={cn(
-                "flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium uppercase tracking-wider",
+                "flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium tracking-wider",
                 statusStyle,
               )}
             >
-              <Clock className="size-3" />
               {upperCaseFirstLetter(order.status)}
             </div>
           </div>
 
-          {/* Price - Positioned like the timestamp in notifications */}
-          <span className="text-sm font-bold text-accent whitespace-nowrap">
+          <div className="flex items-center gap-x-2 text-[12px] text-muted-foreground">
+            <div className="flex items-center gap-1">
+              <Calendar className="size-3" />
+              <span>{formatDate(order.created_at)}</span>
+            </div>
+            <span className="opacity-50">•</span>
+            <span>{formatRelativeTime(order.created_at)}</span>
+          </div>
+        </div>
+
+        {/* CENTERED PRICE: Flex-shrink-0 keeps it from squishing */}
+        <div className="flex items-center justify-center shrink-0">
+          <span className="text-base font-bold text-accent whitespace-nowrap">
             ₱{formatPrice(order.total_price)}
           </span>
         </div>
 
-        {/* Date & Relative Time Footer */}
-        <div className="flex items-center gap-x-2 text-[12px] text-muted-foreground">
-          <div className="flex items-center gap-1">
-            <Calendar className="size-3" />
-            <span>{formatDate(order.created_at)}</span>
-          </div>
-          <span className="opacity-50">•</span>
-          <span>{formatRelativeTime(order.created_at)}</span>
-        </div>
+        {/* RIGHT COLUMN: This is where your Arrow icon or "View" button usually sits */}
+        {/* If you have a ChevronRight icon, put it here to act as the second "fixed col" */}
       </div>
 
       {/* Right Section: Subtle Chevron indicating clickability */}

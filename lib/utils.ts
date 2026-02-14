@@ -67,7 +67,14 @@ export function upperCaseFirstLetter(text: string) {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 export function formatRelativeTime(date: string | Date): string {
+  const d = typeof date === "string" ? new Date(date) : date;
+
+  if (isNaN(d.getTime())) {
+    return "Just now";
+  }
+
   const now = new Date();
+
   let past = new Date(date);
 
   if (typeof date === "string" && !date.includes("Z") && !date.includes("+")) {

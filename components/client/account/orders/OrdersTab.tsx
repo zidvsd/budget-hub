@@ -77,7 +77,7 @@ export default function OrdersTab() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Button
-              variant={showFilters ? "secondary" : "outline"}
+              variant="secondary"
               size="sm"
               className="h-8 gap-2 transition-all"
               onClick={() => setShowFilters(!showFilters)}
@@ -103,7 +103,7 @@ export default function OrdersTab() {
           </div>
 
           <Select value={sortOrder} onValueChange={setSortOrder}>
-            <SelectTrigger className="h-8 w-[130px] text-xs bg-transparent">
+            <SelectTrigger className=" h-8 w-fit text-xs bg-transparent">
               <ArrowUpDown className="mr-2 size-3 opacity-50" />
               <SelectValue placeholder="Sort" />
             </SelectTrigger>
@@ -188,8 +188,35 @@ export default function OrdersTab() {
 
           {visibleCount < filteredAndSortedOrders.length && (
             <CarouselItem className="pt-4 basis-auto">
-              <div ref={ref} className="flex justify-center py-4">
-                <Skeleton className="h-24 w-full rounded-xl" />
+              {/* The 'ref' stays here to trigger the load */}
+              <div
+                ref={ref}
+                className="flex items-center gap-4 rounded-xl border p-5 opacity-50"
+              >
+                {/* Icon Placeholder */}
+                <Skeleton className="size-11 rounded-full shrink-0" />
+
+                {/* Content Placeholder */}
+                <div className="flex flex-1 flex-col gap-3">
+                  <div className="flex items-center gap-2">
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-4 w-16 rounded-full" />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <Skeleton className="h-3 w-32" />
+                  </div>
+                </div>
+
+                {/* Price Placeholder */}
+                <div className="flex flex-col items-end gap-2 pr-2 shrink-0">
+                  <Skeleton className="h-5 w-20" />
+                  <Skeleton className="h-2 w-12" />
+                </div>
+
+                {/* Chevron Divider Placeholder */}
+                <div className="border-l pl-4 h-10 flex items-center shrink-0">
+                  <Skeleton className="size-4 rounded-md" />
+                </div>
               </div>
             </CarouselItem>
           )}

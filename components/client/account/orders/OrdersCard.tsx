@@ -40,11 +40,11 @@ export default function OrdersCard({ order }: OrdersCardProps) {
 
             <div className="flex flex-col md:flex-row gap-0 md:gap-2 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
-                <Calendar className="size-3.5 opacity-50" />
+                <Calendar className="size-3.5 opacity-90" />
                 <span>{formatDate(order.created_at)}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Clock className="size-3.5 opacity-50" />
+                <Clock className="size-3.5 opacity-90" />
                 <span>{formatRelativeTime(order.created_at)}</span>
               </div>
             </div>

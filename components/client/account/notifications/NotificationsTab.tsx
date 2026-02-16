@@ -15,6 +15,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import NotificationsSkeleton from "../../skeleton/NotificationsSkeleton";
 
 export default function NotificationsTab() {
   const { user: currentUser } = useAuth();
@@ -146,34 +147,29 @@ export default function NotificationsTab() {
 
           {/* Sentinel for infinite loading */}
           {visibleCount < filteredNotifications.length && (
-            <CarouselItem className="pt-1 basis-auto">
-              <div ref={ref} className="py-4">
-                <Skeleton className="h-20 w-full rounded-xl" />
+            <CarouselItem className="pt-2 basis-auto">
+              <div
+                ref={ref}
+                className="flex items-center gap-4 rounded-xl border p-4 opacity-50 transition-opacity"
+              >
+                {/* 1. Circular Avatar Placeholder */}
+                <Skeleton className="size-10 rounded-full shrink-0" />
+
+                {/* 2. Text Content Placeholder */}
+                <div className="flex flex-col gap-2 flex-1">
+                  <Skeleton className="h-4 w-1/3" /> {/* Title/User */}
+                  <Skeleton className="h-3 w-2/3" /> {/* Message Preview */}
+                </div>
+
+                {/* 3. Tiny Time Placeholder */}
+                <div className="shrink-0 self-start pt-1">
+                  <Skeleton className="h-3 w-8" />
+                </div>
               </div>
             </CarouselItem>
           )}
         </CarouselContent>
       </Carousel>
-    </div>
-  );
-}
-
-function NotificationsSkeleton() {
-  return (
-    <div className="flex flex-col gap-3 animate-in fade-in duration-500">
-      <div className="flex justify-between mb-2">
-        <Skeleton className="h-4 w-32" />
-        <Skeleton className="h-4 w-24" />
-      </div>
-      {Array.from({ length: 5 }).map((_, i) => (
-        <div key={i} className="flex items-center gap-4 rounded-xl border p-4">
-          <Skeleton className="size-10 rounded-full" />
-          <div className="flex flex-col gap-2 flex-1">
-            <Skeleton className="h-4 w-1/3" />
-            <Skeleton className="h-3 w-2/3" />
-          </div>
-        </div>
-      ))}
     </div>
   );
 }

@@ -7,6 +7,7 @@ export async function PATCH(req: NextRequest) {
   try {
     const adminCheck = await requireAdmin(req);
     if (adminCheck) return adminCheck;
+    
     const {
       id,
       name,

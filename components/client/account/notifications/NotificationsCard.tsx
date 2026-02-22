@@ -6,7 +6,6 @@ import { formatRelativeTime } from "@/lib/utils";
 import { useNotifications } from "@/store/useNotifications";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-
 interface NotificationsCardProps {
   notification: Notification;
 }

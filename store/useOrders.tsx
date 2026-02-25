@@ -92,7 +92,8 @@ export const useOrders = create<OrdersState>((set, get) => ({
     try {
       const isAdmin = role === "admin";
       let endpoint = isAdmin ? "/api/admin/orders" : "/api/client/orders";
-      if (userId && !isAdmin) {
+
+      if (userId) {
         endpoint += `?user_id=${userId}`;
       }
 
@@ -105,7 +106,7 @@ export const useOrders = create<OrdersState>((set, get) => ({
       });
 
       const json = await res.json();
-      console.log("Admin API Response:", json);
+
       if (json.success === false) {
         set({ error: json.error, loading: false, orders: [] });
         return;

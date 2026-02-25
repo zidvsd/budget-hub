@@ -10,17 +10,14 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get("user_id");
 
-    let query = supabaseAdmin
-      .from("orders")
-      .select(
-        `*, order_items(*, product:products(name)
-  )`
-      )
-      .order("created_at", { ascending: false });
+    let query = supabaseAdmin.from("orders").select("*");
+
     if (userId) {
       query = query.eq("user_id", userId);
     }
-    const { data, error } = await query;
+    const { data, error } = await query.order("created_at", {
+      ascending: false,
+    });
 
     if (error) throw error;
 
@@ -29,7 +26,7 @@ export async function GET(req: NextRequest) {
     console.error("Error fetching admin orders:", error);
     return NextResponse.json(
       { success: false, error: error.message || "Failed to fetch orders" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -53,7 +50,7 @@ export async function POST(req: NextRequest) {
     console.error("Error fetching admin orders:", error);
     return NextResponse.json(
       { success: false, error: error.message || "Failed to fetch orders" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

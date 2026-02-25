@@ -24,7 +24,7 @@ export async function GET(
       .from("users")
       .select("*")
       .eq("id", id)
-      .select();
+      .single();
 
     if (error) {
       console.error("Supabase Error:", error);

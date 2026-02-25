@@ -72,11 +72,11 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center gap-2">
-          <Button variant={"nav"} className="border">
-            <Link href={`/admin/dashboard/users/${row.original.id}`}>
+          <Link href={`/admin/dashboard/users/${row.original.id}`}>
+            <Button variant={"nav"} className="border">
               <Eye className="size-4" />
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </div>
       );
     },

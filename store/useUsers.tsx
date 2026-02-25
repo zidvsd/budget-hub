@@ -7,6 +7,7 @@ interface UsersState {
   error: string | null;
   lastUpdated: number | null;
   fetchUsers: (role?: "admin" | "user", force?: boolean) => Promise<void>;
+  fetchUserById: (userId: string, role?: "admin" | "user") => Promise<void>;
   clearUsers: () => void;
 }
 
@@ -58,6 +59,44 @@ export const useUsers = create<UsersState>((set, get) => ({
         loading: false,
         lastUpdated: Date.now(),
       });
+    } catch (err: any) {
+      set({ error: err.message, loading: false });
+    }
+  },
+  fetchUserById: async (userId: string, role = "admin") => {
+    const { users } = get();
+
+    // Check if user is already in state
+    const existingUser = users.find((u) => u.id === userId);
+    if (existingUser) return;
+
+    set({ loading: true, error: null });
+
+    try {
+      // Adjusted endpoint for single user fetch
+      const endpoint =
+        role === "admin"
+          ? `/api/admin/users/${userId}`
+          : `/api/client/user/${userId}`;
+
+      const res = await fetch(endpoint, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+
+      if (!res.ok) throw new Error("User not found");
+
+      const json = await res.json();
+
+      if (json.success) {
+        set((state) => ({
+          users: [...state.users, json.data],
+          loading: false,
+        }));
+      } else {
+        set({ error: json.error, loading: false });
+      }
     } catch (err: any) {
       set({ error: err.message, loading: false });
     }

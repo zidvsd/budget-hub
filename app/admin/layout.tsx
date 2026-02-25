@@ -26,7 +26,7 @@ export default function AdminLayout({
       const loadAdminData = async () => {
         try {
           await Promise.all([
-            fetchOrders("admin"),
+            fetchOrders("admin", undefined, true),
             fetchUsers("admin"),
             fetchNotifications(user.id),
             fetchProducts(),

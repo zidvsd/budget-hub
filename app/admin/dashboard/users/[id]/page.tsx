@@ -10,14 +10,16 @@ import { DataTable } from "@/components/ui/data-table";
 import { orderColumns } from "./columns";
 import { StatCard } from "@/components/ui/stat-card";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import {
   User,
   ShoppingCart,
   DollarSign,
   Clock,
+  ArrowLeft,
   CheckCircle,
 } from "lucide-react";
-import { formatPrice } from "@/lib/utils";
+import { truncateId, formatPrice } from "@/lib/utils";
 
 export default function Page() {
   const router = useRouter();
@@ -25,14 +27,22 @@ export default function Page() {
   const toastShownRef = useRef(false);
   const userId = Array.isArray(params.id) ? params.id[0] : params.id;
 
-  const { users, fetchUsers, loading: usersLoading } = useUsers();
+  const {
+    users,
+    fetchUserById,
+    loading: usersLoading,
+    clearUsers,
+  } = useUsers();
   const { orders, fetchOrders, loading: ordersLoading } = useOrders();
   const { fetchProducts, loading: productsLoading } = useProducts();
 
   const isLoading = usersLoading || ordersLoading || productsLoading;
 
   // Get the user by ID from users array
-  const user = users?.find((u) => u.id === userId);
+  const user = useMemo(
+    () => users?.find((u) => u.id === userId),
+    [users, userId],
+  );
   // Redirect admin users after user is loaded
   useEffect(() => {
     if (!usersLoading && user?.role === "admin" && !toastShownRef.current) {
@@ -46,11 +56,30 @@ export default function Page() {
 
   // Fetch data
   useEffect(() => {
-    fetchUsers("admin");
-    fetchProducts();
-    if (userId) fetchOrders("admin", userId, true);
-  }, [userId, fetchUsers, fetchOrders, fetchProducts]);
+    if (!userId) return;
 
+    const loadData = async () => {
+      // Only fetch if we don't have this specific user already
+      if (!user) {
+        await fetchUserById(userId, "admin");
+      }
+
+      await Promise.all([
+        fetchProducts(),
+        fetchOrders("admin", userId, true), // Ensure your store uses this userId to filter!
+      ]);
+    };
+
+    loadData();
+  }, [userId, fetchUserById, fetchOrders, fetchProducts, user]);
+
+  useEffect(() => {
+    return () => {
+      // This runs when the admin leaves the user profile page
+      // It clears the 'users' array so the table page starts fresh
+      clearUsers();
+    };
+  }, [clearUsers]);
   // Compute stats
   const stats = useMemo(() => {
     const totalOrders = orders.length;
@@ -117,15 +146,33 @@ export default function Page() {
     <div className="space-y-6">
       {/* User Header */}
       <div className="space-y-2">
-        <div className="flex items-center gap-2">
-          <User className="size-8" />
-          <h1 className="page-heading">
-            {user?.first_name} {user?.last_name}
-          </h1>
+        <div className="flex items-start gap-2">
+          {/* Back Button - Aligned to the top of the icon/text */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => router.back()}
+            className="-ml-2"
+          >
+            <ArrowLeft className="size-5" />
+          </Button>
+
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2">
+              <User className="size-7 text-muted-foreground" />
+              <h1 className="page-heading">
+                {user?.first_name
+                  ? `${user.first_name} ${user.last_name}`
+                  : "Unnamed Customer"}
+              </h1>
+            </div>
+
+            <p className="page-subheading ">
+              Displaying purchase history of{" "}
+              <span className="font-mono text-xs">{user?.id}</span>
+            </p>
+          </div>
         </div>
-        <p className="page-subheading">
-          Displaying purchase history of {user?.id}
-        </p>
       </div>
 
       {/* Stats */}

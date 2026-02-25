@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 export default function page() {
-  const { users, loading: userLoading } = useUsers();
+  const { users, loading: userLoading, fetchUsers } = useUsers();
 
   const totalUser = users?.length ?? 0;
   const totalAdmins =
@@ -16,7 +16,11 @@ export default function page() {
     users?.filter((user) => user.role === "user").length ?? 0;
 
   const loading = userLoading;
-
+  useEffect(() => {
+    // Pass 'true' for the force parameter to ensure
+    // we get the full list back after visiting a profile
+    fetchUsers("admin", true);
+  }, [fetchUsers]);
   return (
     <div>
       {loading ? (

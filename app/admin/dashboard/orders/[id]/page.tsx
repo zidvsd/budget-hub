@@ -46,7 +46,7 @@ export default function Page() {
 
   const orderItems = useMemo(() => {
     if (!order) return [];
-    return order.order_items.map((item) => {
+    return order.order_items?.map((item) => {
       const product = products.find((p) => p.id === item.product_id);
       return {
         ...item,
@@ -198,7 +198,7 @@ export default function Page() {
           ) : (
             <>
               <h1 className="font-semibold mb-4 text-xl">Order Items</h1>
-              <DataTable columns={columns} data={orderItems} />
+              <DataTable columns={columns} data={orderItems || []} />
             </>
           )}
         </div>

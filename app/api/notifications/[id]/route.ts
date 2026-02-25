@@ -27,11 +27,7 @@ export const GET = withAuth(
       let query = supabase.from("notifications").select("*");
 
       if (isAdmin && targetUserId === "all") {
-        query = query.in("type", [
-          "admin_order_alert",
-          "general",
-          "order_placed",
-        ]);
+        query = query.eq("user_id", requester.id);
       } else if (isAdmin || requester.id === targetUserId) {
         query = query.eq("user_id", targetUserId);
       } else {

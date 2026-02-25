@@ -23,7 +23,7 @@ export function NotificationListener() {
 
     // 2. Realtime Subscription
     const channelName = isAdmin
-      ? "admin-global-notifs"
+      ? `admin-changes-${currentUser.id}`
       : `user-changes-${currentUser.id}`;
 
     const channel = supabase
@@ -34,7 +34,7 @@ export function NotificationListener() {
           event: "INSERT",
           schema: "public",
           table: "notifications",
-          filter: isAdmin ? undefined : `user_id=eq.${currentUser.id}`,
+          filter: `user_id=eq.${currentUser.id}`,
         },
         (payload) => {
           const raw = payload.new;
@@ -69,7 +69,7 @@ export function NotificationListener() {
             id: String(raw.id),
             user_id: String(raw.user_id),
             title: String(raw.title || "Order Update"),
-            message: String(raw.message || raw.body || ""),
+            message: String(raw.message || ""),
             type: String(raw.type || "general"),
             is_read: Boolean(raw.is_read),
             created_at: raw.created_at,

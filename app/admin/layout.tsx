@@ -20,15 +20,15 @@ export default function AdminLayout({
   const { fetchNotifications } = useNotifications();
   const { fetchUsers } = useUsers();
   const { fetchProducts } = useProducts();
-
+  const { user } = useAuth();
   useEffect(() => {
-    if (!authLoading && role === "admin") {
+    if (!authLoading && role === "admin" && user?.id) {
       const loadAdminData = async () => {
         try {
           await Promise.all([
             fetchOrders("admin"),
             fetchUsers("admin"),
-            fetchNotifications("all"),
+            fetchNotifications(user.id),
             fetchProducts(),
           ]);
         } catch (err) {
@@ -45,6 +45,7 @@ export default function AdminLayout({
     fetchUsers,
     fetchNotifications,
     fetchProducts,
+    user?.id,
   ]);
 
   return (

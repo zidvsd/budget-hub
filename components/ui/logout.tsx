@@ -9,6 +9,7 @@ import { useProducts } from "@/store/useProducts";
 import { useOrders } from "@/store/useOrders";
 import { useCart } from "@/store/useCart";
 import { cn } from "@/lib/utils"; // Shadcn utility for merging classes
+import { useNotifications } from "@/store/useNotifications";
 
 interface LogoutButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   showText?: boolean;
@@ -40,7 +41,7 @@ export const LogoutButton = forwardRef<HTMLButtonElement, LogoutButtonProps>(
         useOrders.getState().clearOrders();
         useProducts.getState().clearProducts();
         useCart.getState().clearCart();
-
+        useNotifications.getState().clearNotifications();
         toast.success("Logged out successfully!");
 
         // Use window.location for a full refresh to clear any residual cache

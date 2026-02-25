@@ -85,7 +85,10 @@ export default function NotificationsCard({
                 : "text-muted-foreground",
             )}
           >
-            {notification.title || "New Notification"}
+            {/* If it's an admin alert, ensure we show the dynamic title from DB */}
+            {notification.type === "admin_order_alert"
+              ? notification.title
+              : notification.title || "Order Update"}
           </h3>
           <span className="text-[10px] text-muted-foreground whitespace-nowrap">
             {formatRelativeTime(notification.created_at)}
@@ -93,7 +96,8 @@ export default function NotificationsCard({
         </div>
 
         <p className="text-sm text-muted-foreground">
-          {notification.message || "No content available"}
+          {/* This is the part that contains "Customer Name just placed..." */}
+          {notification.message}
         </p>
       </div>
     </div>

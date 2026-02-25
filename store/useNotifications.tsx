@@ -61,8 +61,6 @@ export const useNotifications = create<NotificationsState>((set, get) => ({
         return state;
       }
 
-      // 2. Centralized Toast (Only fires once per unique ID)
-      // We check the type to decide if we show the rocket
       const isAdminType = newNotif.type === "admin_order_alert";
 
       toast.success(newNotif.title, {

@@ -17,8 +17,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-import { formatPrice } from "@/lib/utils";
-
+import { cn } from "@/lib/utils";
 interface ChartLineDefaultProps {
   data: { month: string; users: number }[];
 }
@@ -33,66 +32,68 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function ChartLineDefault({ data }: ChartLineDefaultProps) {
-  // Compute footer values
   const totalUsers = data.reduce((acc, d) => acc + d.users, 0);
-  const lastMonthUsers = data[data.length - 1]?.users || 0;
-  const prevMonthUsers = data[data.length - 2]?.users || 0;
-  const change = prevMonthUsers
-    ? (((lastMonthUsers - prevMonthUsers) / prevMonthUsers) * 100).toFixed(1)
+  const lastVal = data[data.length - 1]?.users || 0;
+  const prevVal = data[data.length - 2]?.users || 0;
+  const change = prevVal
+    ? (((lastVal - prevVal) / prevVal) * 100).toFixed(1)
     : "0";
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>User Activity</CardTitle>
-        <CardDescription>
-          Daily active users navigating your storefront
-        </CardDescription>
+        <CardDescription>New customer registrations over time</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <LineChart
-            accessibilityLayer
-            data={data}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
-          >
-            <CartesianGrid vertical={false} />
+        <ChartContainer
+          config={chartConfig}
+          className="aspect-auto h-[250px] w-full"
+        >
+          <LineChart data={data} margin={{ left: 12, right: 12 }}>
+            <CartesianGrid
+              vertical={false}
+              strokeDasharray="3 3"
+              opacity={0.5}
+            />
             <XAxis
               dataKey="month"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
+              // Only slice if it looks like a long month name
+              tickFormatter={(value) =>
+                value.length > 6 ? value.slice(0, 3) : value
+              }
             />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
+            <ChartTooltip content={<ChartTooltipContent />} />
             <Line
               dataKey="users"
-              type="natural"
-              stroke="var(--color-users)"
+              type="monotone" // Smoother curve than "natural" for activity
+              stroke="var(--chart-1)"
               strokeWidth={2}
-              dot={false}
+              dot={{ r: 4, fill: "var(--chart-1)" }}
+              activeDot={{ r: 6 }}
             />
           </LineChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex items-center gap-2 font-medium">
-          <Users className="h-4 w-4" />
-          Total Users: {formatPrice(totalUsers)}
+        <div className="flex items-center gap-2 font-bold text-lg">
+          <Users className="h-5 w-5 text-accent" />
+          {totalUsers.toLocaleString()} Users
         </div>
-        <div className="flex items-center gap-2 text-muted-foreground">
-          Monthly change: {change}%{" "}
-          {Number(change) >= 0 ? (
-            <TrendingUp className="h-4 w-4 text-green-500" />
-          ) : (
-            <TrendingUp className="h-4 w-4 rotate-180 text-red-500" />
+        <div
+          className={cn(
+            "flex items-center gap-1 font-medium",
+            Number(change) >= 0 ? "text-green-600" : "text-red-600",
           )}
+        >
+          {Number(change) >= 0 ? "+" : ""}
+          {change}% from previous period
+          <TrendingUp
+            className={cn("h-4 w-4", Number(change) < 0 && "rotate-180")}
+          />
         </div>
       </CardFooter>
     </Card>

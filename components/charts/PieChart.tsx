@@ -17,6 +17,7 @@ import {
   ChartLegendContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { Package } from "lucide-react";
 
 const chartConfig = {
   count: {
@@ -97,6 +98,7 @@ export function ChartPieLabelList({ data }: OrderPieProps) {
       <CardFooter className="flex flex-col gap-2 text-sm">
         {/* Total orders */}
         <div className="flex items-center gap-2 font-medium leading-none">
+          <Package className="size-4" />
           Total Orders: {data.reduce((sum, d) => sum + d.count, 0)}
         </div>
 
@@ -104,7 +106,7 @@ export function ChartPieLabelList({ data }: OrderPieProps) {
         {data.length > 0 &&
           (() => {
             const mostStatus = data.reduce((prev, curr) =>
-              curr.count > prev.count ? curr : prev
+              curr.count > prev.count ? curr : prev,
             );
             return (
               <div className="flex items-center gap-2 leading-none text-muted-foreground">

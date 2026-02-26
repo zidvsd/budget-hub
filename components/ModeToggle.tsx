@@ -15,7 +15,19 @@ export const ModeToggle = forwardRef<HTMLDivElement, ModeToggleProps>(
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => setMounted(true), []);
-
+    // 1. Return a skeleton or null during the first pass
+    if (!mounted) {
+      return (
+        <div
+          ref={ref}
+          className={cn("flex items-center gap-2 opacity-0", className)}
+          {...props}
+        >
+          <div className="h-4 w-4 shrink-0" />
+          {showText && <span className="truncate">Loading...</span>}
+        </div>
+      );
+    }
     const handleToggle = (e: React.MouseEvent<HTMLDivElement>) => {
       onClick?.(e); // Essential for triggering the parent's logic
       if (!mounted) return;

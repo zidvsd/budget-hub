@@ -19,7 +19,7 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-white dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
         accent:
-          "text-white bg-accent hover:bg-accent/60   dark:hover:bg-accent/70  ",
+          "text-white bg-accent hover:bg-accent/60 dark:hover:bg-accent/70 border border-transparent",
         nav: "hover:bg-muted     hover:text-accent",
       },
       size: {
@@ -35,7 +35,7 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
+  },
 );
 
 function Button({

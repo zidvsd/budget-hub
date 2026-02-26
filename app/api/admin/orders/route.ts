@@ -20,7 +20,6 @@ export async function GET(req: NextRequest) {
     });
 
     if (error) throw error;
-
     return NextResponse.json({ success: true, data });
   } catch (error: any) {
     console.error("Error fetching admin orders:", error);

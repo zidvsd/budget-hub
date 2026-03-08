@@ -60,6 +60,7 @@ This starter kit is intended for developers who want a working, full‑stack e�
 - [TypeScript](https://www.typescriptlang.org) – Type-safe code
 - [Tailwind CSS 4](https://tailwindcss.com) – Utility-first styling
 - [Radix UI](https://radix-ui.com) – Headless components (dialogs, dropdowns, tooltips)
+- [shadcn/ui](https://ui.shadcn.com) – Tailwind-compatible component primitives (used across the UI)
 - [Lucide React](https://lucide.dev) – Icon library
 - [Next Themes](https://next-themes.js.org) – Dark mode support
 
@@ -136,6 +137,7 @@ The application expects the following Supabase tables:
 - **products** – Product catalog with name, price, stock, image_path
 - **orders** – User orders with status and total_price
 - **order_items** – Line items linking orders to products
+- **notifications** – Stores messages shown to users (used by the real-time alert system)
 
 Refer to your Supabase database schema documentation or create tables using the SQL Editor in your Supabase dashboard.
 
@@ -356,7 +358,7 @@ Contributions are welcome! Please follow these guidelines:
 
 ## License
 
-This project does not include a license file; add one or contact the maintainer.
+This project is licensed under the MIT license. Add a `LICENSE` file with the MIT text or contact the maintainer.
 
 ---
 

@@ -34,6 +34,7 @@ This starter kit is intended for developers who want a working, full‑stack e�
 - **Shopping Cart** – Add items to cart and manage orders
 - **Order Management** – View and track your orders
 - **Notifications** – Real-time notifications and alerts
+- **Forgot Password** – Reset your password via email link for account recovery
 - **Dark/Light Mode** – Theme toggle for user preference
 
 **Admin Dashboard**
@@ -264,6 +265,8 @@ gadyethub/
 
 - `POST /api/auth/login` – Login with email/password
 - `POST /api/auth/signin` – Sign up new account
+- `POST /api/auth/forgot-password` – Request password reset email
+- `POST /api/auth/reset-password` – Submit new password using reset token
 
 ## Development
 

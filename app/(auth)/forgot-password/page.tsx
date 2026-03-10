@@ -13,13 +13,26 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { toast } from "sonner";
+import { resetPasswordAction } from "../actions";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Add logic to send password reset email
+    setIsLoading(true);
+
+    const res = await resetPasswordAction(email);
+
+    if (res.success) {
+      toast.success(res.message);
+      setEmail("");
+    } else {
+      toast.error(res.message);
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -36,17 +49,22 @@ export default function ForgotPasswordPage() {
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
-              autoComplete="off"
+              autoComplete="email"
               id="email"
               type="email"
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              disabled={isLoading}
               required
             />
           </div>
-          <Button type="submit" className="w-full mt-2 cursor-pointer">
-            Send Reset Link
+          <Button
+            type="submit"
+            className="w-full mt-2 cursor-pointer"
+            disabled={isLoading}
+          >
+            {isLoading ? "Sending..." : "Send Reset Link"}
           </Button>
         </form>
       </CardContent>
